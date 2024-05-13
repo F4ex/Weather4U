@@ -14,6 +14,12 @@
 		FFE5DCC12BF1B464004EE3F7 /* Weather4U.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCBF2BF1B463004EE3F7 /* Weather4U.xcdatamodeld */; };
 		FFE5DCC32BF1B465004EE3F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFE5DCC22BF1B465004EE3F7 /* Assets.xcassets */; };
 		FFE5DCC62BF1B465004EE3F7 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = FFE5DCC52BF1B465004EE3F7 /* Base */; };
+		FFE5DCCF2BF1B7BD004EE3F7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FFE5DCCE2BF1B7BD004EE3F7 /* Alamofire */; };
+		FFE5DCD12BF1B7BD004EE3F7 /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = FFE5DCD02BF1B7BD004EE3F7 /* AlamofireDynamic */; };
+		FFE5DCD42BF1B7C8004EE3F7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FFE5DCD32BF1B7C8004EE3F7 /* Kingfisher */; };
+		FFE5DCD72BF1B7D8004EE3F7 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = FFE5DCD62BF1B7D8004EE3F7 /* SnapKit */; };
+		FFE5DCD92BF1B7D8004EE3F7 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = FFE5DCD82BF1B7D8004EE3F7 /* SnapKit-Dynamic */; };
+		FFE5DCDC2BF1B800004EE3F7 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = FFE5DCDB2BF1B800004EE3F7 /* Then */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +39,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFE5DCD92BF1B7D8004EE3F7 /* SnapKit-Dynamic in Frameworks */,
+				FFE5DCDC2BF1B800004EE3F7 /* Then in Frameworks */,
+				FFE5DCD42BF1B7C8004EE3F7 /* Kingfisher in Frameworks */,
+				FFE5DCD72BF1B7D8004EE3F7 /* SnapKit in Frameworks */,
+				FFE5DCCF2BF1B7BD004EE3F7 /* Alamofire in Frameworks */,
+				FFE5DCD12BF1B7BD004EE3F7 /* AlamofireDynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +98,14 @@
 			dependencies = (
 			);
 			name = Weather4U;
+			packageProductDependencies = (
+				FFE5DCCE2BF1B7BD004EE3F7 /* Alamofire */,
+				FFE5DCD02BF1B7BD004EE3F7 /* AlamofireDynamic */,
+				FFE5DCD32BF1B7C8004EE3F7 /* Kingfisher */,
+				FFE5DCD62BF1B7D8004EE3F7 /* SnapKit */,
+				FFE5DCD82BF1B7D8004EE3F7 /* SnapKit-Dynamic */,
+				FFE5DCDB2BF1B800004EE3F7 /* Then */,
+			);
 			productName = Weather4U;
 			productReference = FFE5DCB32BF1B463004EE3F7 /* Weather4U.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +134,12 @@
 				Base,
 			);
 			mainGroup = FFE5DCAA2BF1B463004EE3F7;
+			packageReferences = (
+				FFE5DCCD2BF1B7BD004EE3F7 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				FFE5DCD22BF1B7C8004EE3F7 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				FFE5DCD52BF1B7D8004EE3F7 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				FFE5DCDA2BF1B800004EE3F7 /* XCRemoteSwiftPackageReference "Then" */,
+			);
 			productRefGroup = FFE5DCB42BF1B463004EE3F7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -222,7 +248,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -279,7 +305,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -304,6 +330,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -332,6 +359,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -367,6 +395,74 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FFE5DCCD2BF1B7BD004EE3F7 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = exactVersion;
+				version = 5.9.1;
+			};
+		};
+		FFE5DCD22BF1B7C8004EE3F7 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = exactVersion;
+				version = 7.11.0;
+			};
+		};
+		FFE5DCD52BF1B7D8004EE3F7 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = exactVersion;
+				version = 5.7.1;
+			};
+		};
+		FFE5DCDA2BF1B800004EE3F7 /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = exactVersion;
+				version = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FFE5DCCE2BF1B7BD004EE3F7 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFE5DCCD2BF1B7BD004EE3F7 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		FFE5DCD02BF1B7BD004EE3F7 /* AlamofireDynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFE5DCCD2BF1B7BD004EE3F7 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = AlamofireDynamic;
+		};
+		FFE5DCD32BF1B7C8004EE3F7 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFE5DCD22BF1B7C8004EE3F7 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		FFE5DCD62BF1B7D8004EE3F7 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFE5DCD52BF1B7D8004EE3F7 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		FFE5DCD82BF1B7D8004EE3F7 /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFE5DCD52BF1B7D8004EE3F7 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
+		};
+		FFE5DCDB2BF1B800004EE3F7 /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFE5DCDA2BF1B800004EE3F7 /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		FFE5DCBF2BF1B463004EE3F7 /* Weather4U.xcdatamodeld */ = {
