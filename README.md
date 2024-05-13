@@ -1,4 +1,4 @@
-# Project Convention
+## Project Convention
 
 - iOS 15.x 버전으로 설정 후 개발하기
     - 최신의 버전 사용보다는 이미 검증받은 버전 위주로 사용하는 것이 오류가 적다고 생각해서
