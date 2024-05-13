@@ -32,9 +32,9 @@ struct Items: Codable {
 
 // MARK: - Item
 struct Item: Codable {
-    let baseDate, baseTime, category: String
+    let baseDate, baseTime, category, fcstDate: String
+    let fcstTime, fcstValue: String
     let nx, ny: Int
-    let obsrValue: String
 }
 
 // MARK: - Header

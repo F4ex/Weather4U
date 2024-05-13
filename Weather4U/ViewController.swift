@@ -11,7 +11,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NetworkManager.shared.executeNetwork(date: "20240513", time: "1500")
+        NetworkManager.shared.executeNetwork(date: Date(), page: 1)
     }
 
 
