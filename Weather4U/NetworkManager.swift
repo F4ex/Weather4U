@@ -15,22 +15,6 @@ class NetworkManager {
     
     private init() { }
     
-    func currentDateToString() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd"
-        let currentDateString = formatter.string(from: Date())
-        
-        return currentDateString
-    }
-    
-    func currentTimeToString() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HHmm"
-        let currentTimeString = formatter.string(from: Date())
-        
-        return currentTimeString
-    }
-    
     // 최저 기온 : 페이지 번호 - 5, 예측 시간(fcst_time) - 0600
     // 최고 기온 : 페이지 번호 - 16, 예측 시간(fcst_time) - 1500
     func fetchWeatherData(date: Date, page: Int, completion: @escaping (Result<[Item], Error>) -> Void) {
@@ -63,5 +47,24 @@ class NetworkManager {
                 print(error)
             }
         }
+    }
+}
+
+extension NetworkManager {
+    
+    func currentDateToString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let currentDateString = formatter.string(from: Date())
+        
+        return currentDateString
+    }
+    
+    func currentTimeToString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HHmm"
+        let currentTimeString = formatter.string(from: Date())
+        
+        return currentTimeString
     }
 }
