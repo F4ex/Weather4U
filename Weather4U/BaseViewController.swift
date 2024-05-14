@@ -16,7 +16,7 @@ class BaseViewController: UIViewController {
     }
     
     func configureUI() {
-        
+        let Font = UIFont(name:"")
     }
     
     func constraintLayout() {
