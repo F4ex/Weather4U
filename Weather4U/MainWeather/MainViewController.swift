@@ -181,8 +181,7 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         status.register(StatusCell.self, forCellWithReuseIdentifier: "StatusCell")
         status.delegate = self
         status.dataSource = self
-        status.backgroundColor = UIColor(named: "cell")
-        status.layer.cornerRadius = 15
+        status.backgroundColor = view.backgroundColor
         
         todayWeather.register(TodayWeatherCell.self, forCellWithReuseIdentifier: "TodayWeatherCell")
         todayWeather.delegate = self
@@ -190,10 +189,12 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         todayWeather.backgroundColor = UIColor(named: "cell")
         todayWeather.layer.cornerRadius = 15
         
-        weekWeather.backgroundColor = UIColor(named: "cell")
-        weekWeather.layer.cornerRadius = 15
+        weekWeather.register(WeekWeatherCell.self, forCellReuseIdentifier: "WeekWeatherCell")
         weekWeather.delegate = self
         weekWeather.dataSource = self
+        weekWeather.backgroundColor = UIColor(named: "cell")
+        weekWeather.layer.cornerRadius = 15
+        
     }
     
     @objc func clickToSearch() {

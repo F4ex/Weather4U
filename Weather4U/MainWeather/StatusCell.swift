@@ -11,9 +11,11 @@ import UIKit
 class StatusCell: UICollectionViewCell {
     static let identifier = "StatusCell"
     
+    let background = UIImageView()
     let property = UILabel()
     let icon = UIImageView()
     let num = UILabel()
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,10 +28,10 @@ class StatusCell: UICollectionViewCell {
     }
     
     func configureUI() {
-        [property, icon, num].forEach(){
+        [background, property, icon, num].forEach(){
             addSubview($0)
         }
-        property.text = "UV"
+        property.text = "UV INDEX"
         property.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
         property.textColor = UIColor(named: "font")
         
@@ -37,9 +39,15 @@ class StatusCell: UICollectionViewCell {
         num.font = UIFont.defaultFont(weight: .semibold)
         num.textColor = UIColor(named: "font")
         
+        background.backgroundColor = UIColor(named: "cell")
+        background.layer.cornerRadius = 15
     }
     
     func constraintLayout() {
+        
+        background.snp.makeConstraints(){
+            $0.width.height.equalTo(110)
+        }
         icon.snp.makeConstraints(){
             $0.top.equalToSuperview().offset(29)
             $0.width.height.equalTo(20)
@@ -47,7 +55,7 @@ class StatusCell: UICollectionViewCell {
         }
         property.snp.makeConstraints(){
             $0.top.equalToSuperview().offset(29)
-            $0.right.equalToSuperview().offset(10)
+            $0.left.equalTo(icon.snp.right).offset(6)
         }
         num.snp.makeConstraints(){
             $0.top.equalToSuperview().offset(58)
@@ -56,3 +64,4 @@ class StatusCell: UICollectionViewCell {
         
     }
 }
+
