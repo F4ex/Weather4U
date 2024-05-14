@@ -197,7 +197,7 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
     }
     
     @objc func clickToSearch() {
-        let vc = SearchController()
+        let vc = SearchViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
