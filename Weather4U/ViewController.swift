@@ -8,9 +8,11 @@
 import UIKit
 
 class ViewController: UIViewController {
+    let lable = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(named: "background")
         // Do any additional setup after loading the view.
     }
 
