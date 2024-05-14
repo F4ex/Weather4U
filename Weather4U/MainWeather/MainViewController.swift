@@ -21,23 +21,21 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
     let tempHigh = UILabel()
     let tempLow = UILabel()
     let weatherExplanation = UILabel()
-    let status = UICollectionView().then {
-        let layout = UICollectionViewFlowLayout().then {
-            $0.minimumInteritemSpacing = 15
-            $0.itemSize = CGSize(width: 110, height: 110)
-        }
-        $0.collectionViewLayout = layout
+    let status = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then() {
+        let layout = $0.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.minimumInteritemSpacing = 15
+        layout.itemSize = CGSize(width: 110, height: 110)
     }
-    
-    let todayWeather = UICollectionView().then(){
-        let layout = UICollectionViewFlowLayout().then(){
-            $0.minimumInteritemSpacing = 15
-            $0.itemSize = CGSize(width: 56, height: 110)
-        }
-        $0.collectionViewLayout = layout
+
+    let todayWeather = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then() {
+        let layout = $0.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.minimumInteritemSpacing = 15
+        layout.itemSize = CGSize(width: 56, height: 110)
     }
     
     let weekWeather = UITableView()
+    
+    
  
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,20 +43,36 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        <#code#>
+        return collectionView == status ? 3 : 24
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        <#code#>
+        if collectionView == status {
+            guard let cell = status.dequeueReusableCell(withReuseIdentifier: "StatusCell", for: indexPath) as? StatusCell else {
+                return UICollectionViewCell()
+            } 
+            return cell
+        } else if collectionView == todayWeather {
+            guard let cell = todayWeather.dequeueReusableCell(withReuseIdentifier: "TodayWeatherCell", for: indexPath) as? TodayWeatherCell else {
+                return UICollectionViewCell()
+            }
+            return cell
+        }
+        return UICollectionViewCell()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        <#code#>
+        return 8
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+        guard let cell = weekWeather.dequeueReusableCell(withIdentifier: "WeekWeatherCell", for: indexPath) as? WeekWeatherCell else {
+            return UITableViewCell()
+        }
+        return cell
     }
+    
+    
     
     override func constraintLayout(){
         [scrollView, location, moveToDress, moveToSearch, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather].forEach(){
@@ -69,7 +83,6 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
             $0.horizontalEdges.equalTo(view)
             $0.height.equalTo(1704)
         }
-        
         scrollView.contentLayoutGuide.snp.makeConstraints(){
             $0.top.equalTo(view).offset(54)
             $0.horizontalEdges.equalTo(view)
@@ -82,14 +95,14 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         moveToDress.snp.makeConstraints(){
             $0.top.equalTo(view).offset(67)
             $0.left.equalTo(view).inset(29)
-            $0.width.equalTo(22)
-            $0.height.equalTo(16)
+            $0.width.equalTo(30)
+            $0.height.equalTo(24)
         }
         moveToSearch.snp.makeConstraints(){
             $0.top.equalTo(view).offset(67)
             $0.right.equalTo(view).inset(29)
-            $0.width.equalTo(20)
-            $0.height.equalTo(16)
+            $0.width.equalTo(30)
+            $0.height.equalTo(24)
         }
         weatherImage.snp.makeConstraints(){
             $0.width.height.equalTo(235)
@@ -97,7 +110,7 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
             $0.centerX.centerX.equalTo(view)
         }
         temperature.snp.makeConstraints(){
-            $0.top.equalTo(weatherImage.snp.bottom).offset(1)
+            $0.top.equalTo(weatherImage.snp.bottom).offset(19)
             $0.left.equalTo(view).offset(164)
         }
         tempHigh.snp.makeConstraints(){
@@ -109,8 +122,8 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
             $0.left.equalTo(view.snp.centerX).offset(7.5)
         }
         weatherExplanation.snp.makeConstraints(){
-            $0.top.equalTo(tempHigh).offset(3)
-            $0.centerX.equalTo(view)
+            $0.top.equalTo(tempHigh.snp.bottom).offset(6)
+            $0.horizontalEdges.equalTo(view).inset(47)
         }
         status.snp.makeConstraints(){
             $0.top.equalTo(weatherExplanation.snp.bottom).offset(18)
@@ -129,8 +142,62 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         }
     }
     
+    
+    
+    
     override func configureUI() {
         location.text = "내 위치"
-        location.font = UIFont(name: "a", size: <#T##CGFloat#>)
+        location.font = defaultFont?.withSize(34)
+        location.tintColor = UIColor(named: "font")
+        
+        moveToDress.setImage(UIImage(systemName: "hanger"), for: .normal)
+        moveToDress.tintColor = UIColor(named: "font")
+        
+        moveToSearch.setImage(UIImage(systemName: "list.bullet"), for: .normal)
+        moveToSearch.tintColor = UIColor(named: "font")
+        moveToSearch.addTarget(self, action: #selector(clickToSearch), for: .touchUpInside)
+        
+        weatherImage.image = UIImage(systemName: "sun.max.fill")
+        
+        
+        temperature.font = numFont?.withSize(50)
+        temperature.text = "\(30)°"
+        temperature.tintColor = UIColor(named: "font")
+        
+        tempHigh.text = "H: \(01)"
+        tempHigh.font = defaultFontB.withSize(15)
+        tempHigh.tintColor = UIColor(named: "font")
+        
+        tempLow.text = "L: \(01)"
+        tempLow.font = defaultFontB.withSize(15)
+        tempLow.tintColor = UIColor(named: "font")
+        
+        weatherExplanation.text = "Sunny conditions will continue for the rest of the day.Wind gusts are up to 8 m/s"
+        weatherExplanation.textAlignment = .center
+        weatherExplanation.numberOfLines = 2
+        weatherExplanation.font = defaultFont?.withSize(13)
+        weatherExplanation.tintColor = UIColor(named: "font")
+        
+        status.register(StatusCell.self, forCellWithReuseIdentifier: "StatusCell")
+        status.delegate = self
+        status.dataSource = self
+        status.backgroundColor = UIColor(named: "cell")
+        status.layer.cornerRadius = 15
+        
+        todayWeather.register(TodayWeatherCell.self, forCellWithReuseIdentifier: "TodayWeatherCell")
+        todayWeather.delegate = self
+        todayWeather.dataSource = self
+        todayWeather.backgroundColor = UIColor(named: "cell")
+        todayWeather.layer.cornerRadius = 15
+        
+        weekWeather.backgroundColor = UIColor(named: "cell")
+        weekWeather.layer.cornerRadius = 15
+        weekWeather.delegate = self
+        weekWeather.dataSource = self
+    }
+    
+    @objc func clickToSearch() {
+        let vc = SearchController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
