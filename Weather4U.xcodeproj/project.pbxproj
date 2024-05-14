@@ -28,6 +28,10 @@
 		FFE5DCF12BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCEE2BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift */; };
 		FFE5DCF22BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCEF2BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift */; };
 		FFE5DCF32BF3057C004EE3F7 /* MyWeatherPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCF02BF3057C004EE3F7 /* MyWeatherPageViewController.swift */; };
+		FFE5DCF52BF309E0004EE3F7 /* LocationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCF42BF309E0004EE3F7 /* LocationData.swift */; };
+		FFE5DCF92BF30CF0004EE3F7 /* JSONManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCF82BF30CF0004EE3F7 /* JSONManager.swift */; };
+		FFE5DCFD2BF32AF3004EE3F7 /* locationData.json in Resources */ = {isa = PBXBuildFile; fileRef = FFE5DCFC2BF32AF3004EE3F7 /* locationData.json */; };
+		FFE5DCFF2BF32C73004EE3F7 /* WeatherSentence.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCFE2BF32C73004EE3F7 /* WeatherSentence.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +52,10 @@
 		FFE5DCEE2BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWeatherPageTableViewCell.swift; sourceTree = "<group>"; };
 		FFE5DCEF2BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWeatherPageTableViewController.swift; sourceTree = "<group>"; };
 		FFE5DCF02BF3057C004EE3F7 /* MyWeatherPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWeatherPageViewController.swift; sourceTree = "<group>"; };
+		FFE5DCF42BF309E0004EE3F7 /* LocationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationData.swift; sourceTree = "<group>"; };
+		FFE5DCF82BF30CF0004EE3F7 /* JSONManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONManager.swift; sourceTree = "<group>"; };
+		FFE5DCFC2BF32AF3004EE3F7 /* locationData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = locationData.json; sourceTree = "<group>"; };
+		FFE5DCFE2BF32C73004EE3F7 /* WeatherSentence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSentence.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +110,10 @@
 				FFE5DCE22BF1E491004EE3F7 /* NetworkManager.swift */,
 				FFE5DCE42BF203E6004EE3F7 /* CategoryManager.swift */,
 				FFE5DCEC2BF30302004EE3F7 /* BaseViewController.swift */,
+				FFE5DCF42BF309E0004EE3F7 /* LocationData.swift */,
+				FFE5DCFC2BF32AF3004EE3F7 /* locationData.json */,
+				FFE5DCF82BF30CF0004EE3F7 /* JSONManager.swift */,
+				FFE5DCFE2BF32C73004EE3F7 /* WeatherSentence.swift */,
 			);
 			path = Weather4U;
 			sourceTree = "<group>";
@@ -178,6 +190,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFE5DCFD2BF32AF3004EE3F7 /* locationData.json in Resources */,
 				FFE5DCC32BF1B465004EE3F7 /* Assets.xcassets in Resources */,
 				FFE5DCC62BF1B465004EE3F7 /* Base in Resources */,
 				FFE5DCBE2BF1B463004EE3F7 /* Base in Resources */,
@@ -193,6 +206,7 @@
 			files = (
 				FFE5DCF12BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift in Sources */,
 				FFE5DCE32BF1E491004EE3F7 /* NetworkManager.swift in Sources */,
+				FFE5DCFF2BF32C73004EE3F7 /* WeatherSentence.swift in Sources */,
 				FFE5DCBB2BF1B463004EE3F7 /* ViewController.swift in Sources */,
 				7B09E6EF2BF1D91800248D0B /* SearchController.swift in Sources */,
 				FFE5DCF22BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift in Sources */,
@@ -200,8 +214,10 @@
 				FFE5DCB72BF1B463004EE3F7 /* AppDelegate.swift in Sources */,
 				FFE5DCED2BF30302004EE3F7 /* BaseViewController.swift in Sources */,
 				FFE5DCB92BF1B463004EE3F7 /* SceneDelegate.swift in Sources */,
+				FFE5DCF52BF309E0004EE3F7 /* LocationData.swift in Sources */,
 				FFE5DCC12BF1B464004EE3F7 /* Weather4U.xcdatamodeld in Sources */,
 				FFE5DCF32BF3057C004EE3F7 /* MyWeatherPageViewController.swift in Sources */,
+				FFE5DCF92BF30CF0004EE3F7 /* JSONManager.swift in Sources */,
 				FFE5DCE52BF203E6004EE3F7 /* CategoryManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
