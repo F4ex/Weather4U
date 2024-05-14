@@ -43,7 +43,7 @@ class NetworkManager {
         AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: WeatherData.self) { response in
             switch response.result {
             case .success(let data):
-                print(data.response)
+//                print(data.response)
                 completion(.success(data.response.body.items.item))
             case .failure(let error):
                 print("Error: 데이터 받아오기 실패, \(error.localizedDescription)")
