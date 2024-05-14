@@ -79,7 +79,7 @@ class MyWeatherPageTableViewController: UITableViewController {
     
     func fetchWeatherData() {
         let currentDate = Date()
-        NetworkManager.shared.fetchWeatherData(date: currentDate, page: 1) { result in
+        NetworkManager.shared.fetchWeatherData(completion: { result in
             switch result {
             case .success(let data):
                 // 날씨 데이터 업데이트
@@ -91,6 +91,6 @@ class MyWeatherPageTableViewController: UITableViewController {
             case .failure(let error):
                 print("Error fetching weather data: \(error.localizedDescription)")
             }
-        }
+        })
     }
 }
