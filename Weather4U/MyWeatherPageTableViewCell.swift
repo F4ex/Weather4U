@@ -28,12 +28,12 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         lowLabel.backgroundColor = .orange
         
         
-        addSubview(cityLabel)
-        addSubview(tempLabel)
-        addSubview(highLabel)
-        addSubview(lowLabel)
-        addSubview(weatherLabel)
-        addSubview(cellImageView)
+        contentView.addSubview(cityLabel)
+        contentView.addSubview(tempLabel)
+        contentView.addSubview(highLabel)
+        contentView.addSubview(lowLabel)
+        contentView.addSubview(weatherLabel)
+        contentView.addSubview(cellImageView)
         
         // Auto Layout constraints 설정
         cityLabel.snp.makeConstraints { make in

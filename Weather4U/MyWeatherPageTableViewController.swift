@@ -8,14 +8,16 @@
 import UIKit
 
 class MyWeatherPageTableViewController: UITableViewController {
+   
     
-    let data = ["Item 1", "Item 2", "Item 3"]
+    static var data = ["Item 1", "Item 2", "Item 3"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // 테이블 뷰 설정
         tableView.register(MyWeatherPageTableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.delegate = self
     }
     
     // MARK: - Table view data source
@@ -25,7 +27,7 @@ class MyWeatherPageTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return MyWeatherPageTableViewController.data.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -44,7 +46,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         
         return cell
     }
-
+    
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // 셀의 높이 설정
