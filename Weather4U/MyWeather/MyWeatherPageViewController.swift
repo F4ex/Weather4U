@@ -10,7 +10,7 @@ import UIKit
 class MyWeatherPageViewController: BaseViewController {
     
     let searchBar = UISearchBar()
-    let myWeatherTable = MyWeatherPageTableViewController() // 테이블 뷰 컨트롤러의 인스턴스 생성
+    let myWeatherTable = MyWeatherPageTableViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,4 +37,4 @@ class MyWeatherPageViewController: BaseViewController {
         }
     }
 }
-//푸시용주석
+
