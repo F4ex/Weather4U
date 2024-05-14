@@ -25,6 +25,9 @@
 		FFE5DCE32BF1E491004EE3F7 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCE22BF1E491004EE3F7 /* NetworkManager.swift */; };
 		FFE5DCE52BF203E6004EE3F7 /* CategoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCE42BF203E6004EE3F7 /* CategoryManager.swift */; };
 		FFE5DCED2BF30302004EE3F7 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCEC2BF30302004EE3F7 /* BaseViewController.swift */; };
+		FFE5DCF12BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCEE2BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift */; };
+		FFE5DCF22BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCEF2BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift */; };
+		FFE5DCF32BF3057C004EE3F7 /* MyWeatherPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCF02BF3057C004EE3F7 /* MyWeatherPageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +45,9 @@
 		FFE5DCE22BF1E491004EE3F7 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		FFE5DCE42BF203E6004EE3F7 /* CategoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManager.swift; sourceTree = "<group>"; };
 		FFE5DCEC2BF30302004EE3F7 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		FFE5DCEE2BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWeatherPageTableViewCell.swift; sourceTree = "<group>"; };
+		FFE5DCEF2BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWeatherPageTableViewController.swift; sourceTree = "<group>"; };
+		FFE5DCF02BF3057C004EE3F7 /* MyWeatherPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWeatherPageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +86,9 @@
 		FFE5DCB52BF1B463004EE3F7 /* Weather4U */ = {
 			isa = PBXGroup;
 			children = (
+				FFE5DCEE2BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift */,
+				FFE5DCEF2BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift */,
+				FFE5DCF02BF3057C004EE3F7 /* MyWeatherPageViewController.swift */,
 				FFE5DCB62BF1B463004EE3F7 /* AppDelegate.swift */,
 				FFE5DCB82BF1B463004EE3F7 /* SceneDelegate.swift */,
 				FFE5DCBA2BF1B463004EE3F7 /* ViewController.swift */,
@@ -182,14 +191,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFE5DCF12BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift in Sources */,
 				FFE5DCE32BF1E491004EE3F7 /* NetworkManager.swift in Sources */,
 				FFE5DCBB2BF1B463004EE3F7 /* ViewController.swift in Sources */,
 				7B09E6EF2BF1D91800248D0B /* SearchController.swift in Sources */,
+				FFE5DCF22BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift in Sources */,
 				FFE5DCE12BF1E46B004EE3F7 /* WeatherData.swift in Sources */,
 				FFE5DCB72BF1B463004EE3F7 /* AppDelegate.swift in Sources */,
 				FFE5DCED2BF30302004EE3F7 /* BaseViewController.swift in Sources */,
 				FFE5DCB92BF1B463004EE3F7 /* SceneDelegate.swift in Sources */,
 				FFE5DCC12BF1B464004EE3F7 /* Weather4U.xcdatamodeld in Sources */,
+				FFE5DCF32BF3057C004EE3F7 /* MyWeatherPageViewController.swift in Sources */,
 				FFE5DCE52BF203E6004EE3F7 /* CategoryManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

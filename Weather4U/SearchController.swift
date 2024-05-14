@@ -8,7 +8,7 @@
 import SnapKit
 import UIKit
 
-class SearchController: UIViewController, UISearchResultsUpdating, UISearchControllerDelegate, UISearchBarDelegate {
+class SearchController: BaseViewController, UISearchResultsUpdating, UISearchControllerDelegate, UISearchBarDelegate {
    
 
     let settingButton = UIButton()
@@ -130,7 +130,7 @@ class SearchController: UIViewController, UISearchResultsUpdating, UISearchContr
     }
     
     //MARK: - UI 구현 및 오토레이아웃
-    func configureUI() {
+    override func configureUI() {
         
         [settingButton, searchBar, weatherLabel].forEach {
             view.addSubview($0)
@@ -149,7 +149,7 @@ class SearchController: UIViewController, UISearchResultsUpdating, UISearchContr
     }
 
     
-    func constraintLayout() {
+    override func constraintLayout() {
         
         settingButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(20)
