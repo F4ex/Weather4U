@@ -56,7 +56,7 @@ class SearchController: BaseViewController, UISearchResultsUpdating, UISearchCon
     func updateSearchResults(for searchController: UISearchController) {
         dump(searchController.searchBar.text) // 디버깅을 위한 출력
                 
-        guard let text = searchController.searchBar.text?.lowercased() else {
+        guard (searchController.searchBar.text?.lowercased()) != nil else {
             return
         }
 //        performSearch(with: text)
@@ -65,7 +65,7 @@ class SearchController: BaseViewController, UISearchResultsUpdating, UISearchCon
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
             searchBar.resignFirstResponder() // 키보드를 숨깁니다.
     
-            guard let text = searchBar.text?.lowercased() else {
+        guard (searchBar.text?.lowercased()) != nil else {
                 return
             }
     
