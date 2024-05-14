@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7B09E6EF2BF1D91800248D0B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */; };
+		7B09E6EF2BF1D91800248D0B /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B09E6ED2BF1D91800248D0B /* SearchController.swift */; };
 		FFE5DCB72BF1B463004EE3F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCB62BF1B463004EE3F7 /* AppDelegate.swift */; };
 		FFE5DCB92BF1B463004EE3F7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCB82BF1B463004EE3F7 /* SceneDelegate.swift */; };
 		FFE5DCBB2BF1B463004EE3F7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCBA2BF1B463004EE3F7 /* ViewController.swift */; };
@@ -31,7 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		7B09E6ED2BF1D91800248D0B /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		FFE5DCB32BF1B463004EE3F7 /* Weather4U.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather4U.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFE5DCB62BF1B463004EE3F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FFE5DCB82BF1B463004EE3F7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -95,7 +95,7 @@
 				FFE5DCBC2BF1B463004EE3F7 /* Main.storyboard */,
 				FFE5DCC22BF1B465004EE3F7 /* Assets.xcassets */,
 				FFE5DCC42BF1B465004EE3F7 /* LaunchScreen.storyboard */,
-				7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */,
+				7B09E6ED2BF1D91800248D0B /* SearchController.swift */,
 				FFE5DCC72BF1B465004EE3F7 /* Info.plist */,
 				FFE5DCBF2BF1B463004EE3F7 /* Weather4U.xcdatamodeld */,
 				FFE5DCE02BF1E46B004EE3F7 /* WeatherData.swift */,
@@ -194,7 +194,7 @@
 				FFE5DCF12BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift in Sources */,
 				FFE5DCE32BF1E491004EE3F7 /* NetworkManager.swift in Sources */,
 				FFE5DCBB2BF1B463004EE3F7 /* ViewController.swift in Sources */,
-				7B09E6EF2BF1D91800248D0B /* SearchViewController.swift in Sources */,
+				7B09E6EF2BF1D91800248D0B /* SearchController.swift in Sources */,
 				FFE5DCF22BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift in Sources */,
 				FFE5DCE12BF1E46B004EE3F7 /* WeatherData.swift in Sources */,
 				FFE5DCB72BF1B463004EE3F7 /* AppDelegate.swift in Sources */,
