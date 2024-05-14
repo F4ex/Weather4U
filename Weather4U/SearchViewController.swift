@@ -8,20 +8,18 @@
 import SnapKit
 import UIKit
 
-class SearchController: MyWeatherPageViewController, UISearchResultsUpdating, UISearchControllerDelegate, UISearchBarDelegate {
+class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearchControllerDelegate, UISearchBarDelegate {
     
     
     let settingButton = UIButton()
     let doneButton = UIButton()
     
-    
-//    let searchBar = UISearchBar()
+    //    var barbutton : UIBarButtonItem?
+    //    var doneButton = UIBarButtonItem()
+    let searchBar = UISearchBar()
     let weatherLabel = UILabel()
-//    let myWeatherTable = MyWeatherPageTableViewController()
-    
+    let myWeatherTable = MyWeatherPageTableViewController()
     var isEditMode = false
-    var isCelsius = true
-    var isFahrenheit = false
     
     let celsius : Int = 17
     
@@ -34,8 +32,8 @@ class SearchController: MyWeatherPageViewController, UISearchResultsUpdating, UI
         
         
         setSearchController(searchBar)
+        setSettingButton(settingButton)
         
-        setCelsius()
         
     }
     
@@ -104,41 +102,43 @@ class SearchController: MyWeatherPageViewController, UISearchResultsUpdating, UI
     
     //MARK: - Pop up button (정렬방식)
     
+    
+    
     func setSettingButton(_ button: UIButton) {
         let configuration = UIButton.Configuration.plain()
         settingButton.configuration = configuration
         
-        let seletedPriority = {(action: UIAction) in
-            if action.title == "Edit List" {
-                self.tappedEditList()
-                //                self.myWeatherTable.dragInteractionEnabled = true
-            }
-            else if action.title == "Celsius" {
-                self.setCelsius()
-            } else if action.title == "Fahrenheit"{
-                self.setFahrenheit()
-            }
-            
-            //            self.weatherTableView.reloadData()
-            print(action.title)}
+        var celsiusAction: UIAction!
+        var fahrenheitAction: UIAction!
         
+        celsiusAction = UIAction(title: "Celsius", image: UIImage(named: "Celsius"), state: .off) { [weak self] _ in
+            guard let self = self else { return }
+            print(self.celsius)
+            celsiusAction.state = .on
+            fahrenheitAction.state = .off
+        }
         
+        fahrenheitAction = UIAction(title: "Fahrenheit", image: UIImage(named: "Fahrenheit"), state: .on) { [weak self] _ in
+            guard let self = self else { return }
+            print(Int((Double(self.celsius) * 1.8 + 32).rounded()))
+            celsiusAction.state = .off
+            fahrenheitAction.state = .on
+        }
         
-        let editList = UIAction(title: "Edit List", image: UIImage(systemName: "pencil"), handler: seletedPriority)
-        let celsiusAction = UIAction(title: "Celsius", image: UIImage(named: "Celsius"),state: (isCelsius == true) ? .on : .off, handler: seletedPriority)
-        let fahrenheitAction = UIAction(title: "Fahrenheit", image: UIImage(named: "Fahrenheit"), state: (isFahrenheit == true) ? .on : .off, handler: seletedPriority)
+        let editList = UIAction(title: "Edit List", image: UIImage(systemName: "pencil")) { [weak self] _ in
+            self?.tappedEditList()
+        }
         
         let menu = UIMenu(options: .displayInline, children: [editList])
         
-        var settingMenu : UIMenu {
-            return UIMenu(options: [], children: [menu,celsiusAction, fahrenheitAction])
-        }
+        let settingMenu = UIMenu(options: [], children: [menu, celsiusAction, fahrenheitAction])
         
         self.settingButton.menu = settingMenu
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: settingMenu)
         self.settingButton.showsMenuAsPrimaryAction = true
     }
 
+    
     func tappedEditList() {
         isEditMode = true
         settingButton.isHidden = true
@@ -146,23 +146,6 @@ class SearchController: MyWeatherPageViewController, UISearchResultsUpdating, UI
         self.myWeatherTable.setEditing(true, animated: true)
         print("EditList")
     }
-    
-    //섭씨 세팅
-    func setCelsius() {
-        isCelsius = true
-        isFahrenheit = false
-        setSettingButton(settingButton)
-        print(self.celsius)
-    }
-    
-    //화씨 세팅
-    func setFahrenheit() {
-        isCelsius = false
-        isFahrenheit = true
-        setSettingButton(settingButton)
-        print(Int((Double(self.celsius) * 1.8 + 32).rounded()))
-    }
-    
     
     // 편집 끝
     @objc func tappedDone() {
@@ -172,7 +155,7 @@ class SearchController: MyWeatherPageViewController, UISearchResultsUpdating, UI
         self.myWeatherTable.setEditing(false, animated: true)
         print("Done")
     }
-    
+
     
     //MARK: - UI 구현 및 오토레이아웃
     override func configureUI() {
