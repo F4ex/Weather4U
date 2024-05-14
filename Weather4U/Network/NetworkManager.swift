@@ -48,6 +48,10 @@ class NetworkManager {
             }
         }
     }
+    
+    func fetchWeatherSentence() {
+        
+    }
 }
 
 extension NetworkManager {

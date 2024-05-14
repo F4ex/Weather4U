@@ -12,6 +12,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        JSONManager.shared.loadJSONToLocationData(fileName: "locationData", extensionType: "json")
     }
 
 
