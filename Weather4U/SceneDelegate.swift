@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         navigationController.navigationBar.isHidden = true // 스크롤바 내릴때 상단에 창 뜨는거 싫으면 이 코드 써주기
         
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = navigationController
+        window.rootViewController = SearchViewController()
         window.makeKeyAndVisible()
         self.window = window
     }

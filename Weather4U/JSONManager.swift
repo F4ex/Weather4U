@@ -12,7 +12,7 @@ class JSONManager {
     static let shared = JSONManager()
     static var locationData: LocationData = []
     
-    private init() { }
+    init() { }
     
     func loadJSONToLocationData(fileName: String, extensionType: String) {
         let fileName: String = fileName
