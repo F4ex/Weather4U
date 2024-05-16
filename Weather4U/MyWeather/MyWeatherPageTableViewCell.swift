@@ -17,6 +17,7 @@ class MyWeatherPageTableViewCell: UITableViewCell {
     let weatherLabel = UILabel()
     let cellImageView = UIImageView() // imageView 이름 변경
     
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -32,12 +33,11 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         highLabel.textColor = .white
         lowLabel.textColor = .white
         
-        contentView.addSubview(cityLabel)
-        contentView.addSubview(tempLabel)
-        contentView.addSubview(highLabel)
-        contentView.addSubview(lowLabel)
-        contentView.addSubview(weatherLabel)
-        contentView.addSubview(cellImageView)
+        
+        [cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
+            contentView.addSubview($0)
+            }
+           
         
         // Auto Layout constraints 설정
         cityLabel.snp.makeConstraints { make in
@@ -80,6 +80,7 @@ class MyWeatherPageTableViewCell: UITableViewCell {
             make.height.equalTo(130) // 이미지 뷰의 높이 설정
         }
     }
+    
     
     override func layoutSubviews() {
             super.layoutSubviews()
