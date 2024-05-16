@@ -5,13 +5,12 @@
 //  Created by 이시안 on 5/14/24.
 //
 
-import Foundation
-import UIKit
 import SnapKit
 import Then
+import UIKit
 
-class MainViewController: BaseViewController, UICollectionViewDelegate,UICollectionViewDataSource, UITableViewDelegate,UITableViewDataSource {
-   
+class MainViewController: BaseViewController {
+    
     let scrollView = UIScrollView()
     let contentView = UIView()
     let location = UILabel()
@@ -27,53 +26,34 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         layout.minimumInteritemSpacing = 15
         layout.itemSize = CGSize(width: 110, height: 110)
     }
-
+    
     let todayWeather = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then() {
         let layout = $0.collectionViewLayout as! UICollectionViewFlowLayout
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 2
         layout.itemSize = CGSize(width: 56, height: 110)
     }
-    
     let weekWeather = UITableView()
+    let footerMessage = UILabel()
+    let logo = UIImageView()
     
     
- 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "Background") 
+        view.backgroundColor = UIColor(named: "Background")
+        
+        status.delegate = self
+        status.dataSource = self
+        todayWeather.delegate = self
+        todayWeather.dataSource = self
+        weekWeather.delegate = self
+        weekWeather.dataSource = self
+        
+        weekWeather.sectionHeaderTopPadding = 0
+        //stickyheader 사용 -> y축의 몇 픽셀에서 멈추는지 정하면 되는것 같다..
+        //그렇다면 접히면서 사라리는건?
     }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionView == status ? 3 : 24
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == status {
-            guard let cell = status.dequeueReusableCell(withReuseIdentifier: "StatusCell", for: indexPath) as? StatusCell else {
-                return UICollectionViewCell()
-            } 
-            return cell
-        } else if collectionView == todayWeather {
-            guard let cell = todayWeather.dequeueReusableCell(withReuseIdentifier: "TodayWeatherCell", for: indexPath) as? TodayWeatherCell else {
-                return UICollectionViewCell()
-            }
-            return cell
-        }
-        return UICollectionViewCell()
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = weekWeather.dequeueReusableCell(withIdentifier: "WeekWeatherCell", for: indexPath) as? WeekWeatherCell else {
-            return UITableViewCell()
-        }
-        return cell
-    }
-    
     
     
     override func constraintLayout(){
@@ -82,14 +62,14 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
             $0.edges.equalTo(view)
         }
         scrollView.addSubview(contentView)
-        [location, moveToDress, moveToSearch, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather].forEach() {
+        [location, moveToDress, moveToSearch, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather, footerMessage, logo].forEach() {
             contentView.addSubview($0)
         }
         
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView)
-             $0.width.equalTo(scrollView)
-             $0.height.equalTo(1763)
+            $0.width.equalTo(scrollView)
+            $0.height.equalTo(1763)
         }
         
         location.snp.makeConstraints(){
@@ -142,11 +122,21 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         weekWeather.snp.makeConstraints(){
             $0.top.equalTo(todayWeather.snp.bottom).offset(14)
             $0.left.right.equalTo(contentView).inset(16)
-            $0.height.equalTo(473)
+            $0.height.equalTo(470)
         }
+        footerMessage.snp.makeConstraints(){
+            $0.bottom.equalTo(logo.snp.top).offset(-9)
+            $0.horizontalEdges.equalTo(contentView).inset(102)
+        }
+        
+        logo.snp.makeConstraints(){
+            $0.bottom.equalTo(contentView).inset(54)
+            $0.width.height.equalTo(43)
+            $0.centerX.equalTo(contentView)
+        }
+        
+        
     }
-    
-    
     
     
     override func configureUI() {
@@ -172,11 +162,11 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         temperature.shadowOffset = CGSize(width: 0, height: 4)
         
         
-        tempHigh.text = "H: \(01)"
+        tempHigh.text = "H: \(01)°"
         tempHigh.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempHigh.textColor = UIColor(named: "font")
         
-        tempLow.text = "L: \(01)"
+        tempLow.text = "L: \(01)°"
         tempLow.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempLow.textColor = UIColor(named: "font")
         
@@ -187,25 +177,104 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         weatherExplanation.textColor = UIColor(named: "font")
         
         status.register(StatusCell.self, forCellWithReuseIdentifier: "StatusCell")
-        status.delegate = self
-        status.dataSource = self
         status.backgroundColor = view.backgroundColor
         
         todayWeather.register(TodayWeatherCell.self, forCellWithReuseIdentifier: "TodayWeatherCell")
-        todayWeather.delegate = self
-        todayWeather.dataSource = self
         todayWeather.backgroundColor = UIColor(named: "cell")
         todayWeather.layer.cornerRadius = 15
         
         weekWeather.register(WeekWeatherCell.self, forCellReuseIdentifier: "WeekWeatherCell")
-        weekWeather.delegate = self
-        weekWeather.dataSource = self
         weekWeather.backgroundColor = UIColor(named: "cell")
         weekWeather.layer.cornerRadius = 15
+        
+        
+        footerMessage.text = "Weather4U will be by your side, cheering you on through your day."
+        footerMessage.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
+        footerMessage.textAlignment = .center
+        footerMessage.numberOfLines = 2
+        
+        logo.backgroundColor = .white
     }
     
     @objc func clickToSearch() {
         let vc = SearchViewController()
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+
+
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return collectionView == status ? 3 : 24
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if collectionView == status {
+            guard let cell = status.dequeueReusableCell(withReuseIdentifier: "StatusCell", for: indexPath) as? StatusCell else {
+                return UICollectionViewCell()
+            }
+            return cell
+        } else if collectionView == todayWeather {
+            guard let cell = todayWeather.dequeueReusableCell(withReuseIdentifier: "TodayWeatherCell", for: indexPath) as? TodayWeatherCell else {
+                return UICollectionViewCell()
+            }
+            return cell
+        }
+        return UICollectionViewCell()
+    }
+}
+
+
+
+extension MainViewController: UITableViewDelegate,UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 8
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = weekWeather.dequeueReusableCell(withIdentifier: "WeekWeatherCell", for: indexPath) as? WeekWeatherCell else {
+            return UITableViewCell()
+        }
+        return cell
+    }
+    //셀 높이 조절
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 51
+    }
+    //테이블뷰 배경색 지정
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor(named: "cell")
+    }
+    //헤더크기 지정
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        36
+    }
+    //뷰델리게이트 안에 헤더뷰
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let weekWeatherH = UIView() //헤더로 사용할 뷰 만들기
+        weekWeatherH.backgroundColor = UIColor(named: "cell")
+        
+        let label = UILabel()
+        label.text = "Week Forcast"
+        label.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
+        label.textColor = UIColor(named: "font")
+        
+        let icon = UIImageView(image: UIImage(systemName: "calendar"))
+        
+        weekWeatherH.addSubview(label)
+        weekWeatherH.addSubview(icon)
+        
+        icon.snp.makeConstraints(){
+            $0.centerY.equalTo(weekWeatherH)
+            $0.left.equalTo(weekWeatherH).offset(22)
+            $0.width.height.equalTo(20)
+        }
+        
+        label.snp.makeConstraints(){
+            $0.centerY.equalTo(weekWeatherH)
+            $0.left.equalTo(icon.snp.right).offset(6)
+        }
+        return weekWeatherH
     }
 }
