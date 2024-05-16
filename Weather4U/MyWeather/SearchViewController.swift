@@ -8,18 +8,17 @@
 import SnapKit
 import UIKit
 
-class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearchControllerDelegate, UISearchBarDelegate {
-    
+class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating, UISearchControllerDelegate, UISearchBarDelegate {
     
     let settingButton = UIButton()
     let doneButton = UIButton()
     
-    //    var barbutton : UIBarButtonItem?
-    //    var doneButton = UIBarButtonItem()
-    let searchBar = UISearchBar()
+    
     let weatherLabel = UILabel()
-    let myWeatherTable = MyWeatherPageTableViewController()
     var isEditMode = false
+
+    var isCelsius = true
+    var isFahrenheit = false
     
     let celsius : Int = 17
     
@@ -33,6 +32,8 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
         
         setSearchController(searchBar)
         setSettingButton(settingButton)
+        
+        setCelsius()
         
         
     }
@@ -103,39 +104,52 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
     //MARK: - Pop up button (정렬방식)
     
     
-    
     func setSettingButton(_ button: UIButton) {
-        let configuration = UIButton.Configuration.plain()
-        settingButton.configuration = configuration
+           let configuration = UIButton.Configuration.plain()
+           settingButton.configuration = configuration
+           
+           
+           let seletedPriority = {(action: UIAction)  in
+               
+    
+               if action.title == "Edit List" {
+                   self.tappedEditList()
+                   self.myWeatherTable.setEditing(true, animated: true)
+                   print("edit list")
+               } else if action.title == "Celsius" {
+                   self.setCelsius()
+               } else if action.title == "Fahrenheit"{
+                   self.setFahrenheit()
+               }
+               
+   //            self.searchCollectionView.reloadData()
+               print(action.title)}
+           
+           let editList = UIAction(title: "Edit List", image: UIImage(systemName: "pencil"), handler: seletedPriority)
+        let celsiusAction = UIAction(title: "Celsius", image: UIImage(named: "Celsius"),state: (isCelsius == true) ? .on : .off, handler: seletedPriority)
+        let fahrenheitAction = UIAction(title: "Fahrenheit", image: UIImage(named: "Fahrenheit"), state: (isFahrenheit == true) ? .on : .off, handler: seletedPriority)
+           
+           let menu = UIMenu(options: .displayInline, children: [editList])
+           
+           self.settingButton.menu = UIMenu(children: [menu,celsiusAction, fahrenheitAction])
+           
+           self.settingButton.showsMenuAsPrimaryAction = true
+           
+       }
+    
+    func setCelsius() {
+        isCelsius = true
+        isFahrenheit = false
+        setSettingButton(settingButton)
+        print(self.celsius)
         
-        var celsiusAction: UIAction!
-        var fahrenheitAction: UIAction!
-        
-        celsiusAction = UIAction(title: "Celsius", image: UIImage(named: "Celsius"), state: .off) { [weak self] _ in
-            guard let self = self else { return }
-            print(self.celsius)
-            celsiusAction.state = .on
-            fahrenheitAction.state = .off
-        }
-        
-        fahrenheitAction = UIAction(title: "Fahrenheit", image: UIImage(named: "Fahrenheit"), state: .on) { [weak self] _ in
-            guard let self = self else { return }
-            print(Int((Double(self.celsius) * 1.8 + 32).rounded()))
-            celsiusAction.state = .off
-            fahrenheitAction.state = .on
-        }
-        
-        let editList = UIAction(title: "Edit List", image: UIImage(systemName: "pencil")) { [weak self] _ in
-            self?.tappedEditList()
-        }
-        
-        let menu = UIMenu(options: .displayInline, children: [editList])
-        
-        let settingMenu = UIMenu(options: [], children: [menu, celsiusAction, fahrenheitAction])
-        
-        self.settingButton.menu = settingMenu
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: settingMenu)
-        self.settingButton.showsMenuAsPrimaryAction = true
+    }
+    
+    func setFahrenheit() {
+        isCelsius = false
+        isFahrenheit = true
+        setSettingButton(settingButton)
+        print(Int((Double(self.celsius) * 1.8 + 32).rounded()))
     }
 
     
@@ -191,7 +205,6 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
         
     }
     
-    
     override func constraintLayout() {
         
         settingButton.snp.makeConstraints {
@@ -226,7 +239,5 @@ class SearchViewController: BaseViewController, UISearchResultsUpdating, UISearc
     
     
 } // class
-
-//MARK: - tableView edit
 
 
