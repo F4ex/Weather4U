@@ -11,8 +11,6 @@ import SnapKit
 
 class MyWeatherPageTableViewController: UITableViewController {
     
-    
-    var weatherData: [Item] = []
     var city: String = "Seoul"
     
     override func viewDidLoad() {
@@ -38,19 +36,18 @@ class MyWeatherPageTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return weatherData.count
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MyWeatherPageTableViewCell
         
         // 데이터 설정
-        let item = weatherData[indexPath.row]
         cell.cityLabel.text = city
-        cell.tempLabel.text = "\(item.fcstValue)°C"
-        cell.highLabel.text = "H: \(item.fcstValue)°C"
-        cell.lowLabel.text = "L: \(item.fcstValue)°C"
-        cell.weatherLabel.text = "Sunny"
+        cell.tempLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "1시간 기온", currnetTime: true) ?? "-") + "°C"
+        cell.highLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최고기온", currnetTime: false, highTemp: true) ?? "-") + "°C"
+        cell.lowLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최저기온", currnetTime: false) ?? "-") + "°C"
+        cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "하늘상태", currnetTime: true) ?? "-")
         // 이미지 설정
         if let weatherImage = UIImage(named: "sunny") {
             cell.cellImageView.image = weatherImage

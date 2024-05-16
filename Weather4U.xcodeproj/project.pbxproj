@@ -43,6 +43,9 @@
 		FFE5DD072BF38B18004EE3F7 /* weatherTemperatureLocationData.json in Resources */ = {isa = PBXBuildFile; fileRef = FFE5DD042BF38B18004EE3F7 /* weatherTemperatureLocationData.json */; };
 		FFE5DD082BF38B18004EE3F7 /* weatherStatusLocationData.json in Resources */ = {isa = PBXBuildFile; fileRef = FFE5DD052BF38B18004EE3F7 /* weatherStatusLocationData.json */; };
 		FFE5DD092BF38B18004EE3F7 /* weatherSentenceLocationData.json in Resources */ = {isa = PBXBuildFile; fileRef = FFE5DD062BF38B18004EE3F7 /* weatherSentenceLocationData.json */; };
+		FFE5DD0B2BF5A798004EE3F7 /* ChartCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DD0A2BF5A798004EE3F7 /* ChartCollectionViewCell.swift */; };
+		FFE5DD132BF5B8D4004EE3F7 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = FFE5DD122BF5B8D4004EE3F7 /* DGCharts */; };
+		FFE5DD152BF5B8D4004EE3F7 /* DGChartsDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = FFE5DD142BF5B8D4004EE3F7 /* DGChartsDynamic */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -92,6 +95,7 @@
 		FFE5DD042BF38B18004EE3F7 /* weatherTemperatureLocationData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = weatherTemperatureLocationData.json; sourceTree = "<group>"; };
 		FFE5DD052BF38B18004EE3F7 /* weatherStatusLocationData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = weatherStatusLocationData.json; sourceTree = "<group>"; };
 		FFE5DD062BF38B18004EE3F7 /* weatherSentenceLocationData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = weatherSentenceLocationData.json; sourceTree = "<group>"; };
+		FFE5DD0A2BF5A798004EE3F7 /* ChartCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,7 +107,9 @@
 				FFE5DCDC2BF1B800004EE3F7 /* Then in Frameworks */,
 				FFE5DCD42BF1B7C8004EE3F7 /* Kingfisher in Frameworks */,
 				FFE5DCD72BF1B7D8004EE3F7 /* SnapKit in Frameworks */,
+				FFE5DD152BF5B8D4004EE3F7 /* DGChartsDynamic in Frameworks */,
 				FFE5DCCF2BF1B7BD004EE3F7 /* Alamofire in Frameworks */,
+				FFE5DD132BF5B8D4004EE3F7 /* DGCharts in Frameworks */,
 				FFE5DCD12BF1B7BD004EE3F7 /* AlamofireDynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -129,6 +135,7 @@
 				9545B8082BF3252800EE36B8 /* StatusCell.swift */,
 				9545B80A2BF3255A00EE36B8 /* TodayWeatherCell.swift */,
 				95FE07E12BF35203004D2139 /* WeekWeatherCell.swift */,
+				FFE5DD0A2BF5A798004EE3F7 /* ChartCollectionViewCell.swift */,
 			);
 			path = MainWeather;
 			sourceTree = "<group>";
@@ -204,6 +211,8 @@
 				FFE5DCD62BF1B7D8004EE3F7 /* SnapKit */,
 				FFE5DCD82BF1B7D8004EE3F7 /* SnapKit-Dynamic */,
 				FFE5DCDB2BF1B800004EE3F7 /* Then */,
+				FFE5DD122BF5B8D4004EE3F7 /* DGCharts */,
+				FFE5DD142BF5B8D4004EE3F7 /* DGChartsDynamic */,
 			);
 			productName = Weather4U;
 			productReference = FFE5DCB32BF1B463004EE3F7 /* Weather4U.app */;
@@ -238,6 +247,7 @@
 				FFE5DCD22BF1B7C8004EE3F7 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				FFE5DCD52BF1B7D8004EE3F7 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				FFE5DCDA2BF1B800004EE3F7 /* XCRemoteSwiftPackageReference "Then" */,
+				FFE5DD112BF5B8D4004EE3F7 /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			productRefGroup = FFE5DCB42BF1B463004EE3F7 /* Products */;
 			projectDirPath = "";
@@ -260,7 +270,6 @@
 				FFE5DCC62BF1B465004EE3F7 /* Base in Resources */,
 				95B07D9F2BF3C6BB00F80AC5 /* Alata-Regular in Resources */,
 				FFE5DD072BF38B18004EE3F7 /* weatherTemperatureLocationData.json in Resources */,
-				FFE5DCBE2BF1B463004EE3F7 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +300,7 @@
 				9545B8092BF3252800EE36B8 /* StatusCell.swift in Sources */,
 				FFE5DCF32BF3057C004EE3F7 /* MyWeatherPageViewController.swift in Sources */,
 				FFE5DD032BF36AD6004EE3F7 /* WeatherTemperatureData.swift in Sources */,
+				FFE5DD0B2BF5A798004EE3F7 /* ChartCollectionViewCell.swift in Sources */,
 				FFE5DCF92BF30CF0004EE3F7 /* JSONManager.swift in Sources */,
 				FFE5DCE52BF203E6004EE3F7 /* CategoryManager.swift in Sources */,
 			);
@@ -549,6 +559,14 @@
 				version = 3.0.0;
 			};
 		};
+		FFE5DD112BF5B8D4004EE3F7 /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ChartsOrg/Charts";
+			requirement = {
+				kind = exactVersion;
+				version = 5.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -581,6 +599,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FFE5DCDA2BF1B800004EE3F7 /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
+		};
+		FFE5DD122BF5B8D4004EE3F7 /* DGCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFE5DD112BF5B8D4004EE3F7 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = DGCharts;
+		};
+		FFE5DD142BF5B8D4004EE3F7 /* DGChartsDynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFE5DD112BF5B8D4004EE3F7 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = DGChartsDynamic;
 		};
 /* End XCSwiftPackageProductDependency section */
 
