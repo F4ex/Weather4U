@@ -35,17 +35,32 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         layout.itemSize = CGSize(width: 56, height: 110)
     }
     
+    let todayPrecipitation = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then() {
+        let layout = $0.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.minimumInteritemSpacing = 15
+        layout.itemSize = CGSize(width: 360, height: 110)
+    }
+    
     let weekWeather = UITableView()
     
     
  
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "Background") 
+        view.backgroundColor = UIColor(named: "Background")
+        NetworkManager.shared.receiveWeatherData()
+        JSONManager.shared.loadJSONToLocationData(fileName: "weatherLocationData", extensionType: "json")
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionView == status ? 3 : 24
+        switch collectionView {
+        case status:
+            return 3
+        case todayWeather:
+            return 24
+        default :
+            return 1
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -56,6 +71,11 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
             return cell
         } else if collectionView == todayWeather {
             guard let cell = todayWeather.dequeueReusableCell(withReuseIdentifier: "TodayWeatherCell", for: indexPath) as? TodayWeatherCell else {
+                return UICollectionViewCell()
+            }
+            return cell
+        } else if collectionView == todayPrecipitation {
+            guard let cell = todayPrecipitation.dequeueReusableCell(withReuseIdentifier: ChartCollectionViewCell.identifier, for: indexPath) as? ChartCollectionViewCell else {
                 return UICollectionViewCell()
             }
             return cell
@@ -82,7 +102,7 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
             $0.edges.equalTo(view)
         }
         scrollView.addSubview(contentView)
-        [location, moveToDress, moveToSearch, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather].forEach() {
+        [location, moveToDress, moveToSearch, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, todayPrecipitation, weekWeather].forEach() {
             contentView.addSubview($0)
         }
         
@@ -144,6 +164,11 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
             $0.left.right.equalTo(contentView).inset(16)
             $0.height.equalTo(473)
         }
+        todayPrecipitation.snp.makeConstraints() {
+            $0.top.equalTo(weekWeather.snp.bottom).offset(14)
+            $0.left.right.equalTo(contentView).inset(16)
+            $0.height.equalTo(164)
+        }
     }
     
     
@@ -196,6 +221,12 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         todayWeather.dataSource = self
         todayWeather.backgroundColor = UIColor(named: "cell")
         todayWeather.layer.cornerRadius = 15
+        
+        todayPrecipitation.register(ChartCollectionViewCell.self, forCellWithReuseIdentifier: "ChartCollectionViewCell")
+        todayPrecipitation.delegate = self
+        todayPrecipitation.dataSource = self
+        todayPrecipitation.backgroundColor = UIColor(named: "cell")
+        todayPrecipitation.layer.cornerRadius = 15
         
         weekWeather.register(WeekWeatherCell.self, forCellReuseIdentifier: "WeekWeatherCell")
         weekWeather.delegate = self

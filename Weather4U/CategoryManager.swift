@@ -89,6 +89,26 @@ class CategoryManager {
         default: return "알 수 없음"
         }
     }
+    
+    func getTodayWeatherDataValue(dataKey: String) -> String? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH00"
+        let currentTimeString = formatter.string(from: Date())
+
+        guard let forecastsAtTime = CategoryManager.todayWeatherData[currentTimeString] else {
+            print("\(currentTimeString)시 데이터가 없습니다.")
+            return "-"
+        }
+
+        for forecast in forecastsAtTime {
+            if let value = forecast[dataKey] {
+                return value
+            }
+        }
+        
+        print("\(currentTimeString)시의 \(dataKey)값이 없습니다.")
+        return "-"
+    }
 }
 
 // 카테고리 설명 변환 함수

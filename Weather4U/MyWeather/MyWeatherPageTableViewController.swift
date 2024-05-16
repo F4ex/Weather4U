@@ -47,10 +47,10 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 데이터 설정
         let item = weatherData[indexPath.row]
         cell.cityLabel.text = city
-        cell.tempLabel.text = "\(item.fcstValue)°C"
-        cell.highLabel.text = "H: \(item.fcstValue)°C"
-        cell.lowLabel.text = "L: \(item.fcstValue)°C"
-        cell.weatherLabel.text = "Sunny"
+        cell.tempLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "1시간 기온") ?? "-") + "°C"
+        cell.highLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "1시간 기온") ?? "-") + "°C"
+        cell.lowLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "1시간 기온") ?? "-") + "°C"
+        cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "하늘상태") ?? "-")
         // 이미지 설정
         if let weatherImage = UIImage(named: "sunny") {
             cell.cellImageView.image = weatherImage
