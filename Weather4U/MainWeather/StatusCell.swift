@@ -37,8 +37,9 @@ class StatusCell: UICollectionViewCell {
         
         num.text = "00"
         num.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
-        
         num.textColor = UIColor(named: "font")
+        
+        icon.backgroundColor = .white
         
         background.backgroundColor = UIColor(named: "cell")
         background.layer.cornerRadius = 15

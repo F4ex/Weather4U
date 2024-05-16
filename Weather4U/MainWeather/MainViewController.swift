@@ -5,13 +5,12 @@
 //  Created by 이시안 on 5/14/24.
 //
 
-import Foundation
-import UIKit
 import SnapKit
 import Then
+import UIKit
 
 class MainViewController: BaseViewController {
-   
+    
     let scrollView = UIScrollView()
     let contentView = UIView()
     let location = UILabel()
@@ -27,7 +26,7 @@ class MainViewController: BaseViewController {
         layout.minimumInteritemSpacing = 15
         layout.itemSize = CGSize(width: 110, height: 110)
     }
-
+    
     let todayWeather = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then() {
         let layout = $0.collectionViewLayout as! UICollectionViewFlowLayout
         layout.scrollDirection = .horizontal
@@ -39,10 +38,10 @@ class MainViewController: BaseViewController {
     let logo = UIImageView()
     
     
- 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "Background") 
+        view.backgroundColor = UIColor(named: "Background")
         
         status.delegate = self
         status.dataSource = self
@@ -50,6 +49,10 @@ class MainViewController: BaseViewController {
         todayWeather.dataSource = self
         weekWeather.delegate = self
         weekWeather.dataSource = self
+        
+        weekWeather.sectionHeaderTopPadding = 0
+        //stickyheader 사용 -> y축의 몇 픽셀에서 멈추는지 정하면 되는것 같다..
+        //그렇다면 접히면서 사라리는건?
     }
     
     
@@ -65,8 +68,8 @@ class MainViewController: BaseViewController {
         
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView)
-             $0.width.equalTo(scrollView)
-             $0.height.equalTo(1763)
+            $0.width.equalTo(scrollView)
+            $0.height.equalTo(1763)
         }
         
         location.snp.makeConstraints(){
@@ -119,7 +122,7 @@ class MainViewController: BaseViewController {
         weekWeather.snp.makeConstraints(){
             $0.top.equalTo(todayWeather.snp.bottom).offset(14)
             $0.left.right.equalTo(contentView).inset(16)
-            $0.height.equalTo(473)
+            $0.height.equalTo(470)
         }
         footerMessage.snp.makeConstraints(){
             $0.bottom.equalTo(logo.snp.top).offset(-9)
@@ -223,6 +226,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
 }
 
 
+
 extension MainViewController: UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -244,7 +248,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
     }
     //헤더크기 지정
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        37
+        36
     }
     //뷰델리게이트 안에 헤더뷰
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -273,8 +277,4 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         }
         return weekWeatherH
     }
-    
-    
-    
-    
 }
