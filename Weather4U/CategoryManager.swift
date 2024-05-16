@@ -90,11 +90,21 @@ class CategoryManager {
         }
     }
     
-    func getTodayWeatherDataValue(dataKey: String) -> String? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH00"
-        let currentTimeString = formatter.string(from: Date())
-
+    func getTodayWeatherDataValue(dataKey: String, currnetTime: Bool, highTemp: Bool = false) -> String? {
+        var currentTimeString = ""
+        
+        if currnetTime {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH00"
+            currentTimeString = formatter.string(from: Date())
+        } else {
+            if highTemp {
+                currentTimeString = "1500"
+            } else {
+                currentTimeString = "0600"
+            }
+        }
+        
         guard let forecastsAtTime = CategoryManager.todayWeatherData[currentTimeString] else {
             print("\(currentTimeString)시 데이터가 없습니다.")
             return "-"
