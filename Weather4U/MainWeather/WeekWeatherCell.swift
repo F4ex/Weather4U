@@ -64,6 +64,6 @@ class WeekWeatherCell: UITableViewCell {
 //        num.snp.makeConstraints(){
 //            $0.top.equalToSuperview().offset(58)
 //            $0.centerX.equalToSuperview()
-        }
-    }
+//        }
+//    }
 }
