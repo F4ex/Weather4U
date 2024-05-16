@@ -34,7 +34,7 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         layout.minimumInteritemSpacing = 2
         layout.itemSize = CGSize(width: 56, height: 110)
     }
-    
+    let weekWeatherB = UIImageView()
     let weekWeather = UITableView()
     
     
@@ -72,6 +72,14 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
             return UITableViewCell()
         }
         return cell
+    }
+    //셀 높이 조절
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 51
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor(named: "cell")
     }
     
     
@@ -148,7 +156,6 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
     
     
     
-    
     override func configureUI() {
         location.text = "내 위치"
         location.font = UIFont(name: "Apple SD Gothic Neo", size: 34)
@@ -172,11 +179,11 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         temperature.shadowOffset = CGSize(width: 0, height: 4)
         
         
-        tempHigh.text = "H: \(01)"
+        tempHigh.text = "H: \(01)°"
         tempHigh.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempHigh.textColor = UIColor(named: "font")
         
-        tempLow.text = "L: \(01)"
+        tempLow.text = "L: \(01)°"
         tempLow.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempLow.textColor = UIColor(named: "font")
         
@@ -200,7 +207,6 @@ class MainViewController: BaseViewController, UICollectionViewDelegate,UICollect
         weekWeather.register(WeekWeatherCell.self, forCellReuseIdentifier: "WeekWeatherCell")
         weekWeather.delegate = self
         weekWeather.dataSource = self
-        weekWeather.backgroundColor = UIColor(named: "cell")
         weekWeather.layer.cornerRadius = 15
     }
     

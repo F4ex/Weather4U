@@ -11,59 +11,84 @@ import UIKit
 class WeekWeatherCell: UITableViewCell {
     static let identifier = "WeekWeatherCell"
     
-    let property = UILabel()
+    let day = UILabel()
+    let drop = UIImageView()
+    let pop = UILabel()
     let icon = UIImageView()
-    let down = UIImageView()
-    let up = UIImageView()
     let tempHigh = UILabel()
     let tempLow = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-//        configureUI()
-//        constraintLayout()
+        configureUI()
+        constraintLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    func configureUI() {
-//        [property, icon, down, up, tempHigh, tempLow].forEach(){
-//            addSubview($0)
-//        }
-//        property.text = "UV INDEX"
-//        property.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
-//        property.textColor = UIColor(named: "font")
-//        
-//        icon.
-//        
-//        icon.text = "00"
-//        num.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
-//        
-//        num.textColor = UIColor(named: "font")
-//        
-//        background.backgroundColor = UIColor(named: "cell")
-//        background.layer.cornerRadius = 15
-//    }
-//    
-//    func constraintLayout() {
-//        
-//        background.snp.makeConstraints(){
-//            $0.width.height.equalTo(110)
-//        }
-//        icon.snp.makeConstraints(){
-//            $0.top.equalToSuperview().offset(29)
-//            $0.width.height.equalTo(20)
-//            $0.left.equalToSuperview().offset(10)
-//        }
-//        property.snp.makeConstraints(){
-//            $0.top.equalToSuperview().offset(29)
-//            $0.left.equalTo(icon.snp.right).offset(6)
-//        }
-//        num.snp.makeConstraints(){
-//            $0.top.equalToSuperview().offset(58)
-//            $0.centerX.equalToSuperview()
-//        }
-//    }
+    func configureUI() {
+        [day, drop, pop, icon, tempHigh, tempLow].forEach(){
+            addSubview($0)
+        }
+        day.text = "Now"
+        day.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
+        day.textColor = UIColor(named: "font")
+        
+        drop.image = UIImage(systemName: "drop")
+        drop.tintColor = UIColor(named: "font")
+        
+        pop.text = "00%"
+        pop.font = UIFont(name: "Apple SD Gothic Neo", size: 12)
+        pop.textColor = UIColor(named: "font")
+        
+        icon.backgroundColor = .white
+        
+        tempHigh.text = "00°"
+        tempHigh.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
+        tempHigh.textColor = UIColor(named: "font")
+        
+        tempLow.text = "00°"
+        tempLow.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
+        tempLow.textColor = UIColor(named: "font")
+        
+    }
+    
+    func constraintLayout() {
+        
+        day.snp.makeConstraints(){
+            $0.centerY.equalToSuperview()
+            $0.left.equalToSuperview().offset(20)
+        }
+        
+        drop.snp.makeConstraints(){
+            $0.centerY.equalToSuperview()
+            $0.width.equalTo(12)
+            $0.height.equalTo(17.25)
+            $0.right.equalTo(pop.snp.left).offset(-5)
+        }
+        
+        pop.snp.makeConstraints(){
+            $0.top.equalToSuperview().offset(20)
+            $0.right.equalTo(icon.snp.left).offset(-24)
+        }
+        
+        icon.snp.makeConstraints(){
+            $0.centerY.equalToSuperview()
+            $0.width.height.equalTo(35)
+            $0.right.equalTo(tempHigh.snp.left).offset(-24)
+        }
+        
+        tempHigh.snp.makeConstraints(){
+            $0.centerY.equalToSuperview()
+            $0.right.equalTo(tempLow.snp.left).offset(-13)
+        }
+        
+        tempLow.snp.makeConstraints(){
+            $0.centerY.equalToSuperview()
+            $0.right.equalToSuperview().offset(-20)
+        }
+        
+    }
 }
