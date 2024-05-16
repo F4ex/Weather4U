@@ -36,7 +36,8 @@ class StatusCell: UICollectionViewCell {
         property.textColor = UIColor(named: "font")
         
         num.text = "00"
-        num.font = UIFont.defaultFont(weight: .semibold)
+        num.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
+        
         num.textColor = UIColor(named: "font")
         
         background.backgroundColor = UIColor(named: "cell")
