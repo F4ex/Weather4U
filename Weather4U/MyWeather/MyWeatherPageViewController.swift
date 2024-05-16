@@ -32,7 +32,7 @@ class MyWeatherPageViewController: BaseViewController {
         
         myWeatherTable.view.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(15)
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(20)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(5)
         }
     }
