@@ -11,6 +11,7 @@ import SnapKit
 
 class MyWeatherPageTableViewController: UITableViewController {
     
+    var weatherData: [Item] = []
     var city: String = "Seoul"
     
     override func viewDidLoad() {

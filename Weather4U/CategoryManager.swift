@@ -64,7 +64,7 @@ class CategoryManager {
                 forecastsByTime[item.fcstTime] = [forecastInfo]
             }
         }
-        print(forecastsByTime)
+        
         return forecastsByTime
     }
     
