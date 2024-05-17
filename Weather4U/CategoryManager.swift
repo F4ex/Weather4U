@@ -7,6 +7,24 @@
 
 import Foundation
 
+struct TodayWeather {
+    let todayTime: String   // 오늘 시간별 값
+    let POP: String   // 강수확률(%)
+    let PTY: String   // 강수형태(코드값)
+    let PCP: String   // 1시간 강수량(1mm)
+    let REH: String   // 습도(%)
+    let SNO: String   // 1시간 신적설(1mm)
+    let SKY: String   // 하늘상태(코드값)
+    let TMP: String   // 1시간 기온(℃)
+    let TMN: String   // 일 최저기온(℃)
+    let TMX: String   // 일 최고기온(℃)
+    let UUU: String   // 풍속(동서성분m/s)
+    let VVV: String   // 풍속(남북성분m/s)
+    let WAV: String   // 파고(M)
+    let VEC: String   // 풍향(deg)
+    let WSD: String   // 풍속(m/s)
+}
+
 enum Category: String, CaseIterable {
     case POP = "POP"   // 강수확률(%)
     case PTY = "PTY"   // 강수형태(코드값)
@@ -27,46 +45,68 @@ enum Category: String, CaseIterable {
 class CategoryManager {
     
     static let shared = CategoryManager()
-    static var todayWeatherData: [String: [[String:String]]] = [:]
+    static var todayWeatherData: [TodayWeather] = []
     
     private init() { }
     
-    func forecastForDate(items: [Item], fcstDate: Date) -> [String: [[String:String]]] {
-        var forecastsByTime: [String: [[String:String]]] = [:]
+    func forecastForDate(items: [Item], fcstDate: Date) -> [TodayWeather] {
+        var todayWeatherList: [TodayWeather] = []
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         let currentDate = formatter.string(from: fcstDate)
         
         // 특정 날짜에 해당하는 아이템들을 필터링합니다.
         let filteredItems = items.filter { $0.fcstDate == currentDate }
-
-        // 필터링된 아이템들을 시간별로 처리합니다.
-        for item in filteredItems {
-            // 각 아이템의 카테고리에 따른 처리를 준비합니다.
-            let value: String
-            switch item.category {
-            case Category.PTY.rawValue:
-                value = rainTypeDescription(from: item.fcstValue)
-            case Category.SKY.rawValue:
-                value = skyStatusDescription(from: item.fcstValue)
-            default:
-                value = item.fcstValue
+        
+        // 시간별로 그룹핑합니다.
+        let groupedByTime = Dictionary(grouping: filteredItems) { $0.fcstTime }
+        
+        // 각 시간별로 TodayWeather 객체를 생성합니다.
+        for (time, items) in groupedByTime {
+            var weatherDict = [String: String]()
+            
+            // 각 카테고리별 최신 값을 딕셔너리에 저장합니다.
+            items.forEach { item in
+                let value: String
+                switch item.category {
+                case Category.PTY.rawValue:
+                    value = rainTypeDescription(from: item.fcstValue)
+                case Category.SKY.rawValue:
+                    value = skyStatusDescription(from: item.fcstValue)
+                default:
+                    value = item.fcstValue
+                }
+                weatherDict[item.category] = value
             }
             
-            // 예보 시각을 기준으로 딕셔너리를 업데이트합니다.
-            let category = Category(rawValue: item.category)
-            let categoryDescription = category?.categoryDescription() ?? "Unknown"
-            let forecastInfo = [categoryDescription: value]
+            // TodayWeather 객체를 생성하여 리스트에 추가합니다.
+            let weather = TodayWeather(
+                todayTime: time,
+                POP: weatherDict["POP"] ?? "0", // 강수확률
+                PTY: weatherDict["PTY"] ?? "0", // 강수형태
+                PCP: weatherDict["PCP"] ?? "0", // 1시간 강수량
+                REH: weatherDict["REH"] ?? "0", // 습도
+                SNO: weatherDict["SNO"] ?? "0", // 1시간 신적설
+                SKY: weatherDict["SKY"] ?? "0", // 하늘상태
+                TMP: weatherDict["TMP"] ?? "0", // 1시간 기온
+                TMN: weatherDict["TMN"] ?? "0", // 일 최저기온
+                TMX: weatherDict["TMX"] ?? "0", // 일 최고기온
+                UUU: weatherDict["UUU"] ?? "0", // 풍속(동서성분)
+                VVV: weatherDict["VVV"] ?? "0", // 풍속(남북성분)
+                WAV: weatherDict["WAV"] ?? "0", // 파고
+                VEC: weatherDict["VEC"] ?? "0", // 풍향
+                WSD: weatherDict["WSD"] ?? "0"  // 풍속
+            )
             
-            if forecastsByTime[item.fcstTime] != nil {
-                forecastsByTime[item.fcstTime]?.append(forecastInfo)
-            } else {
-                forecastsByTime[item.fcstTime] = [forecastInfo]
-            }
+            todayWeatherList.append(weather)
         }
         
-        return forecastsByTime
+        // 시간별로 정렬합니다.
+        todayWeatherList.sort { $0.todayTime < $1.todayTime }
+        return todayWeatherList
     }
+
+
     
     // 강수형태 설명 반환 함수
     func rainTypeDescription(from code: String) -> String {
@@ -90,69 +130,51 @@ class CategoryManager {
         }
     }
     
-    func getTodayWeatherDataValue(dataKey: String, currnetTime: Bool, highTemp: Bool = false) -> String? {
+    func getTodayWeatherDataValue(dataKey: Category, currentTime: Bool = true, highTemp: Bool = false) -> String? {
         var currentTimeString = ""
         
-        if currnetTime {
+        if currentTime {
             let formatter = DateFormatter()
             formatter.dateFormat = "HH00"
             currentTimeString = formatter.string(from: Date())
         } else {
-            if highTemp {
-                currentTimeString = "1500"
-            } else {
-                currentTimeString = "0600"
-            }
+            currentTimeString = highTemp ? "1500" : "0600"
         }
         
-        guard let forecastsAtTime = CategoryManager.todayWeatherData[currentTimeString] else {
+        guard let forecastAtTime = CategoryManager.todayWeatherData.first(where: { $0.todayTime == currentTimeString }) else {
             print("\(currentTimeString)시 데이터가 없습니다.")
-            return "-"
-        }
-
-        for forecast in forecastsAtTime {
-            if let value = forecast[dataKey] {
-                return value
-            }
+            return nil
         }
         
-        print("\(currentTimeString)시의 \(dataKey)값이 없습니다.")
-        return "-"
-    }
-}
-
-// 카테고리 설명 변환 함수
-extension Category {
-    func categoryDescription() -> String {
-        switch self {
+        switch dataKey {
         case .POP:
-            return "강수확률"
+            return forecastAtTime.POP
         case .PTY:
-            return "강수형태"
+            return forecastAtTime.PTY
         case .PCP:
-            return "1시간 강수량"
+            return forecastAtTime.PCP
         case .REH:
-            return "습도"
+            return forecastAtTime.REH
         case .SNO:
-            return "1시간 신적설"
+            return forecastAtTime.SNO
         case .SKY:
-            return "하늘상태"
+            return forecastAtTime.SKY
         case .TMP:
-            return "1시간 기온"
+            return forecastAtTime.TMP
         case .TMN:
-            return "일 최저기온"
+            return forecastAtTime.TMN
         case .TMX:
-            return "일 최고기온"
+            return forecastAtTime.TMX
         case .UUU:
-            return "풍속(동서성분)"
+            return forecastAtTime.UUU
         case .VVV:
-            return "풍속(남북성분)"
+            return forecastAtTime.VVV
         case .WAV:
-            return "파고"
+            return forecastAtTime.WAV
         case .VEC:
-            return "풍향"
+            return forecastAtTime.VEC
         case .WSD:
-            return "풍속"
+            return forecastAtTime.WSD
         }
     }
 }

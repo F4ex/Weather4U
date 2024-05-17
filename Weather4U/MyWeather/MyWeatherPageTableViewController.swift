@@ -47,10 +47,10 @@ class MyWeatherPageTableViewController: UITableViewController {
         
         // 데이터 설정
         cell.cityLabel.text = city
-        cell.tempLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "1시간 기온", currnetTime: true) ?? "-") + "°C"
-        cell.highLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최고기온", currnetTime: false, highTemp: true) ?? "-") + "°C"
-        cell.lowLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최저기온", currnetTime: false) ?? "-") + "°C"
-        cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "하늘상태", currnetTime: true) ?? "-")
+        cell.tempLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-") + "°C"
+        cell.highLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-") + "°C"
+        cell.lowLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-") + "°C"
+        cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
         // 이미지 설정
         if let weatherImage = UIImage(named: "sunny") {
             cell.cellImageView.image = weatherImage
