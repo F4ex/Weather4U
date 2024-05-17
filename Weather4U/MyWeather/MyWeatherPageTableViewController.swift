@@ -17,6 +17,8 @@ class MyWeatherPageTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = UIColor(named: "cell")
+        
         // 셀 간격 조정
         tableView.separatorStyle = .none
         tableView.separatorColor = .clear
@@ -28,8 +30,9 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 테이블 뷰 삭제
         tableView.isEditing = false
         
+        // 날씨 데이터 가져오기
+        fetchWeatherData()
         tableView.reloadData()
-        
     }
     
     // MARK: - Table view data source
@@ -51,6 +54,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         cell.highLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-") + "°C"
         cell.lowLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-") + "°C"
         cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
+
         // 이미지 설정
         if let weatherImage = UIImage(named: "sunny") {
             cell.cellImageView.image = weatherImage
@@ -58,8 +62,22 @@ class MyWeatherPageTableViewController: UITableViewController {
             cell.cellImageView.image = UIImage(named: "defaultWeatherImage")
         }
         
-        // 셀의 contentView를 뒤로 보내기
-        cell.contentView.sendSubviewToBack(cell.cellImageView)
+        // 배경색 설정
+                switch cell.weatherLabel.text {
+                case "sunny":
+                    cell.backgroundColor = UIColor(named: "cell")
+                    view.backgroundColor = UIColor(named: "Background")
+                case "cloudy":
+                    cell.backgroundColor = UIColor.purple
+                    view.backgroundColor = UIColor.systemPurple
+                case "rainy":
+                    cell.backgroundColor = UIColor.purple
+                    view.backgroundColor = UIColor.systemPurple
+                default:
+                    cell.backgroundColor = UIColor(named: "cell")
+                    view.backgroundColor = UIColor(named: "Background")
+                }
+
         
         return cell
     }
