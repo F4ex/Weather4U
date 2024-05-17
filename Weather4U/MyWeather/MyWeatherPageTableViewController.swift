@@ -17,6 +17,8 @@ class MyWeatherPageTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = UIColor(named: "cell")
+        
         // 셀 간격 조정
         tableView.separatorStyle = .none
         tableView.separatorColor = .clear
@@ -28,8 +30,9 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 테이블 뷰 삭제
         tableView.isEditing = false
         
+        // 날씨 데이터 가져오기
+        fetchWeatherData()
         tableView.reloadData()
-        
     }
     
     // MARK: - Table view data source
@@ -46,10 +49,11 @@ class MyWeatherPageTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MyWeatherPageTableViewCell
         
         // 데이터 설정
-        cell.cityLabel.text = city
+        let item = weatherData[indexPath.row]
         cell.tempLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "1시간 기온", currnetTime: true) ?? "-") + "°C"
-        cell.highLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최고기온", currnetTime: false, highTemp: true) ?? "-") + "°C"
-        cell.lowLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최저기온", currnetTime: false) ?? "-") + "°C"
+        cell.highLabel.text = "H:" + (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최고기온", currnetTime: false, highTemp: true) ?? "-") + "°C"
+        cell.lowLabel.text = "L:" + (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최저기온", currnetTime: false) ?? "-") + "°C"
+
         cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "하늘상태", currnetTime: true) ?? "-")
         // 이미지 설정
         if let weatherImage = UIImage(named: "sunny") {
@@ -58,8 +62,22 @@ class MyWeatherPageTableViewController: UITableViewController {
             cell.cellImageView.image = UIImage(named: "defaultWeatherImage")
         }
         
-        // 셀의 contentView를 뒤로 보내기
-        cell.contentView.sendSubviewToBack(cell.cellImageView)
+        // 배경색 설정
+                switch cell.weatherLabel.text {
+                case "sunny":
+                    cell.backgroundColor = UIColor(named: "cell")
+                    view.backgroundColor = UIColor(named: "Background")
+                case "cloudy":
+                    cell.backgroundColor = UIColor.purple
+                    view.backgroundColor = UIColor.systemPurple
+                case "rainy":
+                    cell.backgroundColor = UIColor.purple
+                    view.backgroundColor = UIColor.systemPurple
+                default:
+                    cell.backgroundColor = UIColor(named: "cell")
+                    view.backgroundColor = UIColor(named: "Background")
+                }
+
         
         return cell
     }
