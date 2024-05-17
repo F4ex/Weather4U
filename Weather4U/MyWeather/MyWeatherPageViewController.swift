@@ -14,8 +14,9 @@ class MyWeatherPageViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
-        searchBar.backgroundColor = .gray
+        
+        view.backgroundColor = UIColor(named: "cell")
+        
         configureUI()
     }
     
