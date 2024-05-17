@@ -15,7 +15,7 @@ struct WeatherStatusData: Codable {
 // MARK: - Response
 struct StatusResponse: Codable {
     let header: StatusHeader
-    let body: Body
+    let body: StatusBody
 }
 
 // MARK: - Body
