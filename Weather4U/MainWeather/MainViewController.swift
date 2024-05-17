@@ -64,6 +64,9 @@ class MainViewController: BaseViewController {
         //그렇다면 접히면서 사라리는건?
 
         NetworkManager.shared.receiveWeatherData()
+        NetworkManager.shared.receiveWeatherStatus()
+        NetworkManager.shared.receiveWeatherSentence()
+        NetworkManager.shared.receiveWeatherTemperature()
         JSONManager.shared.loadJSONToLocationData(fileName: "weatherLocationData", extensionType: "json")
     }
     
@@ -186,7 +189,7 @@ class MainViewController: BaseViewController {
         tempLow.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempLow.textColor = UIColor(named: "font")
         
-        weatherExplanation.text = "Sunny conditions will continue for the rest of the day.Wind gusts are up to 8 m/s"
+        weatherExplanation.text = NetworkManager.weaterSentenceData ?? "Sunny conditions will continue for the rest of the day.Wind gusts are up to 8 m/s"
         weatherExplanation.textAlignment = .center
         weatherExplanation.numberOfLines = 2
         weatherExplanation.font = UIFont(name: "Apple SD Gothic Neo", size: 15)

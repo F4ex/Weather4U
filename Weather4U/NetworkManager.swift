@@ -12,7 +12,7 @@ class NetworkManager {
     
     static let shared = NetworkManager()
     static var weatherData: [Item] = []
-    static var weaterSentenceData: String = ""
+    static var weaterSentenceData: String?
     static var weatherStatusData: [StatusItem] = []
     static var weatherTemperatureData: [TemperatureItem] = []
     
@@ -28,7 +28,7 @@ class NetworkManager {
         let parameters: Parameters = ["dataType": "JSON", 
                                       "base_date": currentDateString,
                                       "base_time": "0200",
-                                      "nx": 55,
+                                      "nx": 60,
                                       "ny": 127,
                                       "serviceKey": serviceKey,
                                       "numOfRows": 870] // 3일치 예측 단기 예보
