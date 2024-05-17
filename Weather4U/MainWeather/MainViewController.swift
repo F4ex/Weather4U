@@ -280,7 +280,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
     }
     //헤더크기 지정
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        36
+        38
     }
     //뷰델리게이트 안에 헤더뷰
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
