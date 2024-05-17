@@ -15,7 +15,6 @@ class StatusCell: UICollectionViewCell {
     let property = UILabel()
     let icon = UIImageView()
     let num = UILabel()
-
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,37 +30,58 @@ class StatusCell: UICollectionViewCell {
         [background, property, icon, num].forEach(){
             addSubview($0)
         }
-        property.text = "UV INDEX"
         property.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
         property.textColor = UIColor(named: "font")
         
-        num.text = "00"
-        num.font = UIFont.defaultFont(weight: .semibold)
-        num.textColor = UIColor(named: "font")
+        icon.tintColor = UIColor(named: "font")
         
+        num.text = "00"
+        num.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
+        num.textColor = UIColor(named: "font")
+
         background.backgroundColor = UIColor(named: "cell")
         background.layer.cornerRadius = 15
     }
     
+    // 컨테이너 뷰를 선언, 이유는 statusCell의 property와 icon을 하나로 묶어 가운데 정렬을 하기 위해서
+    let containerView = UIView()
+
     func constraintLayout() {
+        addSubview(containerView)
+
+        containerView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(27)
+        }
         
-        background.snp.makeConstraints(){
+        background.snp.makeConstraints {
             $0.width.height.equalTo(110)
         }
-        icon.snp.makeConstraints(){
-            $0.top.equalToSuperview().offset(29)
-            $0.width.height.equalTo(20)
-            $0.left.equalToSuperview().offset(10)
+
+        containerView.addSubview(icon)
+        icon.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.left.equalToSuperview()
+            $0.height.equalTo(20)
         }
-        property.snp.makeConstraints(){
-            $0.top.equalToSuperview().offset(29)
+        
+        containerView.addSubview(property)
+        property.snp.makeConstraints {
             $0.left.equalTo(icon.snp.right).offset(6)
+            $0.top.equalToSuperview()
+            $0.right.equalToSuperview()
         }
-        num.snp.makeConstraints(){
+        
+        addSubview(num)
+        num.snp.makeConstraints {
             $0.top.equalToSuperview().offset(58)
             $0.centerX.equalToSuperview()
         }
-        
     }
+
+    func configure(with viewModel: StatusCellViewModel) {
+            property.text = viewModel.propertyName
+            icon.image = viewModel.iconImage
+        }
 }
 

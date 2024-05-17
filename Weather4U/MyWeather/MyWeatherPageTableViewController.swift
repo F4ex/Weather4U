@@ -10,7 +10,6 @@ import Alamofire
 import SnapKit
 
 class MyWeatherPageTableViewController: UITableViewController {
-   
     
     var weatherData: [Item] = []
     var city: String = "Seoul"
@@ -43,7 +42,7 @@ class MyWeatherPageTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return weatherData.count
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -54,6 +53,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         cell.tempLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "1시간 기온", currnetTime: true) ?? "-") + "°C"
         cell.highLabel.text = "H:" + (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최고기온", currnetTime: false, highTemp: true) ?? "-") + "°C"
         cell.lowLabel.text = "L:" + (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최저기온", currnetTime: false) ?? "-") + "°C"
+
         cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "하늘상태", currnetTime: true) ?? "-")
         // 이미지 설정
         if let weatherImage = UIImage(named: "sunny") {
@@ -81,32 +81,63 @@ class MyWeatherPageTableViewController: UITableViewController {
         
         return cell
     }
-
+    
+    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20 // 각 섹션 사이의 공간을 조절하는 높이
+        return 30 // 각 섹션 사이의 공간을 조절하는 높이
     }
     
+
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // 셀의 높이 설정
-        return 150
+        if SearchViewController.isEditMode == false {
+            return 150
+        } else {
+            return 100
+        }
+    }
+}
+
+extension MyWeatherPageTableViewController {
+    
+    // 0번 셀은 수정이 안되도록 설정
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        indexPath.row > 0
     }
     
-    // MARK: - Data Fetching
-    
-    func fetchWeatherData() {
-        let currentDate = Date()
-        NetworkManager.shared.fetchWeatherData(completion: { result in
-            switch result {
-            case .success(let data):
-                // 날씨 데이터 업데이트
-                self.weatherData = data
-                // TableView 새로고침
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            case .failure(let error):
-                print("Error fetching weather data: \(error.localizedDescription)")
-            }
-        })
+    // 행 삭제
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        indexPath.row > 0 ? .delete : .none
     }
+    
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            weatherData.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Selected: \(weatherData[indexPath.row])")
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    // 드래그 앤 드롭
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let dragItem = UIDragItem(itemProvider: NSItemProvider())
+        dragItem.localObject = weatherData[indexPath.row]
+        return [ dragItem ]
+    }
+    
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.row > 0 ? true : false
+    }
+    
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        // Update the model
+        let mover = weatherData.remove(at: sourceIndexPath.row)
+        weatherData.insert(mover, at: destinationIndexPath.row)
+    }
+    
 }
