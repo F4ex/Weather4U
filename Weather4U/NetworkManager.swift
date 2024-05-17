@@ -48,9 +48,8 @@ class NetworkManager {
         NetworkManager.shared.fetchWeatherData() { result in
             switch result {
             case .success(let data):
-                NetworkManager.weatherData.append(contentsOf: data)
+                NetworkManager.weatherData = data
                 CategoryManager.todayWeatherData = CategoryManager.shared.forecastForDate(items: NetworkManager.weatherData, fcstDate: Date())
-                
             case .failure(let error):
                 print(error) // 추후에 Alert창 호출로 변경
             }
