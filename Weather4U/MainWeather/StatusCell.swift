@@ -60,7 +60,7 @@ class StatusCell: UICollectionViewCell {
 
         containerView.addSubview(icon)
         icon.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().offset(-2)
             $0.left.equalToSuperview()
             $0.height.equalTo(20)
         }
