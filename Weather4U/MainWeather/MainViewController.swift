@@ -67,7 +67,7 @@ class MainViewController: BaseViewController {
         NetworkManager.shared.receiveWeatherStatus()
         NetworkManager.shared.receiveWeatherSentence()
         NetworkManager.shared.receiveWeatherTemperature()
-        JSONManager.shared.loadJSONToLocationData(fileName: "weatherLocationData", extensionType: "json")
+        JSONManager.shared.loadJSONToLocationData()
     }
     
     override func constraintLayout() {

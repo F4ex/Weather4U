@@ -7,6 +7,72 @@
 
 import Foundation
 
+// MARK: - WeatherCode
+//struct SentenceCode: Codable {
+//    let region: String
+//    let code: String
+//    let 강원도, 전국, 서울인천경기도, 충청북도: String
+//    let 대전세종충청남도, 전라북도, 광주전라남도, 대구경상북도: String
+//    let 부산울산경상남도, 제주도: String
+//
+//    enum CodingKeys: String, CodingKey {
+//        case 강원도, 전국
+//        case 서울인천경기도 = "서울, 인천, 경기도"
+//        case 충청북도
+//        case 대전세종충청남도 = "대전, 세종, 충청남도"
+//        case 전라북도
+//        case 광주전라남도 = "광주, 전라남도"
+//        case 대구경상북도 = "대구, 경상북도"
+//        case 부산울산경상남도 = "부산, 울산, 경상남도"
+//        case 제주도
+//    }
+//}
+
+// MARK: - StatusCode
+//struct StatusCode: Codable {
+//    let 서울인천경기도, 강원도영서, 강원도영동, 대전세종충청남도: String
+//    let 충청북도, 광주전라남도, 전라북도, 대구경상북도: String
+//    let 부산울산경상남도, 제주도: String
+//
+//    enum CodingKeys: String, CodingKey {
+//        case 서울인천경기도 = "서울, 인천, 경기도"
+//        case 강원도영서, 강원도영동
+//        case 대전세종충청남도 = "대전, 세종, 충청남도"
+//        case 충청북도
+//        case 광주전라남도 = "광주, 전라남도"
+//        case 전라북도
+//        case 대구경상북도 = "대구, 경상북도"
+//        case 부산울산경상남도 = "부산, 울산, 경상남도"
+//        case 제주도
+//    }
+//}
+
+typealias SentenceCode = [String: String]
+typealias StatusCode = [String: String]
+typealias TemperatureCode = [String: String]
+
+// MARK: - DetailedLocation
+struct DetailedLocation: Decodable {
+    let City: String
+    let Town: String
+    let Village: String
+    let X: Int
+    let Y: Int
+}
+
+// MARK: - CombinedData
+struct CombinedData: Encodable {
+    let Region: String
+    let City: String
+    let Town: String
+    let Village: String
+    let X: Int
+    let Y: Int
+    let Sentence: String
+    let Status: String
+    let Temperature: String
+}
+
 // MARK: - LocationDatum
 struct LocationDatum: Decodable {
     let location, town, village: String
@@ -57,3 +123,4 @@ enum City: String, Codable {
 }
 
 typealias LocationData = [LocationDatum]
+
