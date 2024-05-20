@@ -10,7 +10,7 @@ import Foundation
 class JSONManager {
     
     static let shared = JSONManager()
-    static var locationData: LocationData = []
+    static var combinedDataArray: [CombinedData] = []
     
     init() { }
     
@@ -35,7 +35,6 @@ class JSONManager {
             let detailedData = try Data(contentsOf: weatherFileLocation)
             let detailedLocations = try decoder.decode([DetailedLocation].self, from: detailedData)
             
-            var combinedDataArray = [CombinedData]()
             
             // detailedLocations 배열을 순회하며 CombinedData 생성
             for location in detailedLocations {
@@ -52,7 +51,7 @@ class JSONManager {
                     Status: statusCode.filter { location.City.contains($0.key) }.first?.value ?? "11B00000",
                     Temperature: temperatureCode.filter { location.City.contains($0.key) }.first?.value ?? "11B10101"
                 )
-                combinedDataArray.append(combinedData)
+                JSONManager.combinedDataArray.append(combinedData)
             }
         } catch {
             print(error)

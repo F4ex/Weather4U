@@ -16,14 +16,13 @@ class SearchResultTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-
         contentView.addSubview(locationNameLabel)
         locationNameLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         locationNameLabel.textColor = .black
         locationNameLabel.layer.masksToBounds = true
         locationNameLabel.snp.makeConstraints {
-            $0.centerY.equalTo(0)
-            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.centerY.equalTo(18)
+            $0.leading.trailing.equalToSuperview().inset(50)
         }
         
     }

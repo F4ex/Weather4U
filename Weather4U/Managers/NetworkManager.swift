@@ -20,6 +20,9 @@ class NetworkManager {
     
     // 최저 기온 : 예측 시간(fcst_time) - 0600
     // 최고 기온 : 예측 시간(fcst_time) - 1500
+    
+    
+    
     // MARK: - 3일치 날씨 데이터 받아오기
     func fetchWeatherData(x: Int16 = 60, y: Int16 = 127, completion: @escaping (Result<[Item], Error>) -> Void) {
         let currentDateString = self.currentDateToString()
