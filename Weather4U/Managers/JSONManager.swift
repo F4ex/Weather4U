@@ -48,7 +48,7 @@ class JSONManager {
                     Village: location.Village,
                     X: location.X,
                     Y: location.Y,
-                    Sentence: sentenceCode.filter { location.City.contains($0.key) }.first?.value ?? "108",
+                    Sentence: sentenceCode.filter { location.City.contains($0.key) }.first?.value ?? 108,
                     Status: statusCode.filter { location.City.contains($0.key) }.first?.value ?? "11B00000",
                     Temperature: temperatureCode.filter { location.City.contains($0.key) }.first?.value ?? "11B10101"
                 )

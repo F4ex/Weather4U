@@ -47,7 +47,7 @@ import Foundation
 //    }
 //}
 
-typealias SentenceCode = [String: String]
+typealias SentenceCode = [String: Int]
 typealias StatusCode = [String: String]
 typealias TemperatureCode = [String: String]
 
@@ -68,7 +68,7 @@ struct CombinedData: Encodable {
     let Village: String
     let X: Int
     let Y: Int
-    let Sentence: String
+    let Sentence: Int
     let Status: String
     let Temperature: String
 }

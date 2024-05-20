@@ -6,7 +6,7 @@
 //
 
 import Alamofire
-import Foundation
+import UIKit
 
 class NetworkManager {
     
@@ -15,21 +15,21 @@ class NetworkManager {
     static var weaterSentenceData: String?
     static var weatherStatusData: [StatusItem] = []
     static var weatherTemperatureData: [TemperatureItem] = []
-    
+    weak var delegate: DataReloadDelegate?
     private init() { }
     
     // 최저 기온 : 예측 시간(fcst_time) - 0600
     // 최고 기온 : 예측 시간(fcst_time) - 1500
     // MARK: - 3일치 날씨 데이터 받아오기
-    func fetchWeatherData(completion: @escaping (Result<[Item], Error>) -> Void) {
+    func fetchWeatherData(x: Int16 = 60, y: Int16 = 127, completion: @escaping (Result<[Item], Error>) -> Void) {
         let currentDateString = self.currentDateToString()
         let url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
-        let parameters: Parameters = ["dataType": "JSON", 
+        let parameters: Parameters = ["dataType": "JSON",
                                       "base_date": currentDateString,
                                       "base_time": "0200",
-                                      "nx": 60,
-                                      "ny": 127,
+                                      "nx": x,
+                                      "ny": y,
                                       "serviceKey": serviceKey,
                                       "numOfRows": 870] // 3일치 예측 단기 예보
         AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: WeatherData.self) { response in
@@ -57,14 +57,14 @@ class NetworkManager {
     }
     
     // MARK: - 오늘 날씨 문장 데이터 받아오기
-    func fetchWeatherSentence(completion: @escaping (Result<[SentenceItem], Error>) -> Void) {
+    func fetchWeatherSentence(sentenceCode: Int16 = 108, completion: @escaping (Result<[SentenceItem], Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidFcst"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd0600"
         let currentDateString = formatter.string(from: Date())
         let parameters: Parameters = ["dataType": "JSON",
-                                      "stnId": 108,
+                                      "stnId": sentenceCode,
                                       "tmFc": currentDateString,
                                       "serviceKey": serviceKey]
         AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: WeatherSentenceData.self) { response in
@@ -84,6 +84,7 @@ class NetworkManager {
             switch result {
             case .success(let data):
                 NetworkManager.weaterSentenceData = data[0].wfSv
+                self.delegate?.dataReload()
             case .failure(let error):
                 print(error)
             }
@@ -118,6 +119,7 @@ class NetworkManager {
             switch result {
             case .success(let data):
                 NetworkManager.weatherStatusData = data
+                self.delegate?.dataReload()
             case .failure(let error):
                 print(error)
             }
@@ -151,8 +153,8 @@ class NetworkManager {
         NetworkManager.shared.fetchWeatherTemperature(completion: { result in
             switch result {
             case .success(let data):
-                print(data)
                 NetworkManager.weatherTemperatureData = data
+                self.delegate?.dataReload()
             case .failure(let error):
                 print(error)
             }
@@ -168,13 +170,5 @@ extension NetworkManager {
         let currentDateString = formatter.string(from: Date())
         
         return currentDateString
-    }
-    
-    func currentTimeToString() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HHmm"
-        let currentTimeString = formatter.string(from: Date())
-        
-        return currentTimeString
     }
 }

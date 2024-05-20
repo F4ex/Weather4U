@@ -365,3 +365,11 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         return weekWeatherH
     }
 }
+
+extension MainViewController: DataReloadDelegate {
+    func dataReload() {
+        self.status.reloadData()
+        self.todayWeather.reloadData()
+        self.todayPrecipitation.reloadData()
+    }
+}
