@@ -102,21 +102,21 @@ class MyWeatherPageTableViewCell: UITableViewCell {
     
 }
 
-struct MyWeatherPageViewControllerRepresentable: UIViewControllerRepresentable {
-typealias UIViewControllerType = MyWeatherPageViewController
-
-func makeUIViewController(context: Context) -> MyWeatherPageViewController {
-    return MyWeatherPageViewController()
-}
-
-func updateUIViewController(_ uiViewController: MyWeatherPageViewController, context: Context) {
-    // 필요한 경우 UIViewController를 업데이트하는 코드를 여기에 추가
-}
-}
-
-@available(iOS 13.0, *)
-struct MyWeatherPageViewControllerPreview: PreviewProvider {
-static var previews: some View {
-    MyWeatherPageViewControllerRepresentable()
-}
-}
+//struct MyWeatherPageViewControllerRepresentable: UIViewControllerRepresentable {
+//typealias UIViewControllerType = MyWeatherPageViewController
+//
+//func makeUIViewController(context: Context) -> MyWeatherPageViewController {
+//    return MyWeatherPageViewController()
+//}
+//
+//func updateUIViewController(_ uiViewController: MyWeatherPageViewController, context: Context) {
+//    // 필요한 경우 UIViewController를 업데이트하는 코드를 여기에 추가
+//}
+//}
+//
+//@available(iOS 13.0, *)
+//struct MyWeatherPageViewControllerPreview: PreviewProvider {
+//static var previews: some View {
+//    MyWeatherPageViewControllerRepresentable()
+//}
+//}
