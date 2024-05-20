@@ -71,6 +71,8 @@ class MainViewController: BaseViewController {
         todayPrecipitation.dataSource = self
         feels.delegate = self
         feels.dataSource = self
+        NetworkManager.shared.delegate = self
+        CategoryManager.shared.delegate = self
         
         weekWeather.sectionHeaderTopPadding = 0
         
@@ -365,6 +367,10 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         guard let cell = weekWeather.dequeueReusableCell(withIdentifier: "WeekWeatherCell", for: indexPath) as? WeekWeatherCell else {
             return UITableViewCell()
         }
+        if let data = NetworkManager.weatherTemperatureData {
+            cell.tempHigh.text = "\(data[0].taMax3)°"
+            cell.tempLow.text = "\(data[0].taMin3)°"
+        }
         return cell
     }
     //셀 높이 조절
@@ -411,8 +417,15 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
 
 extension MainViewController: DataReloadDelegate {
     func dataReload() {
-        self.status.reloadData()
-        self.todayWeather.reloadData()
-        self.todayPrecipitation.reloadData()
+        DispatchQueue.main.async {
+            self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
+            self.tempHigh.text = "H: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
+            self.tempLow.text = "L: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"
+            self.weatherExplanation.text = NetworkManager.weaterSentenceData
+            self.weekWeather.reloadData()
+            self.status.reloadData()
+            self.todayWeather.reloadData()
+            self.todayPrecipitation.reloadData()
+        }
     }
 }
