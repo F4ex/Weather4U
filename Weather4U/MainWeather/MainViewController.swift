@@ -59,6 +59,7 @@ class MainViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "Background")
+
         
         status.delegate = self
         status.dataSource = self
@@ -79,6 +80,11 @@ class MainViewController: BaseViewController {
         NetworkManager.shared.receiveWeatherTemperature()
         JSONManager.shared.loadJSONToLocationData(fileName: "weatherLocationData", extensionType: "json")
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
     }
     
     //MARK: - 오토레이아웃
