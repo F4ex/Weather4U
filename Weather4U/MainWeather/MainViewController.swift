@@ -64,6 +64,9 @@ class MainViewController: BaseViewController {
         //그렇다면 접히면서 사라리는건?
 
         NetworkManager.shared.receiveWeatherData()
+        NetworkManager.shared.receiveWeatherStatus()
+        NetworkManager.shared.receiveWeatherSentence()
+        NetworkManager.shared.receiveWeatherTemperature()
         JSONManager.shared.loadJSONToLocationData(fileName: "weatherLocationData", extensionType: "json")
     }
     
@@ -101,9 +104,8 @@ class MainViewController: BaseViewController {
             $0.height.equalTo(24)
         }
         weatherImage.snp.makeConstraints(){
-            $0.width.height.equalTo(235)
-            $0.top.equalTo(location.snp.bottom).offset(24)
-            $0.centerX.centerX.equalTo(contentView)
+            $0.top.equalTo(location.snp.bottom).offset(34)
+            $0.centerX.equalTo(contentView.snp.centerX).offset(12)
         }
         temperature.snp.makeConstraints(){
             $0.top.equalTo(weatherImage.snp.bottom).offset(19)
@@ -167,7 +169,7 @@ class MainViewController: BaseViewController {
         moveToSearch.tintColor = UIColor(named: "font")
         moveToSearch.addTarget(self, action: #selector(clickToSearch), for: .touchUpInside)
         
-        weatherImage.image = UIImage(systemName: "sun.max.fill")
+        weatherImage.image = UIImage(named: "sun3")
         
         
         temperature.font = UIFont(name: "Alata-Regular", size: 50)
@@ -186,7 +188,7 @@ class MainViewController: BaseViewController {
         tempLow.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempLow.textColor = UIColor(named: "font")
         
-        weatherExplanation.text = "Sunny conditions will continue for the rest of the day.Wind gusts are up to 8 m/s"
+        weatherExplanation.text = NetworkManager.weaterSentenceData ?? "Sunny conditions will continue for the rest of the day.Wind gusts are up to 8 m/s"
         weatherExplanation.textAlignment = .center
         weatherExplanation.numberOfLines = 2
         weatherExplanation.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
@@ -196,6 +198,8 @@ class MainViewController: BaseViewController {
         status.backgroundColor = view.backgroundColor
         
         todayWeather.register(TodayWeatherCell.self, forCellWithReuseIdentifier: "TodayWeatherCell")
+        //헤더뷰 등록하기
+        todayWeather.register(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CollectionHeaderView.identifier)
         todayWeather.backgroundColor = UIColor(named: "cell")
         todayWeather.layer.cornerRadius = 15
         
@@ -223,6 +227,43 @@ class MainViewController: BaseViewController {
 }
 
 
+//헤더뷰 정의하기
+//헤더에 어떤 내용 넣어줄지 정하기
+//헤더뷰 등록은 위쪽 configureUI에 함
+class CollectionHeaderView: UICollectionReusableView {
+    static let identifier = "CollectionViewHeaderView"
+    
+    private let titleLabel = UILabel()
+    private let icon = UIImageView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(titleLabel)
+        addSubview(icon)
+        configure()
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure() {
+        titleLabel.text = "Hourly Forcast"
+        titleLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
+        titleLabel.textColor = UIColor(named: "font")
+        
+        icon.image = UIImage(systemName: "clock")
+        icon.tintColor = UIColor(named: "font")
+        
+    }
+}
+
+//헤더뷰의 크기 정하기
+extension ViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 38)
+    }
+}
+
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -238,9 +279,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == status {
-            guard let cell = status.dequeueReusableCell(withReuseIdentifier: "StatusCell", for: indexPath) as? StatusCell else {
+            guard let cell = status.dequeueReusableCell(withReuseIdentifier: StatusCell.identifier, for: indexPath) as? StatusCell else {
                 return UICollectionViewCell()
             }
+            //뷰모델에 있는 정보들을 가지고 셀을 만들겠다
+            let viewModel = cellViewModels[indexPath.item]
+            cell.configure(with: viewModel)
+            
             return cell
         } else if collectionView == todayWeather {
             guard let cell = todayWeather.dequeueReusableCell(withReuseIdentifier: "TodayWeatherCell", for: indexPath) as? TodayWeatherCell else {
@@ -254,6 +299,15 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return cell
         }
         return UICollectionViewCell()
+    }
+    
+    //헤더뷰 제공하기
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader else {
+            return UICollectionReusableView()
+        }
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionHeaderView.identifier, for: indexPath) as! CollectionHeaderView
+        return header
     }
 }
 
@@ -280,7 +334,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
     }
     //헤더크기 지정
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        36
+        38
     }
     //뷰델리게이트 안에 헤더뷰
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -293,6 +347,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         label.textColor = UIColor(named: "font")
         
         let icon = UIImageView(image: UIImage(systemName: "calendar"))
+        icon.tintColor = UIColor(named: "font")
         
         weekWeatherH.addSubview(label)
         weekWeatherH.addSubview(icon)

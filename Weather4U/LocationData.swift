@@ -8,9 +8,9 @@
 import Foundation
 
 // MARK: - LocationDatum
-struct LocationDatum: Codable {
+struct LocationDatum: Decodable {
+    let location, town, village: String
     let city: City
-    let town, village: String
     let x, y: Int
 
     enum CodingKeys: String, CodingKey {
@@ -19,6 +19,19 @@ struct LocationDatum: Codable {
         case village = "Village"
         case x = "X"
         case y = "Y"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let city = try container.decode(City.self, forKey: .city).rawValue
+        let town = try container.decode(String.self, forKey: .town)
+        let village = try container.decode(String.self, forKey: .village)
+        self.location = "\(city) \(town) \(village)"
+        self.city = City(rawValue: city) ?? .서울특별시
+        self.town = town
+        self.village = village
+        self.x = try container.decode(Int.self, forKey: .x)
+        self.y = try container.decode(Int.self, forKey: .y)
     }
 }
 
