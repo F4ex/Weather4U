@@ -168,6 +168,7 @@
 				FFE5DCBA2BF1B463004EE3F7 /* ViewController.swift */,
 				FFE5DCEC2BF30302004EE3F7 /* BaseViewController.swift */,
 				FFE5DCBC2BF1B463004EE3F7 /* Main.storyboard */,
+				FFE5DCBF2BF1B463004EE3F7 /* Weather4U.xcdatamodeld */,
 				FFE5DCC22BF1B465004EE3F7 /* Assets.xcassets */,
 				FFE5DCC42BF1B465004EE3F7 /* LaunchScreen.storyboard */,
 				FFE5DCC72BF1B465004EE3F7 /* Info.plist */,
@@ -179,7 +180,6 @@
 		FFE5DD2B2BFAE5E8004EE3F7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				FFE5DCBF2BF1B463004EE3F7 /* Weather4U.xcdatamodeld */,
 				FFE5DD062BF38B18004EE3F7 /* weatherSentenceLocationData.json */,
 				FFE5DD052BF38B18004EE3F7 /* weatherStatusLocationData.json */,
 				FFE5DD042BF38B18004EE3F7 /* weatherTemperatureLocationData.json */,
