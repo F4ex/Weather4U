@@ -88,7 +88,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         searchController.hidesNavigationBarDuringPresentation = true
         
         self.navigationItem.title = "Weather"
-        self.navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.largeTitleDisplayMode = .automatic
         
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationBar.largeTitleTextAttributes = [
