@@ -44,8 +44,8 @@ class NetworkManager {
     }
     
     // MARK: - 3일치 날씨 데이터 배열에 담기
-    func receiveWeatherData() {
-        NetworkManager.shared.fetchWeatherData() { result in
+    func receiveWeatherData(x: Int16 = 60, y: Int16 = 127) {
+        NetworkManager.shared.fetchWeatherData(x: x, y: y, completion: { result in
             switch result {
             case .success(let data):
                 NetworkManager.weatherData = data
@@ -53,7 +53,7 @@ class NetworkManager {
             case .failure(let error):
                 print(error) // 추후에 Alert창 호출로 변경
             }
-        }
+        })
     }
     
     // MARK: - 오늘 날씨 문장 데이터 받아오기
@@ -79,8 +79,8 @@ class NetworkManager {
     }
     
     // MARK: - 오늘 날씨 문장 데이터 변수에 담기
-    func receiveWeatherSentence() {
-        NetworkManager.shared.fetchWeatherSentence { result in
+    func receiveWeatherSentence(sentenceCode: Int16 = 108) {
+        NetworkManager.shared.fetchWeatherSentence(sentenceCode: sentenceCode, completion: { result in
             switch result {
             case .success(let data):
                 NetworkManager.weaterSentenceData = data[0].wfSv
@@ -88,7 +88,7 @@ class NetworkManager {
             case .failure(let error):
                 print(error)
             }
-        }
+        })
     }
     
     // MARK: - 3일 ~ 7일 날씨 상태 데이터 받아오기
@@ -114,8 +114,8 @@ class NetworkManager {
     }
     
     // MARK: - 3일 ~ 7일 날씨 상태 데이터 배열에 담기
-    func receiveWeatherStatus() {
-        NetworkManager.shared.fetchWeatherStatus(completion: { result in
+    func receiveWeatherStatus(regID: String = "11B00000") {
+        NetworkManager.shared.fetchWeatherStatus(regID: regID, completion: { result in
             switch result {
             case .success(let data):
                 NetworkManager.weatherStatusData = data
@@ -149,11 +149,10 @@ class NetworkManager {
     }
     
     // MARK: - 3일 ~ 7일 날씨 최고, 최저 기온 데이터 배열에 담기
-    func receiveWeatherTemperature() {
-        NetworkManager.shared.fetchWeatherTemperature(completion: { result in
+    func receiveWeatherTemperature(regID: String = "11B10101") {
+        NetworkManager.shared.fetchWeatherTemperature(regID: regID, completion: { result in
             switch result {
             case .success(let data):
-                print(data)
                 NetworkManager.weatherTemperatureData = data
                 self.delegate?.dataReload()
             case .failure(let error):
