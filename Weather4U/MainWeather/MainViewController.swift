@@ -16,6 +16,9 @@ class MainViewController: BaseViewController {
     let location = UILabel()
     let moveToSearch = UIButton()
     let moveToDress = UIButton()
+    let imageView = UIView().then(){
+        $0.frame.size = CGSize(width: 393, height: 259)
+    }
     let weatherImage = UIImageView()
     let temperature = UILabel()
     let tempHigh = UILabel()
@@ -41,8 +44,15 @@ class MainViewController: BaseViewController {
     }
     
     let weekWeather = UITableView()
+    let feels = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then() {
+        let layout = $0.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.minimumInteritemSpacing = 15
+        layout.itemSize = CGSize(width: 173, height: 129)
+    }
     let footerMessage = UILabel()
     let logo = UIImageView()
+    var city: City = .서울특별시 //City의 디폴트 값인 서울로 현재의 위치를 표시하겠다
+    var weatherData: [WeatherData] = []
     
     
     
@@ -58,18 +68,20 @@ class MainViewController: BaseViewController {
         weekWeather.dataSource = self
         todayPrecipitation.delegate = self
         todayPrecipitation.dataSource = self
+        feels.delegate = self
+        feels.dataSource = self
         
         weekWeather.sectionHeaderTopPadding = 0
-        //stickyheader 사용 -> y축의 몇 픽셀에서 멈추는지 정하면 되는것 같다..
-        //그렇다면 접히면서 사라리는건?
-
+        
         NetworkManager.shared.receiveWeatherData()
         NetworkManager.shared.receiveWeatherStatus()
         NetworkManager.shared.receiveWeatherSentence()
         NetworkManager.shared.receiveWeatherTemperature()
         JSONManager.shared.loadJSONToLocationData(fileName: "weatherLocationData", extensionType: "json")
+        
     }
     
+    //MARK: - 오토레이아웃
     override func constraintLayout() {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints(){
@@ -77,7 +89,7 @@ class MainViewController: BaseViewController {
         }
         scrollView.addSubview(contentView)
         
-        [location, moveToDress, moveToSearch, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather,todayPrecipitation, footerMessage, logo].forEach() {
+        [location, moveToDress, moveToSearch, imageView, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather,todayPrecipitation, feels, footerMessage, logo].forEach() {
             contentView.addSubview($0)
         }
         
@@ -103,12 +115,16 @@ class MainViewController: BaseViewController {
             $0.width.equalTo(30)
             $0.height.equalTo(24)
         }
+        imageView.snp.makeConstraints(){
+            $0.top.equalTo(location.snp.bottom)
+            $0.bottom.equalTo(temperature.snp.top)
+        }
         weatherImage.snp.makeConstraints(){
-            $0.top.equalTo(location.snp.bottom).offset(34)
-            $0.centerX.equalTo(contentView.snp.centerX).offset(12)
+            $0.centerX.equalTo(contentView.snp.centerX)
+            $0.centerY.equalTo(imageView)
         }
         temperature.snp.makeConstraints(){
-            $0.top.equalTo(weatherImage.snp.bottom).offset(19)
+            $0.top.equalTo(contentView).offset(383)
             $0.left.equalTo(contentView).offset(164)
         }
         tempHigh.snp.makeConstraints(){
@@ -138,39 +154,41 @@ class MainViewController: BaseViewController {
             $0.left.right.equalTo(contentView).inset(16)
             $0.height.equalTo(470)
         }
-        
-        footerMessage.snp.makeConstraints(){
-            $0.bottom.equalTo(logo.snp.top).offset(-9)
-            $0.horizontalEdges.equalTo(contentView).inset(102)
-        }
-        
-        logo.snp.makeConstraints(){
-            $0.bottom.equalTo(contentView).inset(54)
-            $0.width.height.equalTo(43)
-            $0.centerX.equalTo(contentView)
-        }
-        
         todayPrecipitation.snp.makeConstraints() {
             $0.top.equalTo(weekWeather.snp.bottom).offset(14)
             $0.left.right.equalTo(contentView).inset(16)
             $0.height.equalTo(164)
         }
+        feels.snp.makeConstraints(){
+            $0.top.equalTo(todayPrecipitation.snp.bottom).offset(14)
+            $0.left.right.equalTo(contentView).inset(16)
+            $0.height.equalTo(129)
+        }
+        logo.snp.makeConstraints(){
+            $0.bottom.equalTo(footerMessage.snp.top).offset(-15)
+            $0.width.height.equalTo(60)
+            $0.centerX.equalTo(contentView)
+        }
+        footerMessage.snp.makeConstraints(){
+            $0.bottom.equalTo(contentView).offset(-10)
+            $0.horizontalEdges.equalTo(contentView).inset(102)
+        }
     }
     
+    
+    //MARK: - UI 디테일
     override func configureUI() {
-        location.text = "내 위치"
+        location.text = city.rawValue
         location.font = UIFont(name: "Apple SD Gothic Neo", size: 34)
         location.textColor = UIColor(named: "font")
         
         moveToDress.setImage(UIImage(systemName: "hanger"), for: .normal)
         moveToDress.tintColor = UIColor(named: "font")
+        moveToDress.addTarget(self, action: #selector(clickToStyle), for: .touchUpInside)
         
         moveToSearch.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         moveToSearch.tintColor = UIColor(named: "font")
         moveToSearch.addTarget(self, action: #selector(clickToSearch), for: .touchUpInside)
-        
-        weatherImage.image = UIImage(named: "sun3")
-        
         
         temperature.font = UIFont(name: "Alata-Regular", size: 50)
         temperature.text = "\(30)°"
@@ -217,16 +235,28 @@ class MainViewController: BaseViewController {
         footerMessage.textAlignment = .center
         footerMessage.numberOfLines = 2
         
-        logo.backgroundColor = .white
+        logo.image = UIImage(named: "weather4U")
+        
+        feels.register(FeelsCollectionViewCell.self, forCellWithReuseIdentifier: "FeelsCollectionViewCell")
+        feels.backgroundColor = view.backgroundColor
     }
     
+    
+    // MARK: - 버튼 연결
     @objc func clickToSearch() {
         let vc = SearchViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    @objc func clickToStyle() {
+        let vc = StyleViewController()
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    
+    //MARK: - 데이터 연결
+    
 }
-
-
+//MARK: - 컬렉션뷰 설정
 //헤더뷰 정의하기
 //헤더에 어떤 내용 넣어줄지 정하기
 //헤더뷰 등록은 위쪽 configureUI에 함
@@ -264,7 +294,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -273,8 +302,10 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return 3
         case todayWeather:
             return 24
-        default :
+        case todayPrecipitation:
             return 1
+        default :
+            return 2
         }
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -297,6 +328,14 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return UICollectionViewCell()
             }
             return cell
+        } else if collectionView == feels {
+            guard let cell = feels.dequeueReusableCell(withReuseIdentifier: FeelsCollectionViewCell.identifier, for: indexPath) as? FeelsCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            //뷰모델에 있는 정보들을 가지고 셀을 만들겠다
+            let viewModel = cellViewModel2[indexPath.item]
+            cell.configure(with: viewModel)
+            return cell
         }
         return UICollectionViewCell()
     }
@@ -311,8 +350,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
 }
 
-
-
+//MARK: - 테이블뷰 설정
 extension MainViewController: UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
