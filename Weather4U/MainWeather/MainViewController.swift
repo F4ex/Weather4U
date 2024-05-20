@@ -88,7 +88,6 @@ class MainViewController: BaseViewController {
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
         // 인터페이스 스타일이 변경될 때마다 UI 업데이트
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             updateAppearanceBasedOnWeather(for: weatherStatus)
@@ -268,41 +267,41 @@ class MainViewController: BaseViewController {
     
     //MARK: - 날씨별 배경 및 메인아이콘 변경
     func updateAppearanceBasedOnWeather(for weatherStatus: String) {
-        var Icon = UIImageView()
+        var Icon = UIImage()
         var backgroundColor = UIColor()
         var temperatureColor = UIColor()
         
         switch weatherStatus {
         case "Sunny":
-            Icon = UIImageView(image: UIImage(named: "sun"))
+            Icon = UIImage(named: "sun")!
             backgroundColor = UIColor(named: "Background")!
             temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
         case "Mostly Cloudy":
-            Icon = UIImageView(image: UIImage(named: "sun&cloud"))
+            Icon = UIImage(named: "sun&cloud")!
             backgroundColor = UIColor(named: "BackGroundR")!
             temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
         case "Cloudy":
-            Icon = UIImageView(image: UIImage(named: "cloudy"))
+            Icon = UIImage(named: "cloudy")!
             backgroundColor = UIColor(named: "BackGroundR")!
             temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
         case "비":
-            Icon = UIImageView(image: UIImage(named: "rain"))
+            Icon = UIImage(named: "rain")!
             backgroundColor = UIColor(named: "BackGroundR")!
             temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
         case "소나기":
-            Icon = UIImageView(image: UIImage(named: "heavyRain"))
+            Icon = UIImage(named: "heavyRain")!
             backgroundColor = UIColor(named: "BackGroundR")!
             temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
         case "비/눈":
-            Icon = UIImageView(image: UIImage(named: "snow&rain"))
+            Icon = UIImage(named: "snow&rain")!
             backgroundColor = UIColor(named: "BackGroundS")!
             temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
         case "눈":
-            Icon = UIImageView(image: UIImage(named: "snow"))
+            Icon = UIImage(named: "snow")!
             backgroundColor = UIColor(named: "BackGroundS")!
             temperatureColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
         default:
-            Icon = UIImageView(image: UIImage(named: "sun"))
+            Icon = UIImage(named: "sun")!
             backgroundColor = UIColor(named: "Background")!
             temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
         }
@@ -310,16 +309,16 @@ class MainViewController: BaseViewController {
         if traitCollection.userInterfaceStyle == .dark {
             switch weatherStatus {
             case "Cloudy":
-                Icon = UIImageView(image: UIImage(named: "moon&cloud"))
+                Icon = UIImage(named: "moon&cloud")!
                 backgroundColor = UIColor(named: "Background")!
                 temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
             default:
-                Icon = UIImageView(image: UIImage(named: "moon"))
+                Icon = UIImage(named: "moon")!
                 backgroundColor = UIColor(named: "Background")!
                 temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
             }
         }
-        weatherImage = Icon
+        weatherImage.image = Icon
         view.backgroundColor = backgroundColor
         temperature.textColor = temperatureColor
     }
@@ -406,6 +405,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             //뷰모델에 있는 정보들을 가지고 셀을 만들겠다
             let viewModel = cellViewModel2[indexPath.item]
             cell.configure(with: viewModel)
+            
             return cell
         }
         return UICollectionViewCell()
