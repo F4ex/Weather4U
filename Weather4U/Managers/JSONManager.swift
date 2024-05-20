@@ -54,8 +54,6 @@ class JSONManager {
                 )
                 combinedDataArray.append(combinedData)
             }
-            
-            print(combinedDataArray)
         } catch {
             print(error)
             return
