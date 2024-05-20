@@ -15,25 +15,21 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     
-    let searchController = UISearchController(searchResultsController: nil)
     let searchTable = SearchResultTableViewController()
+    lazy var searchController = UISearchController(searchResultsController: searchTable)
+    
     let settingButton = UIButton()
     let doneButton = UIButton()
     
     static var isEditMode = false
     static var isCelsius = true
     static var isFahrenheit = false
+    static var result : [CombinedData] = []
     
-    let celsius : Int = 17
     
     let weatherLabel = UILabel()
     
-    //    var locationData : LocationData?
-    //    let networkManager = NetworkManager()
-    
-    var searchDebounceTimer: Timer?
-    var result: [LocationDatum] = []
-    
+    var searchDebounceTimer : Timer?
     
     
     
@@ -42,7 +38,6 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         
         navigationController?.navigationBar.isHidden = false
         view.backgroundColor = .white
-        doneButton.isHidden = true
         
         searchTable.tableView.isHidden = true
         
@@ -54,15 +49,19 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         //뒤로 가기 버튼 숨기기
         self.navigationItem.hidesBackButton = true
         
+        let barButton = UIBarButtonItem(customView: settingButton)
+        self.navigationItem.rightBarButtonItem = barButton
+        
+        
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        //        setProductList()
         
         myWeatherTable.tableView.reloadData()
+        
     }
     
     
@@ -83,7 +82,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
-        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.obscuresBackgroundDuringPresentation = true
         
         searchController.searchBar.placeholder = "Search for a city."
         searchController.hidesNavigationBarDuringPresentation = true
@@ -94,11 +93,12 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationBar.largeTitleTextAttributes = [
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 35, weight: .black)
-                   ]
+        ]
         
         searchController.delegate = self
         searchController.searchResultsUpdater = self
-//        searchController.searchBar.delegate = self
+        //        searchController.searchBar.delegate = self
+        
     }
     
     
@@ -109,45 +109,41 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         guard let text = searchController.searchBar.text?.lowercased() else {
             return
         }
-      
-    
-        if text.isEmpty {
-            searchTable.tableView.isHidden = true
-            myWeatherTable.view.isHidden = false
-        } else {
-            searchTable.tableView.isHidden = false
-            myWeatherTable.view.isHidden = true
-            performSearch(with: text)
-            print("히든")
-        }
+        
+        performSearch(with: text)
+        
     }
     
     
     // 검색
     func performSearch(with text: String) {
         
-        searchDebounceTimer?.invalidate()  // 이전 타이머 취소
+        searchDebounceTimer?.invalidate()  // 기존 타이머를 취소합니다.
         searchDebounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] _ in
-            // JSON 데이터를 로드합니다.
-            JSONManager.shared.loadJSONToLocationData()
             
-            // 검색어가 포함된 데이터 필터링하기
-            let locationData = JSONManager.locationData.filter { datum in
-                // 도시 이름, 동 이름
-                let cityNameContainsText = datum.city.rawValue.contains(text)
-                let townContainsText = datum.town.contains(text)
-                let villageContainsText = datum.village.contains(text)
+            if JSONManager.combinedDataArray.isEmpty {
+                JSONManager.shared.loadJSONToLocationData()
+            }
+            
+            if text.isEmpty {
+                SearchViewController.result = JSONManager.combinedDataArray
+            } else {
+                SearchViewController.result = JSONManager.combinedDataArray.filter { combinedData in
+                    combinedData.Region.lowercased().contains(text.lowercased())
+                }
+                for data in SearchViewController.result {
+                    print(data.Region)
+                }
                 
-                return cityNameContainsText || townContainsText || villageContainsText
+                DispatchQueue.main.async {
+                    self?.searchTable.tableView.reloadData()
+                }
             }
             
-            // 필터링된 locationData로 검색결과 업로드하기
-            DispatchQueue.main.async {
-                self?.result = locationData
-                self?.searchTable.tableView.reloadData()
-            }
+            
         })
     }
+    
     
     
     
@@ -155,6 +151,11 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
     
     
     func setSettingButton(_ button: UIButton) {
+        
+        settingButton.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
+        settingButton.frame.size = CGSize(width: 30, height: 30)
+        settingButton.tintColor = .black
+        
         let configuration = UIButton.Configuration.plain()
         settingButton.configuration = configuration
         
@@ -186,6 +187,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         
     }
     
+    
     func setCelsius() {
         SearchViewController.isCelsius = true
         SearchViewController.isFahrenheit = false
@@ -206,8 +208,11 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
     //Edit List 버튼 선택
     func tappedEditList() {
         SearchViewController.isEditMode = true
-        settingButton.isHidden = true
-        doneButton.isHidden = false
+        
+        let doneBarButton = UIBarButtonItem(customView: doneButton)
+        
+        self.navigationItem.rightBarButtonItem = doneBarButton
+        
         self.myWeatherTable.setEditing(true, animated: true)
         print("EditList")
         
@@ -226,8 +231,9 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
     // 편집 끝
     @objc func tappedDone() {
         SearchViewController.isEditMode = false
-        settingButton.isHidden = false
-        doneButton.isHidden = true
+        
+        let settingBarButton = UIBarButtonItem(customView: settingButton)
+        self.navigationItem.rightBarButtonItem = settingBarButton
         
         myWeatherTable.tableView.beginUpdates()
         self.myWeatherTable.setEditing(false, animated: true)
@@ -249,13 +255,9 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
     //MARK: - UI 구현 및 오토레이아웃
     override func configureUI() {
         
-        [settingButton, doneButton,/* searchBar,*/ /*weatherLabel*/].forEach {
-            view.addSubview($0)
-        }
-        
-        settingButton.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
-        settingButton.frame.size = CGSize(width: 30, height: 30)
-        settingButton.tintColor = .black
+        //        [/*settingButton,*/ doneButton,/* searchBar,*/ /*weatherLabel*/].forEach {
+        //            view.addSubview($0)
+        //        }
         
         let attributedTitle = NSAttributedString(string: "Done", attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue])
         doneButton.setAttributedTitle(attributedTitle, for: .normal)
@@ -265,10 +267,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         doneButton.frame.size = CGSize(width: 30, height: 50)
         
         
-//        weatherLabel.text = "Weather"
-//        weatherLabel.font = .systemFont(ofSize: 35, weight: .black)
-        
-//        searchBar.searchBarStyle = .minimal
+        //        searchBar.searchBarStyle = .minimal
         
         
         // 테이블 뷰 컨트롤러의 뷰를 추가
@@ -283,31 +282,24 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
     
     override func constraintLayout() {
         
-        settingButton.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(80)
-            $0.right.equalToSuperview().inset(10)
-            $0.height.equalTo(30)
-        }
+        //        settingButton.snp.makeConstraints {
+        //            $0.top.equalToSuperview().inset(80)
+        //            $0.right.equalToSuperview().inset(10)
+        //            $0.height.equalTo(30)
+        //        }
         
-        doneButton.snp.makeConstraints {
-            $0.top.equalTo(settingButton.snp.top)
-            $0.right.equalToSuperview().inset(25)
-            $0.height.equalTo(30)
-        }
+        //        doneButton.snp.makeConstraints {
+        //            $0.top.equalTo(settingButton.snp.top)
+        //            $0.right.equalToSuperview().inset(25)
+        //            $0.height.equalTo(30)
+        //        }
+        //
         
-       
         myWeatherTable.view.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(5)
         }
-
-//        searchTable.tableView.snp.makeConstraints {
-//            $0.top.equalTo(searchController.searchBar.snp_bottomMargin)
-//            $0.leading.trailing.equalToSuperview().inset(15)
-//            $0.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(5)
-            
-//        }
         
     }
     

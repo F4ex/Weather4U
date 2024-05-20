@@ -20,6 +20,9 @@ class NetworkManager {
     
     // 최저 기온 : 예측 시간(fcst_time) - 0600
     // 최고 기온 : 예측 시간(fcst_time) - 1500
+    
+    
+    
     // MARK: - 3일치 날씨 데이터 받아오기
     func fetchWeatherData(x: Int16 = 60, y: Int16 = 127, completion: @escaping (Result<[Item], Error>) -> Void) {
         let currentDateString = self.currentDateToString()
@@ -44,8 +47,8 @@ class NetworkManager {
     }
     
     // MARK: - 3일치 날씨 데이터 배열에 담기
-    func receiveWeatherData() {
-        NetworkManager.shared.fetchWeatherData() { result in
+    func receiveWeatherData(x: Int16 = 60, y: Int16 = 127) {
+        NetworkManager.shared.fetchWeatherData(x: 60, y: 127) { result in
             switch result {
             case .success(let data):
                 NetworkManager.weatherData = data
@@ -79,8 +82,8 @@ class NetworkManager {
     }
     
     // MARK: - 오늘 날씨 문장 데이터 변수에 담기
-    func receiveWeatherSentence() {
-        NetworkManager.shared.fetchWeatherSentence { result in
+    func receiveWeatherSentence(sentenceCode: Int16 = 108) {
+        NetworkManager.shared.fetchWeatherSentence(sentenceCode: 108) { result in
             switch result {
             case .success(let data):
                 NetworkManager.weaterSentenceData = data[0].wfSv

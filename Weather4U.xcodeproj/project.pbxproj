@@ -10,6 +10,7 @@
 		7B09E6EF2BF1D91800248D0B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */; };
 		7B9BBB1F2BF750E100B72970 /* SearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9BBB1E2BF750E100B72970 /* SearchResultTableViewController.swift */; };
 		7B9BBB212BF7518100B72970 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9BBB202BF7518100B72970 /* SearchResultTableViewCell.swift */; };
+		7B9BBB232BFB684F00B72970 /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9BBB222BFB684F00B72970 /* ModalViewController.swift */; };
 		9545B8072BF3085300EE36B8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545B8062BF3085300EE36B8 /* MainViewController.swift */; };
 		9545B8092BF3252800EE36B8 /* StatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545B8082BF3252800EE36B8 /* StatusCell.swift */; };
 		9545B80B2BF3255A00EE36B8 /* TodayWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545B80A2BF3255A00EE36B8 /* TodayWeatherCell.swift */; };
@@ -68,6 +69,7 @@
 		7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		7B9BBB1E2BF750E100B72970 /* SearchResultTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewController.swift; sourceTree = "<group>"; };
 		7B9BBB202BF7518100B72970 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
+		7B9BBB222BFB684F00B72970 /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
 		9545B8062BF3085300EE36B8 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		9545B8082BF3252800EE36B8 /* StatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCell.swift; sourceTree = "<group>"; };
 		9545B80A2BF3255A00EE36B8 /* TodayWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayWeatherCell.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */,
 				7B9BBB202BF7518100B72970 /* SearchResultTableViewCell.swift */,
 				7B9BBB1E2BF750E100B72970 /* SearchResultTableViewController.swift */,
+				7B9BBB222BFB684F00B72970 /* ModalViewController.swift */,
 			);
 			path = MyWeather;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				FFE5DCF12BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift in Sources */,
 				FFE5DCE32BF1E491004EE3F7 /* NetworkManager.swift in Sources */,
 				FFE5DCFF2BF32C73004EE3F7 /* WeatherSentenceData.swift in Sources */,
+				7B9BBB232BFB684F00B72970 /* ModalViewController.swift in Sources */,
 				FFE5DCBB2BF1B463004EE3F7 /* ViewController.swift in Sources */,
 				7B9BBB212BF7518100B72970 /* SearchResultTableViewCell.swift in Sources */,
 				FFE5DD2E2BFAEB39004EE3F7 /* CoreDataManager.swift in Sources */,

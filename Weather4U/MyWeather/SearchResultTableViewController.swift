@@ -9,13 +9,15 @@ import UIKit
 
 class SearchResultTableViewController: UITableViewController {
     
-    var result: [LocationDatum] = []
+    //    var result: [LocationDatum] = []
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         
         setTableView()
         
         tableView.reloadData()
+        
     }
     
     func setTableView() {
@@ -23,26 +25,36 @@ class SearchResultTableViewController: UITableViewController {
         tableView.dataSource = self
         tableView.register(SearchResultTableViewCell.self, forCellReuseIdentifier: SearchResultTableViewCell.identifier)
         tableView.backgroundColor = .white
+        
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultTableViewCell.identifier, for: indexPath) as! SearchResultTableViewCell
         
-        let result = result[indexPath.row]
-        cell.locationNameLabel.text = result.city.rawValue
-    
+        let result = SearchViewController.result[indexPath.row]
+        cell.locationNameLabel.text = result.Region
         
         return cell
     }
     
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return result.count
+        return SearchViewController.result.count
     }
     
-
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 20
+        return 35
     }
     
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let modalVC = ModalViewController()
+        
+        present(modalVC, animated: true, completion: nil)
+    }
+
+
+
+
 }
