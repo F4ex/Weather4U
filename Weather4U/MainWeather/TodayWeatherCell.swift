@@ -36,7 +36,7 @@ class TodayWeatherCell: UICollectionViewCell {
         
         icon.backgroundColor = .white
         
-        temperature.text = "00°"
+        temperature.text = "\(String(describing: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP, currentTime: true, highTemp: false)))°"
         temperature.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
         temperature.textColor = UIColor(named: "font")
     }

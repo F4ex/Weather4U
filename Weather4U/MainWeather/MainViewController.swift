@@ -19,7 +19,7 @@ class MainViewController: BaseViewController {
     let imageView = UIView().then(){
         $0.frame.size = CGSize(width: 393, height: 259)
     }
-    let weatherImage = UIImageView()
+    var weatherImage = UIImageView()
     let temperature = UILabel()
     let tempHigh = UILabel()
     let tempLow = UILabel()
@@ -53,13 +53,13 @@ class MainViewController: BaseViewController {
     let logo = UIImageView()
     var city: City = .서울특별시 //City의 디폴트 값인 서울로 현재의 위치를 표시하겠다
     var weatherData: [WeatherData] = []
-    
+    var weatherStatus: String = "Sunny"
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "Background")
-
+        updateAppearanceBasedOnWeather(for: weatherStatus)
         
         status.delegate = self
         status.dataSource = self
@@ -81,6 +81,17 @@ class MainViewController: BaseViewController {
         NetworkManager.shared.receiveWeatherSentence()
         NetworkManager.shared.receiveWeatherTemperature()
         JSONManager.shared.loadJSONToLocationData()
+        //여기서 한번 적어주면 아래에는 shared 까지만 써줘도 됨
+        //아 그러네 받아온다! 라는 함수니깐
+        //아래에는 정보를 입력해주는거고!
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        // 인터페이스 스타일이 변경될 때마다 UI 업데이트
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateAppearanceBasedOnWeather(for: weatherStatus)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -105,7 +116,7 @@ class MainViewController: BaseViewController {
             $0.width.equalTo(scrollView)
             $0.height.equalTo(1763)
         }
-        
+
         location.snp.makeConstraints(){
             $0.top.equalTo(contentView).offset(29)
             $0.centerX.equalTo(contentView)
@@ -198,22 +209,16 @@ class MainViewController: BaseViewController {
         moveToSearch.addTarget(self, action: #selector(clickToSearch), for: .touchUpInside)
         
         temperature.font = UIFont(name: "Alata-Regular", size: 50)
-        temperature.text = "\(30)°"
-        temperature.textColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1.0)
-        temperature.shadowColor = UIColor(red: 81/255, green: 51/255, blue: 0/255, alpha: 0.25)
         temperature.layer.shadowRadius = 2
         temperature.shadowOffset = CGSize(width: 0, height: 4)
         
-        
-        tempHigh.text = "H: \(01)°"
         tempHigh.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempHigh.textColor = UIColor(named: "font")
         
-        tempLow.text = "L: \(01)°"
         tempLow.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempLow.textColor = UIColor(named: "font")
         
-        weatherExplanation.text = NetworkManager.weaterSentenceData ?? "Sunny conditions will continue for the rest of the day.Wind gusts are up to 8 m/s"
+        weatherExplanation.text = NetworkManager.weatherSentenceData ?? "No Data"
         weatherExplanation.textAlignment = .center
         weatherExplanation.numberOfLines = 2
         weatherExplanation.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
@@ -259,6 +264,64 @@ class MainViewController: BaseViewController {
         self.present(vc, animated: true, completion: nil)
     }
     
+    
+    //MARK: - 날씨별 배경 및 메인아이콘 변경
+    func updateAppearanceBasedOnWeather(for weatherStatus: String) {
+        var Icon = UIImage()
+        var backgroundColor = UIColor()
+        var temperatureColor = UIColor()
+        
+        switch weatherStatus {
+        case "Sunny":
+            Icon = UIImage(named: "sun")!
+            backgroundColor = UIColor(named: "Background")!
+            temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
+        case "Mostly Cloudy":
+            Icon = UIImage(named: "sun&cloud")!
+            backgroundColor = UIColor(named: "BackGroundR")!
+            temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
+        case "Cloudy":
+            Icon = UIImage(named: "cloudy")!
+            backgroundColor = UIColor(named: "BackGroundR")!
+            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+        case "비":
+            Icon = UIImage(named: "rain")!
+            backgroundColor = UIColor(named: "BackGroundR")!
+            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+        case "소나기":
+            Icon = UIImage(named: "heavyRain")!
+            backgroundColor = UIColor(named: "BackGroundR")!
+            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+        case "비/눈":
+            Icon = UIImage(named: "snow&rain")!
+            backgroundColor = UIColor(named: "BackGroundS")!
+            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+        case "눈":
+            Icon = UIImage(named: "snow")!
+            backgroundColor = UIColor(named: "BackGroundS")!
+            temperatureColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
+        default:
+            Icon = UIImage(named: "sun")!
+            backgroundColor = UIColor(named: "Background")!
+            temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
+        }
+        
+        if traitCollection.userInterfaceStyle == .dark {
+            switch weatherStatus {
+            case "Cloudy":
+                Icon = UIImage(named: "moon&cloud")!
+                backgroundColor = UIColor(named: "Background")!
+                temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
+            default:
+                Icon = UIImage(named: "moon")!
+                backgroundColor = UIColor(named: "Background")!
+                temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
+            }
+        }
+        weatherImage.image = Icon
+        view.backgroundColor = backgroundColor
+        temperature.textColor = temperatureColor
+    }
     
     //MARK: - 데이터 연결
     
@@ -342,6 +405,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             //뷰모델에 있는 정보들을 가지고 셀을 만들겠다
             let viewModel = cellViewModel2[indexPath.item]
             cell.configure(with: viewModel)
+            
             return cell
         }
         return UICollectionViewCell()
@@ -415,17 +479,19 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
     }
 }
 
+//MARK: - 데이터 가져오기
 extension MainViewController: DataReloadDelegate {
     func dataReload() {
         DispatchQueue.main.async {
             self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
             self.tempHigh.text = "H: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
             self.tempLow.text = "L: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"
-            self.weatherExplanation.text = NetworkManager.weaterSentenceData
+            self.weatherExplanation.text = NetworkManager.weatherSentenceData
             self.weekWeather.reloadData()
             self.status.reloadData()
             self.todayWeather.reloadData()
             self.todayPrecipitation.reloadData()
+            self.updateAppearanceBasedOnWeather(for: self.weatherStatus)
         }
     }
 }

@@ -12,7 +12,7 @@ class NetworkManager {
     
     static let shared = NetworkManager()
     static var weatherData: [Item] = []
-    static var weaterSentenceData: String?
+    static var weatherSentenceData: String?
     static var weatherStatusData: [StatusItem] = []
     static var weatherTemperatureData: [TemperatureItem]?
     weak var delegate: DataReloadDelegate?
@@ -86,7 +86,7 @@ class NetworkManager {
         NetworkManager.shared.fetchWeatherSentence(sentenceCode: sentenceCode, completion: { result in
             switch result {
             case .success(let data):
-                NetworkManager.weaterSentenceData = data[0].wfSv
+                NetworkManager.weatherSentenceData = data[0].wfSv
                 self.delegate?.dataReload()
             case .failure(let error):
                 print(error)

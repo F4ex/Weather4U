@@ -10,12 +10,14 @@ import UIKit
 struct StatusCellViewModel {
     let propertyName: String
     let iconImage: UIImage?
+    var num: String
+   
 }
 
 let cellViewModels = [
-        StatusCellViewModel(propertyName: "UV INDEX", iconImage: UIImage(systemName: "sun.max")),
-        StatusCellViewModel(propertyName: "WIND", iconImage: UIImage(systemName: "wind")),
-        StatusCellViewModel(propertyName: "HUMIDITY", iconImage: UIImage(systemName: "drop"))
+        StatusCellViewModel(propertyName: "UV INDEX", iconImage: UIImage(systemName: "sun.max"), num: ""),
+        StatusCellViewModel(propertyName: "WIND", iconImage: UIImage(systemName: "wind"), num: "\(String(describing: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .WSD, currentTime: true)))"),
+        StatusCellViewModel(propertyName: "HUMIDITY", iconImage: UIImage(systemName: "drop"), num: "\(String(describing: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .REH, currentTime: true)))")
     ]
 
 struct FeelsCellViewModel {
