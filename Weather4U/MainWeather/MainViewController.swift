@@ -103,7 +103,8 @@ class MainViewController: BaseViewController {
     override func constraintLayout() {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints(){
-            $0.edges.equalTo(view)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            $0.left.right.bottom.equalTo(view)
         }
         scrollView.addSubview(contentView)
         
@@ -191,6 +192,16 @@ class MainViewController: BaseViewController {
             $0.bottom.equalTo(contentView).offset(-10)
             $0.horizontalEdges.equalTo(contentView).inset(102)
         }
+    }
+    
+    func setGradientColor() {
+        let colorTop =  UIColor(red: 255.0/255.0, green: 149.0/255.0, blue: 0.0/255.0, alpha: 1.0).cgColor
+        let colorBottom = UIColor(red: 255.0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0).cgColor
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [colorTop, colorBottom]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.frame = scrollView.bounds
+        scrollView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     
