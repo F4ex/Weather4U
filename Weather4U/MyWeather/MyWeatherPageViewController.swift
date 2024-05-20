@@ -18,7 +18,7 @@ class MyWeatherPageViewController: BaseViewController {
 
         // 전체 화면을 덮는 배경 뷰 추가
         let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor(named: "Background")
+        backgroundView.backgroundColor = .white
         view.addSubview(backgroundView)
         
         // 제약 조건을 통해 전체 화면을 덮도록 설정

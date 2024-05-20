@@ -54,6 +54,8 @@ class MainViewController: BaseViewController {
     var city: City = .서울특별시 //City의 디폴트 값인 서울로 현재의 위치를 표시하겠다
     var weatherData: [WeatherData] = []
     var weatherStatus: String = "Sunny"
+    let maskedView = UIView(frame: CGRect(x: 0, y: 798, width: 393, height: 200))
+    let gradient = CAGradientLayer() //그라데이션 레이어와 마스크 해줄 레이어 만들기
     
     
     override func viewDidLoad() {
@@ -75,6 +77,14 @@ class MainViewController: BaseViewController {
         CategoryManager.shared.delegate = self
         
         weekWeather.sectionHeaderTopPadding = 0
+        
+        maskedView.backgroundColor = view.backgroundColor //마스킹 컬러는 백그라운드 컬러로
+        gradient.frame = maskedView.bounds
+        gradient.colors = [UIColor.clear.cgColor, UIColor.white.cgColor, UIColor.white.cgColor, UIColor.white.cgColor] // 그라디언트 색상 정하기
+        gradient.locations = [0, 0.2, 0.5, 0.7] //그라디언트 색상 넣을 영역 정하기
+        //젠체 화면을 1이라 생각했을때 0%에 clear, 20%엔 white, 50%, 70%에도 화이트 넣기
+        maskedView.layer.mask = gradient // 그라데이션한 레이어를 화면에 마스킹하기
+        view.addSubview(maskedView)
         
         NetworkManager.shared.receiveWeatherData()
         NetworkManager.shared.receiveWeatherStatus()
@@ -117,9 +127,9 @@ class MainViewController: BaseViewController {
             $0.width.equalTo(scrollView)
             $0.height.equalTo(1763)
         }
-
+        
         location.snp.makeConstraints(){
-            $0.top.equalTo(contentView).offset(29)
+            $0.top.equalTo(contentView).offset(33)
             $0.centerX.equalTo(contentView)
         }
         moveToDress.snp.makeConstraints(){
@@ -135,7 +145,7 @@ class MainViewController: BaseViewController {
             $0.height.equalTo(24)
         }
         imageView.snp.makeConstraints(){
-            $0.top.equalTo(location.snp.bottom)
+            $0.top.equalTo(location.snp.bottom).offset(-5)
             $0.bottom.equalTo(temperature.snp.top)
         }
         weatherImage.snp.makeConstraints(){
@@ -194,16 +204,6 @@ class MainViewController: BaseViewController {
         }
     }
     
-    func setGradientColor() {
-        let colorTop =  UIColor(red: 255.0/255.0, green: 149.0/255.0, blue: 0.0/255.0, alpha: 1.0).cgColor
-        let colorBottom = UIColor(red: 255.0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0).cgColor
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [colorTop, colorBottom]
-        gradientLayer.locations = [0.0, 1.0]
-        gradientLayer.frame = scrollView.bounds
-        scrollView.layer.insertSublayer(gradientLayer, at: 0)
-    }
-    
     
     //MARK: - UI 디테일
     override func configureUI() {
@@ -240,7 +240,7 @@ class MainViewController: BaseViewController {
         
         todayWeather.register(TodayWeatherCell.self, forCellWithReuseIdentifier: "TodayWeatherCell")
         //헤더뷰 등록하기
-        todayWeather.register(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CollectionHeaderView.identifier)
+        todayWeather.register(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CollectionHeaderView")
         todayWeather.backgroundColor = UIColor(named: "cell")
         todayWeather.layer.cornerRadius = 15
         
@@ -333,10 +333,8 @@ class MainViewController: BaseViewController {
         view.backgroundColor = backgroundColor
         temperature.textColor = temperatureColor
     }
-    
-    //MARK: - 데이터 연결
-    
 }
+
 //MARK: - 컬렉션뷰 설정
 //헤더뷰 정의하기
 //헤더에 어떤 내용 넣어줄지 정하기
@@ -344,8 +342,8 @@ class MainViewController: BaseViewController {
 class CollectionHeaderView: UICollectionReusableView {
     static let identifier = "CollectionViewHeaderView"
     
-    private let titleLabel = UILabel()
-    private let icon = UIImageView()
+    let titleLabel = UILabel()
+    let icon = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -356,7 +354,6 @@ class CollectionHeaderView: UICollectionReusableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     func configure() {
         titleLabel.text = "Hourly Forcast"
         titleLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
@@ -364,7 +361,6 @@ class CollectionHeaderView: UICollectionReusableView {
         
         icon.image = UIImage(systemName: "clock")
         icon.tintColor = UIColor(named: "font")
-        
     }
 }
 
@@ -376,7 +372,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
         case status:
@@ -416,19 +411,21 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             //뷰모델에 있는 정보들을 가지고 셀을 만들겠다
             let viewModel = cellViewModel2[indexPath.item]
             cell.configure(with: viewModel)
-            
             return cell
         }
         return UICollectionViewCell()
     }
     
-    //헤더뷰 제공하기
+    // 헤더 뷰 제공하기
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader else {
             return UICollectionReusableView()
         }
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionHeaderView.identifier, for: indexPath) as! CollectionHeaderView
-        return header
+        if collectionView == todayWeather {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionHeaderView.identifier, for: indexPath) as! CollectionHeaderView
+            return header
+        }
+        return UICollectionReusableView()
     }
 }
 
@@ -506,3 +503,4 @@ extension MainViewController: DataReloadDelegate {
         }
     }
 }
+
