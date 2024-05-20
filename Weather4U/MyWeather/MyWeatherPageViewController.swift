@@ -11,11 +11,15 @@ import UIKit
 class MyWeatherPageViewController: BaseViewController {
     
     let searchBar = UISearchBar()
+
+    //    let searchBar = SearchViewController().searchController.searchBar
+
     let myWeatherTable = MyWeatherPageTableViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+
         // 전체 화면을 덮는 배경 뷰 추가
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor(named: "Background")
@@ -35,6 +39,11 @@ class MyWeatherPageViewController: BaseViewController {
         searchBar.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
         }
+        
+        //        view.addSubview(searchBar)
+        //        searchBar.snp.makeConstraints { make in
+        //            make.top.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
+        //        }
         
         // 테이블 뷰 컨트롤러의 뷰를 추가
         addChild(myWeatherTable) // 뷰 컨트롤러를 자식으로 추가

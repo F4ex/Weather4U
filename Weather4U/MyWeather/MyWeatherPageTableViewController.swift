@@ -28,28 +28,14 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 테이블 뷰 삭제
         tableView.isEditing = false
         
-<<<<<<< Updated upstream
-        // 날씨 데이터 가져오기
-        fetchWeatherData()
-=======
         // 빈 상태 뷰 설정
         setEmptyView()
         
         // 테이블 뷰 reload
->>>>>>> Stashed changes
         tableView.reloadData()
     }
     
-    func setEmptyView() {
-        let emptyView = UIView(frame: view.bounds)
-        emptyView.backgroundColor = UIColor(named: "Background")
-        tableView.backgroundView = emptyView
-    }
-    
-    func restoreTableView() {
-        tableView.backgroundView = nil
-    }
-    
+
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -63,22 +49,15 @@ class MyWeatherPageTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MyWeatherPageTableViewCell
         
-        // 데이터 설정
-<<<<<<< Updated upstream
-        let item = weatherData[indexPath.row]
-        cell.tempLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "1시간 기온", currnetTime: true) ?? "-") + "°C"
-        cell.highLabel.text = "H:" + (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최고기온", currnetTime: false, highTemp: true) ?? "-") + "°C"
-        cell.lowLabel.text = "L:" + (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최저기온", currnetTime: false) ?? "-") + "°C"
 
-        cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "하늘상태", currnetTime: true) ?? "-")
-=======
+        // 데이터 설정
+        let item = weatherData[indexPath.row]
         cell.cityLabel.text = city
         cell.tempLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-") + "°C"
         cell.highLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-") + "°C"
         cell.lowLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-") + "°C"
         cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
         
->>>>>>> Stashed changes
         // 이미지 설정
         if let weatherImage = UIImage(named: "sunny") {
             cell.cellImageView.image = weatherImage
@@ -89,27 +68,22 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 배경색 설정
         switch cell.weatherLabel.text {
         case "sunny":
-            cell.backgroundColor = UIColor(named: "Background")
             cell.contentView.backgroundColor = UIColor(named: "cell")
             cell.cellImageView.image = UIImage(named: "sunny")
         case "cloudy":
-            cell.backgroundColor = UIColor.gray
-            cell.contentView.backgroundColor = UIColor.systemGray
+            cell.contentView.backgroundColor = UIColor.gray
             cell.cellImageView.image = UIImage(named:"구름")
         case "rainy":
-            cell.backgroundColor = UIColor(named: "회색")
             cell.contentView.backgroundColor = UIColor(named: "회색")
             cell.cellImageView.image = UIImage(named: "비")
         case "night":
-            cell.backgroundColor = UIColor(named: "보라색?")
-            cell.contentView.backgroundColor = UIColor(named: "보라색")
+            cell.contentView.backgroundColor = UIColor(named: "보라색?")
             cell.cellImageView.image = UIImage(named: "sunny")
         default:
-            cell.backgroundColor = UIColor(named: "cell")
-            cell.contentView.backgroundColor = UIColor(named: "Background")
+            cell.contentView.backgroundColor = UIColor(named: "cell")
+            view.backgroundColor = .white
             cell.cellImageView.image = UIImage(named: "sunny")
         }
-        
         
         return cell
     }
@@ -151,7 +125,14 @@ extension MyWeatherPageTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected: \(weatherData[indexPath.row])")
+
+        if indexPath.row == 0 {
+            if let navigationController = self.navigationController {
+                navigationController.popToRootViewController(animated: true)
+            }
+        } else {
+            print("Selected: \(weatherData[indexPath.row])")
+        }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
