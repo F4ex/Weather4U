@@ -17,8 +17,6 @@ class MyWeatherPageTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(named: "cell")
-        
         // 셀 간격 조정
         tableView.separatorStyle = .none
         tableView.separatorColor = .clear
@@ -30,10 +28,15 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 테이블 뷰 삭제
         tableView.isEditing = false
         
+        // 빈 상태 뷰 설정
+        setEmptyView()
+        
+        // 테이블 뷰 reload
         // 날씨 데이터 가져오기
         tableView.reloadData()
     }
     
+
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -46,7 +49,6 @@ class MyWeatherPageTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MyWeatherPageTableViewCell
-        
     
         cell.cityLabel.text = city
         cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
@@ -83,21 +85,24 @@ class MyWeatherPageTableViewController: UITableViewController {
         }
         
         // 배경색 설정
-                switch cell.weatherLabel.text {
-                case "sunny":
-                    cell.backgroundColor = UIColor(named: "cell")
-                    view.backgroundColor = UIColor(named: "Background")
-                case "cloudy":
-                    cell.backgroundColor = UIColor.purple
-                    view.backgroundColor = UIColor.systemPurple
-                case "rainy":
-                    cell.backgroundColor = UIColor.purple
-                    view.backgroundColor = UIColor.systemPurple
-                default:
-                    cell.backgroundColor = UIColor(named: "cell")
-                    view.backgroundColor = UIColor(named: "Background")
-                }
-
+        switch cell.weatherLabel.text {
+        case "sunny":
+            cell.contentView.backgroundColor = UIColor(named: "cell")
+            cell.cellImageView.image = UIImage(named: "sunny")
+        case "cloudy":
+            cell.contentView.backgroundColor = UIColor.gray
+            cell.cellImageView.image = UIImage(named:"구름")
+        case "rainy":
+            cell.contentView.backgroundColor = UIColor(named: "회색")
+            cell.cellImageView.image = UIImage(named: "비")
+        case "night":
+            cell.contentView.backgroundColor = UIColor(named: "보라색?")
+            cell.cellImageView.image = UIImage(named: "sunny")
+        default:
+            cell.contentView.backgroundColor = UIColor(named: "cell")
+            view.backgroundColor = .white
+            cell.cellImageView.image = UIImage(named: "sunny")
+        }
         
         return cell
     }
