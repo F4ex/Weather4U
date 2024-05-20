@@ -92,14 +92,14 @@ class NetworkManager {
     }
     
     // MARK: - 3일 ~ 7일 날씨 상태 데이터 받아오기
-    func fetchWeatherStatus(completion: @escaping (Result<[StatusItem], Error>) -> Void) {
+    func fetchWeatherStatus(regID: String = "11B00000", completion: @escaping (Result<[StatusItem], Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd0600"
         let currentDateString = formatter.string(from: Date())
         let parameters: Parameters = ["dataType": "JSON",
-                                      "regId": "11B00000",
+                                      "regId": regID,
                                       "tmFc": currentDateString,
                                       "serviceKey": serviceKey]
         AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: WeatherStatusData.self) { response in
@@ -127,14 +127,14 @@ class NetworkManager {
     }
     
     // MARK: - 3일 ~ 7일 날씨 최고, 최저 기온 데이터 받아오기
-    func fetchWeatherTemperature(completion: @escaping (Result<[TemperatureItem], Error>) -> Void) {
+    func fetchWeatherTemperature(regID: String = "11B10101", completion: @escaping (Result<[TemperatureItem], Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd0600"
         let currentDateString = formatter.string(from: Date())
         let parameters: Parameters = ["dataType": "JSON",
-                                      "regId": "11B10101",
+                                      "regId": regID,
                                       "tmFc": currentDateString,
                                       "serviceKey": serviceKey]
         AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: WeatherTemperatureData.self) { response in
