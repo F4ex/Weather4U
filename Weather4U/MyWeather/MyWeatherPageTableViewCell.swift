@@ -19,7 +19,7 @@ class MyWeatherPageTableViewCell: UITableViewCell {
     let weatherLabel = UILabel()
     let cellImageView = UIImageView() // imageView 이름 변경
     
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = UIColor(named: "cell")
@@ -39,8 +39,8 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         
         [cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
             contentView.addSubview($0)
-            }
-           
+        }
+        
         
         // Auto Layout constraints 설정
         cityLabel.snp.makeConstraints { make in
@@ -54,7 +54,7 @@ class MyWeatherPageTableViewCell: UITableViewCell {
             make.top.equalTo(cityLabel.snp.bottom).offset(5)
             make.leading.equalToSuperview().inset(15)
             make.trailing.equalToSuperview().inset(190)
-            make.height.equalTo(40)
+            make.height.equalTo(20)
         }
         
         weatherLabel.snp.makeConstraints { make in
@@ -79,25 +79,27 @@ class MyWeatherPageTableViewCell: UITableViewCell {
             make.leading.equalTo(highLabel.snp.trailing).offset(5)
         }
         
+        cellImageView.contentMode = .scaleAspectFit
+        
         cellImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(10)
+            make.top.bottom.equalToSuperview().inset(10)
             make.trailing.bottom.equalToSuperview().inset(10)
             make.leading.equalToSuperview().inset(200)
-            make.height.equalTo(130) // 이미지 뷰의 높이 설정
         }
     }
     
     
     override func layoutSubviews() {
-            super.layoutSubviews()
-            
-            // contentView 프레임을 수정하여 패딩 추가
-            contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left:0, bottom: 5, right: 5))
-        }
+        super.layoutSubviews()
+        
+        // contentView 프레임을 수정하여 패딩 추가
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left:0, bottom: 5, right: 5))
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 }
 
 struct MyWeatherPageViewControllerRepresentable: UIViewControllerRepresentable {
