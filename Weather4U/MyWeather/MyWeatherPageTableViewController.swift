@@ -17,8 +17,6 @@ class MyWeatherPageTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(named: "cell")
-        
         // 셀 간격 조정
         tableView.separatorStyle = .none
         tableView.separatorColor = .clear
@@ -30,9 +28,26 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 테이블 뷰 삭제
         tableView.isEditing = false
         
+<<<<<<< Updated upstream
         // 날씨 데이터 가져오기
         fetchWeatherData()
+=======
+        // 빈 상태 뷰 설정
+        setEmptyView()
+        
+        // 테이블 뷰 reload
+>>>>>>> Stashed changes
         tableView.reloadData()
+    }
+    
+    func setEmptyView() {
+        let emptyView = UIView(frame: view.bounds)
+        emptyView.backgroundColor = UIColor(named: "Background")
+        tableView.backgroundView = emptyView
+    }
+    
+    func restoreTableView() {
+        tableView.backgroundView = nil
     }
     
     // MARK: - Table view data source
@@ -49,12 +64,21 @@ class MyWeatherPageTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MyWeatherPageTableViewCell
         
         // 데이터 설정
+<<<<<<< Updated upstream
         let item = weatherData[indexPath.row]
         cell.tempLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "1시간 기온", currnetTime: true) ?? "-") + "°C"
         cell.highLabel.text = "H:" + (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최고기온", currnetTime: false, highTemp: true) ?? "-") + "°C"
         cell.lowLabel.text = "L:" + (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "일 최저기온", currnetTime: false) ?? "-") + "°C"
 
         cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: "하늘상태", currnetTime: true) ?? "-")
+=======
+        cell.cityLabel.text = city
+        cell.tempLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-") + "°C"
+        cell.highLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-") + "°C"
+        cell.lowLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-") + "°C"
+        cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
+        
+>>>>>>> Stashed changes
         // 이미지 설정
         if let weatherImage = UIImage(named: "sunny") {
             cell.cellImageView.image = weatherImage
@@ -63,21 +87,29 @@ class MyWeatherPageTableViewController: UITableViewController {
         }
         
         // 배경색 설정
-                switch cell.weatherLabel.text {
-                case "sunny":
-                    cell.backgroundColor = UIColor(named: "cell")
-                    view.backgroundColor = UIColor(named: "Background")
-                case "cloudy":
-                    cell.backgroundColor = UIColor.purple
-                    view.backgroundColor = UIColor.systemPurple
-                case "rainy":
-                    cell.backgroundColor = UIColor.purple
-                    view.backgroundColor = UIColor.systemPurple
-                default:
-                    cell.backgroundColor = UIColor(named: "cell")
-                    view.backgroundColor = UIColor(named: "Background")
-                }
-
+        switch cell.weatherLabel.text {
+        case "sunny":
+            cell.backgroundColor = UIColor(named: "Background")
+            cell.contentView.backgroundColor = UIColor(named: "cell")
+            cell.cellImageView.image = UIImage(named: "sunny")
+        case "cloudy":
+            cell.backgroundColor = UIColor.gray
+            cell.contentView.backgroundColor = UIColor.systemGray
+            cell.cellImageView.image = UIImage(named:"구름")
+        case "rainy":
+            cell.backgroundColor = UIColor(named: "회색")
+            cell.contentView.backgroundColor = UIColor(named: "회색")
+            cell.cellImageView.image = UIImage(named: "비")
+        case "night":
+            cell.backgroundColor = UIColor(named: "보라색?")
+            cell.contentView.backgroundColor = UIColor(named: "보라색")
+            cell.cellImageView.image = UIImage(named: "sunny")
+        default:
+            cell.backgroundColor = UIColor(named: "cell")
+            cell.contentView.backgroundColor = UIColor(named: "Background")
+            cell.cellImageView.image = UIImage(named: "sunny")
+        }
+        
         
         return cell
     }
@@ -87,7 +119,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         return 30 // 각 섹션 사이의 공간을 조절하는 높이
     }
     
-
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // 셀의 높이 설정
         if SearchViewController.isEditMode == false {
