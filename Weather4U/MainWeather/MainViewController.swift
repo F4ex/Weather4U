@@ -51,7 +51,8 @@ class MainViewController: BaseViewController {
     }
     let footerMessage = UILabel()
     let logo = UIImageView()
-    var weatherData = [Item]()
+    let city = City(from: <#any Decoder#>)
+    
     
     
     
@@ -176,7 +177,7 @@ class MainViewController: BaseViewController {
     
     //MARK: - UI 디테일
     override func configureUI() {
-        location.text = "내 위치"
+        location.text = city
         location.font = UIFont(name: "Apple SD Gothic Neo", size: 34)
         location.textColor = UIColor(named: "font")
         
@@ -187,9 +188,6 @@ class MainViewController: BaseViewController {
         moveToSearch.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         moveToSearch.tintColor = UIColor(named: "font")
         moveToSearch.addTarget(self, action: #selector(clickToSearch), for: .touchUpInside)
-        
-        weatherImage.image = UIImage(named: "sun")
-        
         
         temperature.font = UIFont(name: "Alata-Regular", size: 50)
         temperature.text = "\(30)°"
@@ -241,6 +239,7 @@ class MainViewController: BaseViewController {
         feels.register(FeelsCollectionViewCell.self, forCellWithReuseIdentifier: "FeelsCollectionViewCell")
         feels.backgroundColor = view.backgroundColor
     }
+    
     
     // MARK: 버튼 연결
     @objc func clickToSearch() {
