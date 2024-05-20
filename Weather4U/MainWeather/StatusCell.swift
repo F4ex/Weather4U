@@ -35,20 +35,19 @@ class StatusCell: UICollectionViewCell {
         
         icon.tintColor = UIColor(named: "font")
         
-        num.text = "00"
         num.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
         num.textColor = UIColor(named: "font")
-
+        
         background.backgroundColor = UIColor(named: "cell")
         background.layer.cornerRadius = 15
     }
     
     // 컨테이너 뷰를 선언, 이유는 statusCell의 property와 icon을 하나로 묶어 가운데 정렬을 하기 위해서
     let containerView = UIView()
-
+    
     func constraintLayout() {
         addSubview(containerView)
-
+        
         containerView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().offset(27)
@@ -57,10 +56,10 @@ class StatusCell: UICollectionViewCell {
         background.snp.makeConstraints {
             $0.width.height.equalTo(110)
         }
-
+        
         containerView.addSubview(icon)
         icon.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().offset(-2)
             $0.left.equalToSuperview()
             $0.height.equalTo(20)
         }
@@ -78,10 +77,11 @@ class StatusCell: UICollectionViewCell {
             $0.centerX.equalToSuperview()
         }
     }
-
+    
     func configure(with viewModel: StatusCellViewModel) {
-            property.text = viewModel.propertyName
-            icon.image = viewModel.iconImage
-        }
+        property.text = viewModel.propertyName
+        icon.image = viewModel.iconImage
+        num.text = viewModel.num
+    }
 }
 

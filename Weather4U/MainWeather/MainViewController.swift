@@ -16,7 +16,10 @@ class MainViewController: BaseViewController {
     let location = UILabel()
     let moveToSearch = UIButton()
     let moveToDress = UIButton()
-    let weatherImage = UIImageView()
+    let imageView = UIView().then(){
+        $0.frame.size = CGSize(width: 393, height: 259)
+    }
+    var weatherImage = UIImageView()
     let temperature = UILabel()
     let tempHigh = UILabel()
     let tempLow = UILabel()
@@ -41,14 +44,22 @@ class MainViewController: BaseViewController {
     }
     
     let weekWeather = UITableView()
+    let feels = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then() {
+        let layout = $0.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.minimumInteritemSpacing = 15
+        layout.itemSize = CGSize(width: 173, height: 129)
+    }
     let footerMessage = UILabel()
     let logo = UIImageView()
-    
+    var city: City = .서울특별시 //City의 디폴트 값인 서울로 현재의 위치를 표시하겠다
+    var weatherData: [WeatherData] = []
+    var weatherStatus: String = "Sunny"
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "Background")
+        updateAppearanceBasedOnWeather(for: weatherStatus)
         
         status.delegate = self
         status.dataSource = self
@@ -58,15 +69,37 @@ class MainViewController: BaseViewController {
         weekWeather.dataSource = self
         todayPrecipitation.delegate = self
         todayPrecipitation.dataSource = self
+        feels.delegate = self
+        feels.dataSource = self
+        NetworkManager.shared.delegate = self
+        CategoryManager.shared.delegate = self
         
         weekWeather.sectionHeaderTopPadding = 0
-        //stickyheader 사용 -> y축의 몇 픽셀에서 멈추는지 정하면 되는것 같다..
-        //그렇다면 접히면서 사라리는건?
-
+        
         NetworkManager.shared.receiveWeatherData()
-        JSONManager.shared.loadJSONToLocationData(fileName: "weatherLocationData", extensionType: "json")
+        NetworkManager.shared.receiveWeatherStatus()
+        NetworkManager.shared.receiveWeatherSentence()
+        NetworkManager.shared.receiveWeatherTemperature()
+        JSONManager.shared.loadJSONToLocationData()
+        //여기서 한번 적어주면 아래에는 shared 까지만 써줘도 됨
+        //아 그러네 받아온다! 라는 함수니깐
+        //아래에는 정보를 입력해주는거고!
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        // 인터페이스 스타일이 변경될 때마다 UI 업데이트
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateAppearanceBasedOnWeather(for: weatherStatus)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    //MARK: - 오토레이아웃
     override func constraintLayout() {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints(){
@@ -74,7 +107,7 @@ class MainViewController: BaseViewController {
         }
         scrollView.addSubview(contentView)
         
-        [location, moveToDress, moveToSearch, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather,todayPrecipitation, footerMessage, logo].forEach() {
+        [location, moveToDress, moveToSearch, imageView, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather,todayPrecipitation, feels, footerMessage, logo].forEach() {
             contentView.addSubview($0)
         }
         
@@ -83,7 +116,7 @@ class MainViewController: BaseViewController {
             $0.width.equalTo(scrollView)
             $0.height.equalTo(1763)
         }
-        
+
         location.snp.makeConstraints(){
             $0.top.equalTo(contentView).offset(29)
             $0.centerX.equalTo(contentView)
@@ -100,12 +133,16 @@ class MainViewController: BaseViewController {
             $0.width.equalTo(30)
             $0.height.equalTo(24)
         }
+        imageView.snp.makeConstraints(){
+            $0.top.equalTo(location.snp.bottom)
+            $0.bottom.equalTo(temperature.snp.top)
+        }
         weatherImage.snp.makeConstraints(){
-            $0.top.equalTo(location.snp.bottom).offset(34)
-            $0.centerX.equalTo(contentView.snp.centerX).offset(12)
+            $0.centerX.equalTo(contentView.snp.centerX)
+            $0.centerY.equalTo(imageView)
         }
         temperature.snp.makeConstraints(){
-            $0.top.equalTo(weatherImage.snp.bottom).offset(19)
+            $0.top.equalTo(contentView).offset(383)
             $0.left.equalTo(contentView).offset(164)
         }
         tempHigh.snp.makeConstraints(){
@@ -135,57 +172,53 @@ class MainViewController: BaseViewController {
             $0.left.right.equalTo(contentView).inset(16)
             $0.height.equalTo(470)
         }
-        
-        footerMessage.snp.makeConstraints(){
-            $0.bottom.equalTo(logo.snp.top).offset(-9)
-            $0.horizontalEdges.equalTo(contentView).inset(102)
-        }
-        
-        logo.snp.makeConstraints(){
-            $0.bottom.equalTo(contentView).inset(54)
-            $0.width.height.equalTo(43)
-            $0.centerX.equalTo(contentView)
-        }
-        
         todayPrecipitation.snp.makeConstraints() {
             $0.top.equalTo(weekWeather.snp.bottom).offset(14)
             $0.left.right.equalTo(contentView).inset(16)
             $0.height.equalTo(164)
         }
+        feels.snp.makeConstraints(){
+            $0.top.equalTo(todayPrecipitation.snp.bottom).offset(14)
+            $0.left.right.equalTo(contentView).inset(16)
+            $0.height.equalTo(129)
+        }
+        logo.snp.makeConstraints(){
+            $0.bottom.equalTo(footerMessage.snp.top).offset(-15)
+            $0.width.height.equalTo(60)
+            $0.centerX.equalTo(contentView)
+        }
+        footerMessage.snp.makeConstraints(){
+            $0.bottom.equalTo(contentView).offset(-10)
+            $0.horizontalEdges.equalTo(contentView).inset(102)
+        }
     }
     
+    
+    //MARK: - UI 디테일
     override func configureUI() {
-        location.text = "내 위치"
+        location.text = city.rawValue
         location.font = UIFont(name: "Apple SD Gothic Neo", size: 34)
         location.textColor = UIColor(named: "font")
         
         moveToDress.setImage(UIImage(systemName: "hanger"), for: .normal)
         moveToDress.tintColor = UIColor(named: "font")
+        moveToDress.addTarget(self, action: #selector(clickToStyle), for: .touchUpInside)
         
         moveToSearch.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         moveToSearch.tintColor = UIColor(named: "font")
         moveToSearch.addTarget(self, action: #selector(clickToSearch), for: .touchUpInside)
         
-        weatherImage.image = UIImage(named: "sun3")
-        
-        
         temperature.font = UIFont(name: "Alata-Regular", size: 50)
-        temperature.text = "\(30)°"
-        temperature.textColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1.0)
-        temperature.shadowColor = UIColor(red: 81/255, green: 51/255, blue: 0/255, alpha: 0.25)
         temperature.layer.shadowRadius = 2
         temperature.shadowOffset = CGSize(width: 0, height: 4)
         
-        
-        tempHigh.text = "H: \(01)°"
         tempHigh.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempHigh.textColor = UIColor(named: "font")
         
-        tempLow.text = "L: \(01)°"
         tempLow.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempLow.textColor = UIColor(named: "font")
         
-        weatherExplanation.text = "Sunny conditions will continue for the rest of the day.Wind gusts are up to 8 m/s"
+        weatherExplanation.text = NetworkManager.weatherSentenceData ?? "No Data"
         weatherExplanation.textAlignment = .center
         weatherExplanation.numberOfLines = 2
         weatherExplanation.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
@@ -214,16 +247,86 @@ class MainViewController: BaseViewController {
         footerMessage.textAlignment = .center
         footerMessage.numberOfLines = 2
         
-        logo.backgroundColor = .white
+        logo.image = UIImage(named: "weather4U")
+        
+        feels.register(FeelsCollectionViewCell.self, forCellWithReuseIdentifier: "FeelsCollectionViewCell")
+        feels.backgroundColor = view.backgroundColor
     }
     
+    
+    // MARK: - 버튼 연결
     @objc func clickToSearch() {
         let vc = SearchViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    @objc func clickToStyle() {
+        let vc = StyleViewController()
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    
+    //MARK: - 날씨별 배경 및 메인아이콘 변경
+    func updateAppearanceBasedOnWeather(for weatherStatus: String) {
+        var Icon = UIImage()
+        var backgroundColor = UIColor()
+        var temperatureColor = UIColor()
+        
+        switch weatherStatus {
+        case "Sunny":
+            Icon = UIImage(named: "sun")!
+            backgroundColor = UIColor(named: "Background")!
+            temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
+        case "Mostly Cloudy":
+            Icon = UIImage(named: "sun&cloud")!
+            backgroundColor = UIColor(named: "BackGroundR")!
+            temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
+        case "Cloudy":
+            Icon = UIImage(named: "cloudy")!
+            backgroundColor = UIColor(named: "BackGroundR")!
+            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+        case "비":
+            Icon = UIImage(named: "rain")!
+            backgroundColor = UIColor(named: "BackGroundR")!
+            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+        case "소나기":
+            Icon = UIImage(named: "heavyRain")!
+            backgroundColor = UIColor(named: "BackGroundR")!
+            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+        case "비/눈":
+            Icon = UIImage(named: "snow&rain")!
+            backgroundColor = UIColor(named: "BackGroundS")!
+            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+        case "눈":
+            Icon = UIImage(named: "snow")!
+            backgroundColor = UIColor(named: "BackGroundS")!
+            temperatureColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
+        default:
+            Icon = UIImage(named: "sun")!
+            backgroundColor = UIColor(named: "Background")!
+            temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
+        }
+        
+        if traitCollection.userInterfaceStyle == .dark {
+            switch weatherStatus {
+            case "Cloudy":
+                Icon = UIImage(named: "moon&cloud")!
+                backgroundColor = UIColor(named: "Background")!
+                temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
+            default:
+                Icon = UIImage(named: "moon")!
+                backgroundColor = UIColor(named: "Background")!
+                temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
+            }
+        }
+        weatherImage.image = Icon
+        view.backgroundColor = backgroundColor
+        temperature.textColor = temperatureColor
+    }
+    
+    //MARK: - 데이터 연결
+    
 }
-
-
+//MARK: - 컬렉션뷰 설정
 //헤더뷰 정의하기
 //헤더에 어떤 내용 넣어줄지 정하기
 //헤더뷰 등록은 위쪽 configureUI에 함
@@ -261,7 +364,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -270,8 +372,10 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return 3
         case todayWeather:
             return 24
-        default :
+        case todayPrecipitation:
             return 1
+        default :
+            return 2
         }
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -294,6 +398,15 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return UICollectionViewCell()
             }
             return cell
+        } else if collectionView == feels {
+            guard let cell = feels.dequeueReusableCell(withReuseIdentifier: FeelsCollectionViewCell.identifier, for: indexPath) as? FeelsCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            //뷰모델에 있는 정보들을 가지고 셀을 만들겠다
+            let viewModel = cellViewModel2[indexPath.item]
+            cell.configure(with: viewModel)
+            
+            return cell
         }
         return UICollectionViewCell()
     }
@@ -308,8 +421,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
 }
 
-
-
+//MARK: - 테이블뷰 설정
 extension MainViewController: UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -318,6 +430,10 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = weekWeather.dequeueReusableCell(withIdentifier: "WeekWeatherCell", for: indexPath) as? WeekWeatherCell else {
             return UITableViewCell()
+        }
+        if let data = NetworkManager.weatherTemperatureData {
+            cell.tempHigh.text = "\(data[0].taMax3)°"
+            cell.tempLow.text = "\(data[0].taMin3)°"
         }
         return cell
     }
@@ -360,5 +476,22 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
             $0.left.equalTo(icon.snp.right).offset(6)
         }
         return weekWeatherH
+    }
+}
+
+//MARK: - 데이터 가져오기
+extension MainViewController: DataReloadDelegate {
+    func dataReload() {
+        DispatchQueue.main.async {
+            self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
+            self.tempHigh.text = "H: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
+            self.tempLow.text = "L: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"
+            self.weatherExplanation.text = NetworkManager.weatherSentenceData
+            self.weekWeather.reloadData()
+            self.status.reloadData()
+            self.todayWeather.reloadData()
+            self.todayPrecipitation.reloadData()
+            self.updateAppearanceBasedOnWeather(for: self.weatherStatus)
+        }
     }
 }

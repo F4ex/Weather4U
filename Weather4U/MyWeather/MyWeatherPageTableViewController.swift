@@ -32,6 +32,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         setEmptyView()
         
         // 테이블 뷰 reload
+        // 날씨 데이터 가져오기
         tableView.reloadData()
     }
     
@@ -48,15 +49,33 @@ class MyWeatherPageTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MyWeatherPageTableViewCell
-        
-
-        // 데이터 설정
-        let item = weatherData[indexPath.row]
+    
         cell.cityLabel.text = city
-        cell.tempLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-") + "°C"
-        cell.highLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-") + "°C"
-        cell.lowLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-") + "°C"
         cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
+        
+        let tempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
+        let highTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0") ?? 0.0
+        let lowTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "0") ?? 0.0
+        
+        
+        if SearchViewController.isCelsius {
+            let tCelsius = (tempCelsius).rounded()
+            let hCelsius = (highTempCelsius).rounded()
+            let lCelsius = (lowTempCelsius).rounded()
+            
+            cell.tempLabel.text = "\(Int(tCelsius))°C"
+            cell.highLabel.text = "H: \(Int(hCelsius))°C"
+            cell.lowLabel.text = "L: \(Int(lCelsius))°C"
+            
+        } else {
+            let tempFahrenheit = (tempCelsius * 1.8 + 32).rounded()
+            let highTempFahrenheit = (highTempCelsius * 1.8 + 32).rounded()
+            let lowTempFahrenheit = (lowTempCelsius * 1.8 + 32).rounded()
+            
+            cell.tempLabel.text = "\(Int(tempFahrenheit))°F"
+            cell.highLabel.text = "H: \(Int(highTempFahrenheit))°F"
+            cell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°F"
+        }
         
         // 이미지 설정
         if let weatherImage = UIImage(named: "sunny") {
@@ -99,7 +118,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         if SearchViewController.isEditMode == false {
             return 150
         } else {
-            return 100
+            return 110
         }
     }
 }
@@ -125,14 +144,13 @@ extension MyWeatherPageTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
         if indexPath.row == 0 {
-            if let navigationController = self.navigationController {
-                navigationController.popToRootViewController(animated: true)
-            }
-        } else {
-            print("Selected: \(weatherData[indexPath.row])")
-        }
+                    if let navigationController = self.navigationController {
+                        navigationController.popToRootViewController(animated: true)
+                    }
+                } else {
+                    print("Selected: \(weatherData[indexPath.row])")
+                }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

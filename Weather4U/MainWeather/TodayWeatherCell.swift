@@ -30,13 +30,13 @@ class TodayWeatherCell: UICollectionViewCell {
         [time, icon, temperature].forEach(){
             addSubview($0)
         }
-        time.text = "Now"
+        time.text = "시간"
         time.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 17)
         time.textColor = UIColor(named: "font")
         
         icon.backgroundColor = .white
         
-        temperature.text = "00°"
+        temperature.text = "\(String(describing: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP, currentTime: true, highTemp: false)))°"
         temperature.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
         temperature.textColor = UIColor(named: "font")
     }
@@ -54,7 +54,5 @@ class TodayWeatherCell: UICollectionViewCell {
             $0.top.equalTo(icon.snp.bottom).offset(7)
             $0.centerX.equalToSuperview()
         }
-        
     }
-
 }

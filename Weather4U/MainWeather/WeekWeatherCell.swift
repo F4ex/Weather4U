@@ -15,8 +15,8 @@ class WeekWeatherCell: UITableViewCell {
     let drop = UIImageView()
     let pop = UILabel()
     let icon = UIImageView()
-    let tempHigh = UILabel()
-    let tempLow = UILabel()
+    var tempHigh = UILabel()
+    var tempLow = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

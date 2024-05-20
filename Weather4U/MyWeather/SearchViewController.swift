@@ -4,69 +4,103 @@
 //
 //  Created by t2023-m0095 on 5/13/24.
 //
-
+import CoreData
 import SnapKit
 import UIKit
 
+
 class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating, UISearchControllerDelegate, UISearchBarDelegate {
+    
+    var persistentContainer: NSPersistentContainer? {
+        (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+    }
+    
+    let searchTable = SearchResultTableViewController()
+    lazy var searchController = UISearchController(searchResultsController: searchTable)
     
     let settingButton = UIButton()
     let doneButton = UIButton()
     
     static var isEditMode = false
+    static var isCelsius = true
+    static var isFahrenheit = false
+    static var result : [CombinedData] = []
     
-    var isCelsius = true
-    var isFahrenheit = false
-    
-    let celsius : Int = 17
     
     let weatherLabel = UILabel()
     
-    //    var locationData : LocationData?
-    //    let networkManager = NetworkManager()
-    var searchDebounceTimer: Timer?
-    var result: [LocationDatum] = []
-    
+    var searchDebounceTimer : Timer?
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.navigationBar.isHidden = false
         view.backgroundColor = .white
-        doneButton.isHidden = true
         
+        searchTable.tableView.isHidden = true
         
-        setSearchController(searchBar)
+        setSearchController()
         setSettingButton(settingButton)
         
         setCelsius()
         
+        //뒤로 가기 버튼 숨기기
+        self.navigationItem.hidesBackButton = true
+        
+        let barButton = UIBarButtonItem(customView: settingButton)
+        self.navigationItem.rightBarButtonItem = barButton
+        
+        
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
+        myWeatherTable.tableView.reloadData()
+        
+    }
+    
+    
+    // 코어데이터에 저장된 데이터를 불러오기 (데이터조회)
+    //    private func setProductList() {
+    //        guard let context = self.persistentContainer?.viewContext else { return }
+    //
+    //        let request = MyLocation.fetchRequest()
+    //
+    //        if let array = try? context.fetch(request) {
+    //            self.array = array
+    //        }
+    //    }
     
     //MARK: - searchController
     
-    func setSearchController( _ searchBar : UISearchBar ) {
+    func setSearchController() {
         
-        let searchController = UISearchController(searchResultsController: nil)
-        
-        self.navigationItem.searchController = searchController
-        self.navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         searchController.obscuresBackgroundDuringPresentation = true
         
-        searchController.searchResultsUpdater = self
-        
-        searchBar.placeholder = "Search for a city."
-        self.navigationItem.title = "Weather"
+        searchController.searchBar.placeholder = "Search for a city."
         searchController.hidesNavigationBarDuringPresentation = true
         
-        searchController.delegate = self
-        searchController.searchBar.delegate = self
+        self.navigationItem.title = "Weather"
+        self.navigationItem.largeTitleDisplayMode = .always
         
-        // 검색 결과를 업데이트하는 뷰 컨트롤러로 searchController를 설정
-        navigationItem.searchController = searchController
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 35, weight: .black)
+        ]
+        
+        searchController.delegate = self
+        searchController.searchResultsUpdater = self
+        //        searchController.searchBar.delegate = self
+        
     }
+    
     
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -77,34 +111,39 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         }
         
         performSearch(with: text)
+        
     }
     
     
     // 검색
     func performSearch(with text: String) {
-        searchDebounceTimer?.invalidate()  // 이전 타이머를 취소합니다.
+        
+        searchDebounceTimer?.invalidate()  // 기존 타이머를 취소합니다.
         searchDebounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] _ in
-            // JSON 데이터를 로드합니다.
-            JSONManager.shared.loadJSONToLocationData(fileName: "weather", extensionType: "json")
             
-            // 검색어가 포함된 데이터를 필터링합니다.
-            let locationData = JSONManager.locationData.filter { datum in
-                // 도시 이름, 동 또는 마을 이름에 검색어가 포함되어 있는지 확인합니다.
-                let cityNameContainsText = datum.city.rawValue.contains(text)
-                let townContainsText = datum.town.contains(text)
-                let villageContainsText = datum.village.contains(text)
+            if JSONManager.combinedDataArray.isEmpty {
+                JSONManager.shared.loadJSONToLocationData()
+            }
+            
+            if text.isEmpty {
+                SearchViewController.result = JSONManager.combinedDataArray
+            } else {
+                SearchViewController.result = JSONManager.combinedDataArray.filter { combinedData in
+                    combinedData.Region.lowercased().contains(text.lowercased())
+                }
+                for data in SearchViewController.result {
+                    print(data.Region)
+                }
                 
-                // 하나라도 검색어를 포함하고 있다면 true를 반환합니다.
-                return cityNameContainsText || townContainsText || villageContainsText
+                DispatchQueue.main.async {
+                    self?.searchTable.tableView.reloadData()
+                }
             }
             
-            // 필터링된 locationData를 이용하여 테이블 뷰를 업데이트합니다.
-            DispatchQueue.main.async {
-                self?.result = locationData
-                self?.myWeatherTable.tableView.reloadData()
-            }
+            
         })
     }
+    
     
     
     
@@ -112,6 +151,11 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
     
     
     func setSettingButton(_ button: UIButton) {
+        
+        settingButton.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
+        settingButton.frame.size = CGSize(width: 30, height: 30)
+        settingButton.tintColor = .black
+        
         let configuration = UIButton.Configuration.plain()
         settingButton.configuration = configuration
         
@@ -132,8 +176,8 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
             print(action.title)}
         
         let editList = UIAction(title: "Edit List", image: UIImage(systemName: "pencil"), handler: seletedPriority)
-        let celsiusAction = UIAction(title: "Celsius", image: UIImage(named: "Celsius"),state: (isCelsius == true) ? .on : .off, handler: seletedPriority)
-        let fahrenheitAction = UIAction(title: "Fahrenheit", image: UIImage(named: "Fahrenheit"), state: (isFahrenheit == true) ? .on : .off, handler: seletedPriority)
+        let celsiusAction = UIAction(title: "Celsius", image: UIImage(named: "Celsius"),state: (SearchViewController.isCelsius == true) ? .on : .off, handler: seletedPriority)
+        let fahrenheitAction = UIAction(title: "Fahrenheit", image: UIImage(named: "Fahrenheit"), state: (SearchViewController.isFahrenheit == true) ? .on : .off, handler: seletedPriority)
         
         let menu = UIMenu(options: .displayInline, children: [editList])
         
@@ -143,26 +187,32 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         
     }
     
+    
     func setCelsius() {
-        isCelsius = true
-        isFahrenheit = false
+        SearchViewController.isCelsius = true
+        SearchViewController.isFahrenheit = false
         setSettingButton(settingButton)
-        print(self.celsius)
         
+        myWeatherTable.tableView.reloadData()
     }
     
     func setFahrenheit() {
-        isCelsius = false
-        isFahrenheit = true
+        SearchViewController.isCelsius = false
+        SearchViewController.isFahrenheit = true
         setSettingButton(settingButton)
-        print(Int((Double(self.celsius) * 1.8 + 32).rounded()))
+        
+        myWeatherTable.tableView.reloadData()
+        
     }
     
     //Edit List 버튼 선택
     func tappedEditList() {
         SearchViewController.isEditMode = true
-        settingButton.isHidden = true
-        doneButton.isHidden = false
+        
+        let doneBarButton = UIBarButtonItem(customView: doneButton)
+        
+        self.navigationItem.rightBarButtonItem = doneBarButton
+        
         self.myWeatherTable.setEditing(true, animated: true)
         print("EditList")
         
@@ -174,29 +224,30 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
             cell.weatherLabel.isHidden = true
         }
         myWeatherTable.tableView.endUpdates()
- 
+        
     }
     
     
     // 편집 끝
     @objc func tappedDone() {
         SearchViewController.isEditMode = false
-        settingButton.isHidden = false
-        doneButton.isHidden = true
+        
+        let settingBarButton = UIBarButtonItem(customView: settingButton)
+        self.navigationItem.rightBarButtonItem = settingBarButton
         
         myWeatherTable.tableView.beginUpdates()
         self.myWeatherTable.setEditing(false, animated: true)
         
         myWeatherTable.tableView.visibleCells.forEach { cell in
-        guard let cell = cell as? MyWeatherPageTableViewCell else {return}
-        cell.cityLabel.isHidden = false
-        cell.tempLabel.isHidden = false
-        cell.highLabel.isHidden = false
-        cell.lowLabel.isHidden = false
-        cell.weatherLabel.isHidden = false
-    }
+            guard let cell = cell as? MyWeatherPageTableViewCell else {return}
+            //            cell.cityLabel.isHidden = false
+            //            cell.tempLabel.isHidden = false
+            cell.highLabel.isHidden = false
+            cell.lowLabel.isHidden = false
+            cell.weatherLabel.isHidden = false
+        }
         myWeatherTable.tableView.endUpdates()
- 
+        
         print("Done")
     }
     
@@ -204,13 +255,9 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
     //MARK: - UI 구현 및 오토레이아웃
     override func configureUI() {
         
-        [settingButton, doneButton, searchBar, weatherLabel].forEach {
-            view.addSubview($0)
-        }
-        
-        settingButton.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
-        settingButton.frame.size = CGSize(width: 30, height: 30)
-        settingButton.tintColor = .black
+        //        [/*settingButton,*/ doneButton,/* searchBar,*/ /*weatherLabel*/].forEach {
+        //            view.addSubview($0)
+        //        }
         
         let attributedTitle = NSAttributedString(string: "Done", attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue])
         doneButton.setAttributedTitle(attributedTitle, for: .normal)
@@ -220,10 +267,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         doneButton.frame.size = CGSize(width: 30, height: 50)
         
         
-        weatherLabel.text = "Weather"
-        weatherLabel.font = .systemFont(ofSize: 35, weight: .black)
-        
-        searchBar.searchBarStyle = .minimal
+        //        searchBar.searchBarStyle = .minimal
         
         
         // 테이블 뷰 컨트롤러의 뷰를 추가
@@ -231,35 +275,28 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         view.addSubview(myWeatherTable.view) // 뷰 컨트롤러의 뷰를 추가
         myWeatherTable.didMove(toParent: self) // 부모 뷰 컨트롤러를 설정
         
+        view.addSubview(searchTable.tableView)
+        
         
     }
     
     override func constraintLayout() {
         
-        settingButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(20)
-            $0.right.equalToSuperview().inset(20)
-            $0.height.equalTo(30)
-        }
+        //        settingButton.snp.makeConstraints {
+        //            $0.top.equalToSuperview().inset(80)
+        //            $0.right.equalToSuperview().inset(10)
+        //            $0.height.equalTo(30)
+        //        }
         
-        doneButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(20)
-            $0.right.equalToSuperview().inset(25)
-            $0.height.equalTo(30)
-        }
-        
-        weatherLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(40)
-            $0.left.right.equalToSuperview().inset(20)
-        }
-        
-        searchBar.snp.makeConstraints {
-            $0.top.equalTo(weatherLabel.snp_bottomMargin).offset(5)
-            $0.left.right.equalToSuperview().inset(10)
-        }
+        //        doneButton.snp.makeConstraints {
+        //            $0.top.equalTo(settingButton.snp.top)
+        //            $0.right.equalToSuperview().inset(25)
+        //            $0.height.equalTo(30)
+        //        }
+        //
         
         myWeatherTable.view.snp.makeConstraints { make in
-            make.top.equalTo(searchBar.snp.bottom).offset(0)
+            make.top.equalToSuperview()
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(15)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(5)
         }

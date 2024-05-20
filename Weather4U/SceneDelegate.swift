@@ -5,12 +5,12 @@
 //  Created by t2023-m0056 on 5/13/24.
 //
 
+import CoreData
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-    
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navigationController = UINavigationController()
         let mainViewController = MainViewController()
         navigationController.viewControllers = [mainViewController]
-        navigationController.navigationBar.isHidden = true // 스크롤바 내릴때 상단에 창 뜨는거 싫으면 이 코드 써주기
+        navigationController.navigationBar.isHidden = true
         
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = navigationController
@@ -62,4 +62,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     
 }
-
