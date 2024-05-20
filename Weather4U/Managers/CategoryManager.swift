@@ -46,6 +46,7 @@ class CategoryManager {
     
     static let shared = CategoryManager()
     static var todayWeatherData: [TodayWeather] = []
+    weak var delegate: DataReloadDelegate?
     
     private init() { }
     
@@ -103,6 +104,7 @@ class CategoryManager {
         
         // 시간별로 정렬합니다.
         todayWeatherList.sort { $0.todayTime < $1.todayTime }
+        self.delegate?.dataReload()
         return todayWeatherList
     }
 

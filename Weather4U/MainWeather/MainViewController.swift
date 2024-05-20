@@ -78,8 +78,7 @@ class MainViewController: BaseViewController {
         NetworkManager.shared.receiveWeatherStatus()
         NetworkManager.shared.receiveWeatherSentence()
         NetworkManager.shared.receiveWeatherTemperature()
-        JSONManager.shared.loadJSONToLocationData(fileName: "weatherLocationData", extensionType: "json")
-        
+        JSONManager.shared.loadJSONToLocationData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -407,5 +406,13 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
             $0.left.equalTo(icon.snp.right).offset(6)
         }
         return weekWeatherH
+    }
+}
+
+extension MainViewController: DataReloadDelegate {
+    func dataReload() {
+        self.status.reloadData()
+        self.todayWeather.reloadData()
+        self.todayPrecipitation.reloadData()
     }
 }

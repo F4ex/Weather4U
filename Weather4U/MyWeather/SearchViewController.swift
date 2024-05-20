@@ -128,8 +128,8 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         
         searchDebounceTimer?.invalidate()  // 이전 타이머 취소
         searchDebounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] _ in
-            // JSON 데이터 로드
-            JSONManager.shared.loadJSONToLocationData(fileName: "weather", extensionType: "json")
+            // JSON 데이터를 로드합니다.
+            JSONManager.shared.loadJSONToLocationData()
             
             // 검색어가 포함된 데이터 필터링하기
             let locationData = JSONManager.locationData.filter { datum in
