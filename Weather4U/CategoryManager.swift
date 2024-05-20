@@ -83,9 +83,9 @@ class CategoryManager {
     // 하늘상태 설명 반환 함수
     func skyStatusDescription(from code: String) -> String {
         switch code {
-        case "1": return "맑음"
-        case "3": return "구름 많음"
-        case "4": return "흐림"
+        case "1": return "Sunny"
+        case "3": return "Mostly Cloudy"
+        case "4": return "Cloudy"
         default: return "알 수 없음"
         }
     }

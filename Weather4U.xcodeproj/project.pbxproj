@@ -10,6 +10,8 @@
 		7B01FB692BF468690063BADA /* AlamofireDynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = FFE5DCD02BF1B7BD004EE3F7 /* AlamofireDynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		7B01FB6B2BF4686E0063BADA /* SnapKit-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = FFE5DCD82BF1B7D8004EE3F7 /* SnapKit-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		7B09E6EF2BF1D91800248D0B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */; };
+		7B9BBB1F2BF750E100B72970 /* SearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9BBB1E2BF750E100B72970 /* SearchResultTableViewController.swift */; };
+		7B9BBB212BF7518100B72970 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9BBB202BF7518100B72970 /* SearchResultTableViewCell.swift */; };
 		9545B8072BF3085300EE36B8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545B8062BF3085300EE36B8 /* MainViewController.swift */; };
 		9545B8092BF3252800EE36B8 /* StatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545B8082BF3252800EE36B8 /* StatusCell.swift */; };
 		9545B80B2BF3255A00EE36B8 /* TodayWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545B80A2BF3255A00EE36B8 /* TodayWeatherCell.swift */; };
@@ -65,6 +67,8 @@
 
 /* Begin PBXFileReference section */
 		7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		7B9BBB1E2BF750E100B72970 /* SearchResultTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewController.swift; sourceTree = "<group>"; };
+		7B9BBB202BF7518100B72970 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		9545B8062BF3085300EE36B8 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		9545B8082BF3252800EE36B8 /* StatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCell.swift; sourceTree = "<group>"; };
 		9545B80A2BF3255A00EE36B8 /* TodayWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayWeatherCell.swift; sourceTree = "<group>"; };
@@ -124,6 +128,8 @@
 				FFE5DCEF2BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift */,
 				FFE5DCF02BF3057C004EE3F7 /* MyWeatherPageViewController.swift */,
 				7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */,
+				7B9BBB202BF7518100B72970 /* SearchResultTableViewCell.swift */,
+				7B9BBB1E2BF750E100B72970 /* SearchResultTableViewController.swift */,
 			);
 			path = MyWeather;
 			sourceTree = "<group>";
@@ -286,6 +292,7 @@
 				FFE5DCE32BF1E491004EE3F7 /* NetworkManager.swift in Sources */,
 				FFE5DCFF2BF32C73004EE3F7 /* WeatherSentenceData.swift in Sources */,
 				FFE5DCBB2BF1B463004EE3F7 /* ViewController.swift in Sources */,
+				7B9BBB212BF7518100B72970 /* SearchResultTableViewCell.swift in Sources */,
 				7B09E6EF2BF1D91800248D0B /* SearchViewController.swift in Sources */,
 				95FE07E22BF35203004D2139 /* WeekWeatherCell.swift in Sources */,
 				7B09E6EF2BF1D91800248D0B /* SearchViewController.swift in Sources */,
@@ -300,6 +307,7 @@
 				9545B8092BF3252800EE36B8 /* StatusCell.swift in Sources */,
 				FFE5DCF32BF3057C004EE3F7 /* MyWeatherPageViewController.swift in Sources */,
 				FFE5DD032BF36AD6004EE3F7 /* WeatherTemperatureData.swift in Sources */,
+				7B9BBB1F2BF750E100B72970 /* SearchResultTableViewController.swift in Sources */,
 				FFE5DD0B2BF5A798004EE3F7 /* ChartCollectionViewCell.swift in Sources */,
 				FFE5DCF92BF30CF0004EE3F7 /* JSONManager.swift in Sources */,
 				FFE5DCE52BF203E6004EE3F7 /* CategoryManager.swift in Sources */,
