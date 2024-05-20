@@ -51,8 +51,8 @@ class MainViewController: BaseViewController {
     }
     let footerMessage = UILabel()
     let logo = UIImageView()
-    let city = City(from: <#any Decoder#>)
-    
+    var city: City = .서울특별시 //City의 디폴트 값인 서울로 현재의 위치를 표시하겠다
+    var weatherData: [WeatherData] = []
     
     
     
@@ -72,12 +72,13 @@ class MainViewController: BaseViewController {
         feels.dataSource = self
         
         weekWeather.sectionHeaderTopPadding = 0
-
+        
         NetworkManager.shared.receiveWeatherData()
         NetworkManager.shared.receiveWeatherStatus()
         NetworkManager.shared.receiveWeatherSentence()
         NetworkManager.shared.receiveWeatherTemperature()
         JSONManager.shared.loadJSONToLocationData(fileName: "weatherLocationData", extensionType: "json")
+        
     }
     
     //MARK: - 오토레이아웃
@@ -177,7 +178,7 @@ class MainViewController: BaseViewController {
     
     //MARK: - UI 디테일
     override func configureUI() {
-        location.text = city
+        location.text = city.rawValue
         location.font = UIFont(name: "Apple SD Gothic Neo", size: 34)
         location.textColor = UIColor(named: "font")
         
@@ -241,7 +242,7 @@ class MainViewController: BaseViewController {
     }
     
     
-    // MARK: 버튼 연결
+    // MARK: - 버튼 연결
     @objc func clickToSearch() {
         let vc = SearchViewController()
         self.navigationController?.pushViewController(vc, animated: true)
@@ -250,9 +251,11 @@ class MainViewController: BaseViewController {
         let vc = StyleViewController()
         self.present(vc, animated: true, completion: nil)
     }
+    
+    
+    //MARK: - 데이터 연결
+    
 }
-
-
 //MARK: - 컬렉션뷰 설정
 //헤더뷰 정의하기
 //헤더에 어떤 내용 넣어줄지 정하기
