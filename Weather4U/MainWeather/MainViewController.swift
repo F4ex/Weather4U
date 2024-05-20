@@ -55,7 +55,6 @@ class MainViewController: BaseViewController {
     var weatherData: [WeatherData] = []
     
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "Background")
@@ -71,6 +70,8 @@ class MainViewController: BaseViewController {
         todayPrecipitation.dataSource = self
         feels.delegate = self
         feels.dataSource = self
+        NetworkManager.shared.delegate = self
+        CategoryManager.shared.delegate = self
         
         weekWeather.sectionHeaderTopPadding = 0
         
@@ -79,6 +80,9 @@ class MainViewController: BaseViewController {
         NetworkManager.shared.receiveWeatherSentence()
         NetworkManager.shared.receiveWeatherTemperature()
         JSONManager.shared.loadJSONToLocationData()
+        //여기서 한번 적어주면 아래에는 shared 까지만 써줘도 됨
+        //아 그러네 받아온다! 라는 함수니깐
+        //아래에는 정보를 입력해주는거고!
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -196,22 +200,22 @@ class MainViewController: BaseViewController {
         moveToSearch.addTarget(self, action: #selector(clickToSearch), for: .touchUpInside)
         
         temperature.font = UIFont(name: "Alata-Regular", size: 50)
-        temperature.text = "\(30)°"
+        temperature.text = "\(String(describing: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP, currentTime: true, highTemp: false)))°"
         temperature.textColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1.0)
         temperature.shadowColor = UIColor(red: 81/255, green: 51/255, blue: 0/255, alpha: 0.25)
         temperature.layer.shadowRadius = 2
         temperature.shadowOffset = CGSize(width: 0, height: 4)
         
         
-        tempHigh.text = "H: \(01)°"
+        tempHigh.text = "H: \(String(describing: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true)))°"
         tempHigh.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempHigh.textColor = UIColor(named: "font")
         
-        tempLow.text = "L: \(01)°"
+        tempLow.text = "L: \(String(describing: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: false)))°"
         tempLow.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         tempLow.textColor = UIColor(named: "font")
         
-        weatherExplanation.text = NetworkManager.weaterSentenceData ?? "Sunny conditions will continue for the rest of the day.Wind gusts are up to 8 m/s"
+        weatherExplanation.text = NetworkManager.weatherSentenceData ?? "No Data"
         weatherExplanation.textAlignment = .center
         weatherExplanation.numberOfLines = 2
         weatherExplanation.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
@@ -257,6 +261,31 @@ class MainViewController: BaseViewController {
         self.present(vc, animated: true, completion: nil)
     }
     
+    
+    //MARK: - 배경 및 메인아이콘 변경
+    
+    func updateAppearanceBasedOnWeather(for weatherStatus: String) -> (UIImage, UIColor) {
+        var Icon = weatherImage
+        var backgroundColor = view.backgroundColor
+        
+        switch weatherStatus {
+        case "맑음":
+            Icon = UIImage(named: "sunny_background")!
+            backgroundColor = UIColor.yellow
+        case "흐림":
+            Icon = UIImage(named: "cloudy_background")!
+            backgroundColor = UIColor.gray
+        case "비":
+            Icon = UIImage(named: "rainy_background")!
+            backgroundColor = UIColor.blue
+        // 추가적인 날씨 상태에 따른 처리
+        default:
+            Icon = UIImageView(image: UIImage(named: "sun"))
+            backgroundColor = UIColor.white
+        }
+        
+        return (backgroundImage, backgroundColor)
+    }
     
     //MARK: - 데이터 연결
     
