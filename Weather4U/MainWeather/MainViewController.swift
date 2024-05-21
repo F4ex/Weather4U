@@ -86,6 +86,8 @@ class MainViewController: BaseViewController {
         NetworkManager.shared.delegate = self
         CategoryManager.shared.delegate = self
         
+        CoreDataManager.shared.readFirstData()
+        
         weekWeather.sectionHeaderTopPadding = 0
         
         maskedUpView.backgroundColor = view.backgroundColor //마스킹 컬러는 백그라운드 컬러로
@@ -460,13 +462,10 @@ class MainViewController: BaseViewController {
     @objc func tappedAddButton() {
         print("Add")
         
-
         guard let unwrapArray = MainViewController.selectRegion else {
             return
         }
         CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
-
-        try? context.save()   
         
         MyWeatherPageTableViewController().tableView.reloadData()
         MainViewController.isModal = false

@@ -60,6 +60,35 @@ class CoreDataManager {
         }
     }
     
+    func readFirstData() {
+        guard let context = self.persistentContainer?.viewContext else {
+            print("Error: Can't access Core Data view context")
+            return
+        }
+        
+        let request = LocationAllData.fetchRequest()
+        
+        do {
+            let locationAllDatas = try context.fetch(request)
+            if let locationData = locationAllDatas.first {
+                let firstValue = CombinedData(
+                    Region: locationData.region ?? "-",
+                    City: locationData.city ?? "-",
+                    Town: locationData.town ?? "-",
+                    Village: locationData.village ?? "-",
+                    X: Int(locationData.x),
+                    Y: Int(locationData.y),
+                    Sentence: Int(locationData.sentence),
+                    Status: locationData.status ?? "-",
+                    Temperature: locationData.temperature ?? "-"
+                )
+                MainViewController.selectRegion = firstValue
+            }
+        } catch {
+            print("Error fetching data from CoreData: \(error.localizedDescription)")
+        }
+    }
+    
     func deleteData(at index: Int) {
         guard let viewContext = self.persistentContainer?.viewContext else {
             print("Error: Can't access Core Data view context")
