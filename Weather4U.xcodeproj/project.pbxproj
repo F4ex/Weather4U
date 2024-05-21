@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F735A2B2BFC7811003FB295 /* FirstTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F735A2A2BFC7811003FB295 /* FirstTableViewCell.swift */; };
 		7B09E6EF2BF1D91800248D0B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */; };
 		7B9BBB1F2BF750E100B72970 /* SearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9BBB1E2BF750E100B72970 /* SearchResultTableViewController.swift */; };
 		7B9BBB212BF7518100B72970 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9BBB202BF7518100B72970 /* SearchResultTableViewCell.swift */; };
@@ -65,6 +66,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3F735A2A2BFC7811003FB295 /* FirstTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTableViewCell.swift; sourceTree = "<group>"; };
 		7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		7B9BBB1E2BF750E100B72970 /* SearchResultTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewController.swift; sourceTree = "<group>"; };
 		7B9BBB202BF7518100B72970 /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
@@ -126,9 +128,10 @@
 		9545B8022BF3077E00EE36B8 /* MyWeather */ = {
 			isa = PBXGroup;
 			children = (
-				FFE5DCEE2BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift */,
-				FFE5DCEF2BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift */,
 				FFE5DCF02BF3057C004EE3F7 /* MyWeatherPageViewController.swift */,
+				FFE5DCEF2BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift */,
+				3F735A2A2BFC7811003FB295 /* FirstTableViewCell.swift */,
+				FFE5DCEE2BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift */,
 				7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */,
 				7B9BBB202BF7518100B72970 /* SearchResultTableViewCell.swift */,
 				7B9BBB1E2BF750E100B72970 /* SearchResultTableViewController.swift */,
@@ -337,6 +340,7 @@
 				9545B80B2BF3255A00EE36B8 /* TodayWeatherCell.swift in Sources */,
 				9545B8072BF3085300EE36B8 /* MainViewController.swift in Sources */,
 				FFE5DD302BFAEE2B004EE3F7 /* DataReloadDelegate.swift in Sources */,
+				3F735A2B2BFC7811003FB295 /* FirstTableViewCell.swift in Sources */,
 				9545B8092BF3252800EE36B8 /* StatusCell.swift in Sources */,
 				FFE5DCF32BF3057C004EE3F7 /* MyWeatherPageViewController.swift in Sources */,
 				95CFF7DD2BFA46CB00CE65EF /* StyleViewController.swift in Sources */,
