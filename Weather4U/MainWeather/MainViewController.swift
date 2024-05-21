@@ -15,11 +15,12 @@ class MainViewController: BaseViewController {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     static var isModal = false
-    static var selectRegion : CombinedData?   // 배열이 아닌 값 하나
+    static var selectRegion : CombinedData? // 배열이 아닌 값 하나
     
     let scrollView = UIScrollView()
     let contentView = UIView()
     let location = UILabel()
+    let locationDetail = UILabel()
     let moveToSearch = UIButton()
     let moveToDress = UIButton()
     let imageView = UIView().then(){
@@ -162,7 +163,7 @@ class MainViewController: BaseViewController {
         }
         scrollView.addSubview(contentView)
         
-        [location, moveToDress, moveToSearch, imageView, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather,todayPrecipitation, feels, footerMessage, logo].forEach() {
+        [location, locationDetail, moveToDress, moveToSearch, imageView, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather,todayPrecipitation, feels, footerMessage, logo].forEach() {
             contentView.addSubview($0)
         }
         
@@ -173,9 +174,14 @@ class MainViewController: BaseViewController {
         }
         
         location.snp.makeConstraints(){
-            $0.top.equalTo(contentView).offset(33)
+            $0.top.equalTo(contentView).offset(28)
             $0.centerX.equalTo(contentView)
         }
+        locationDetail.snp.makeConstraints(){
+            $0.top.equalTo(location.snp.bottom).offset(5)
+            $0.centerX.equalTo(contentView)
+        }
+    
         moveToDress.snp.makeConstraints(){
             $0.top.equalTo(contentView).offset(13)
             $0.left.equalTo(contentView).inset(29)
@@ -189,7 +195,7 @@ class MainViewController: BaseViewController {
             $0.height.equalTo(24)
         }
         imageView.snp.makeConstraints(){
-            $0.top.equalTo(location.snp.bottom).offset(-5)
+            $0.top.equalTo(locationDetail.snp.bottom).offset(10)
             $0.bottom.equalTo(temperature.snp.top)
         }
         weatherImage.snp.makeConstraints(){
@@ -253,7 +259,12 @@ class MainViewController: BaseViewController {
     override func configureUI() {
         
         location.text = city.rawValue
-        location.font = UIFont(name: "Apple SD Gothic Neo", size: 34)
+        location.font = UIFont(name: "Apple SD Gothic Neo", size: 30)
+        location.textAlignment = .center
+        
+        locationDetail.text = "동, 구 텍스트 여기로"
+        locationDetail.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
+        locationDetail.textAlignment = .center
         
         moveToDress.setImage(UIImage(systemName: "hanger"), for: .normal)
         moveToDress.addTarget(self, action: #selector(clickToStyle), for: .touchUpInside)
@@ -269,7 +280,6 @@ class MainViewController: BaseViewController {
         
         tempLow.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
         
-        weatherExplanation.text = NetworkManager.weatherSentenceData ?? "No Data"
         weatherExplanation.textAlignment = .center
         weatherExplanation.numberOfLines = 2
         weatherExplanation.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
@@ -306,11 +316,13 @@ class MainViewController: BaseViewController {
         var backgroundColor = UIColor()
         var temperatureColor = UIColor()
         var locationC = UIColor()
+        var locationDetailC = UIColor()
         var moveToDressC = UIColor()
         var moveToSearchC = UIColor()
         var tempHighC = UIColor()
         var tempLowC = UIColor()
         var weatherExplanationC = UIColor()
+        var weatherExplanationText = String()
         var todayWeatherC = UIColor()
         var todayPrecipitationC = UIColor()
         var weekWeatherC = UIColor()
@@ -323,11 +335,13 @@ class MainViewController: BaseViewController {
             backgroundColor = UIColor(named: "Background")!
             temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
             locationC = UIColor(named: "font")!
+            locationDetailC = UIColor(named: "font")!
             moveToDressC = UIColor(named: "font")!
             moveToSearchC = UIColor(named: "font")!
             tempHighC = UIColor(named: "font")!
             tempLowC = UIColor(named: "font")!
             weatherExplanationC = UIColor(named: "font")!
+            weatherExplanationText = (weatherStatus == "Sunny" ? "써니데이" : "살짝 흐림데이")
             todayWeatherC = UIColor(named: "cell")!
             todayPrecipitationC = UIColor(named: "cell")!
             weekWeatherC = UIColor(named: "cell")!
@@ -336,11 +350,13 @@ class MainViewController: BaseViewController {
             backgroundColor = UIColor(named: "BackGroundR")!
             temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
             locationC = UIColor(named: "fontR")!
+            locationDetailC = UIColor(named: "fontR")!
             moveToDressC = UIColor(named: "fontR")!
             moveToSearchC = UIColor(named: "fontR")!
             tempHighC = UIColor(named: "fontR")!
             tempLowC = UIColor(named: "fontR")!
             weatherExplanationC = UIColor(named: "fontR")!
+            weatherExplanationText = (weatherStatus == "Cloudy" ? "흐린데이" : weatherStatus == "비" ? "비온데이" : "소나기데이")
             todayWeatherC = UIColor(named: "cellR")!
             todayPrecipitationC = UIColor(named: "cellR")!
             weekWeatherC = UIColor(named: "cellR")!
@@ -349,11 +365,13 @@ class MainViewController: BaseViewController {
             backgroundColor = UIColor(named: "BackGroundS")!
             temperatureColor = weatherStatus == "눈" ? UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1) : UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
             locationC = UIColor(named: "fontS")!
+            locationDetailC = UIColor(named: "fontR")!
             moveToDressC = UIColor(named: "fontS")!
             moveToSearchC = UIColor(named: "fontS")!
             tempHighC = UIColor(named: "fontS")!
             tempLowC = UIColor(named: "fontS")!
             weatherExplanationC = UIColor(named: "fontS")!
+            weatherExplanationText = (weatherStatus == "비/눈" ? "비도오고 눈도 옵니데이" : "눈이옵니다")
             todayWeatherC = UIColor(named: "cellS")!
             todayPrecipitationC = UIColor(named: "cellS")!
             weekWeatherC = UIColor(named: "cellS")!
@@ -379,11 +397,13 @@ class MainViewController: BaseViewController {
         view.backgroundColor = backgroundColor
         temperature.textColor = temperatureColor
         location.textColor = locationC
+        locationDetail.textColor = locationDetailC
         moveToDress.tintColor = moveToDressC
         moveToSearch.tintColor = moveToSearchC
         tempHigh.textColor = tempHighC
         tempLow.textColor = tempLowC
         weatherExplanation.textColor = weatherExplanationC
+        weatherExplanation.text = weatherExplanationText
         todayWeather.backgroundColor = todayWeatherC
         todayPrecipitation.backgroundColor = todayPrecipitationC
         weekWeather.backgroundColor = weekWeatherC
