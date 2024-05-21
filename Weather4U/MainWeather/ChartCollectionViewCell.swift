@@ -14,9 +14,11 @@ class ChartCollectionViewCell: UICollectionViewCell {
     let titleLabel = UILabel()
     let descriptionLabel = UILabel()
     var lineChartView = LineChartView()
+    var entries: [ChartDataEntry] = []
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setEntries()
         configureUI()
         constraintLayout()
         configureLineChartView()
@@ -41,12 +43,6 @@ class ChartCollectionViewCell: UICollectionViewCell {
     }
     
     func configureLineChartView() {
-        // 데이터 설정
-        var entries = [ChartDataEntry]()
-        for i in 0...6 {
-            entries.append(ChartDataEntry(x: Double(i), y: Double.random(in: 1...50)))
-        }
-        
         let dataSet = LineChartDataSet(entries: entries, label: "강수량(mm)")
         dataSet.drawValuesEnabled = false
         dataSet.drawCircleHoleEnabled = false
@@ -61,6 +57,10 @@ class ChartCollectionViewCell: UICollectionViewCell {
         
         // String 배열 정의
         let hours = ["Now", "1h", "2h", "3h", "4h", "5h", "6h"]
+        
+        // Y축 범위 설정 (왼쪽 Y축)
+        lineChartView.leftAxis.axisMinimum = 0.0
+        lineChartView.leftAxis.axisMaximum = 50.0
         
         // xAxis valueFormatter 설정
         lineChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: hours)
@@ -101,6 +101,19 @@ class ChartCollectionViewCell: UICollectionViewCell {
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(72) // 차트의 높이 설정
         }
+    }
+    
+    func setEntries() {
+        self.entries.removeAll()
+        
+        for i in 0...6 {
+            if let doubleValue = CategoryManager.shared.getTodayWeatherDataValue(dataKey: .PCP) {
+                self.entries.append(ChartDataEntry(x: Double(i), y: Double(doubleValue) ?? 0.0))
+            } else {
+                self.entries.append(ChartDataEntry(x: Double(i), y: Double.random(in: 1...50)))
+            }
+        }
+        self.configureLineChartView()
     }
     
 }

@@ -11,7 +11,6 @@ import UIKit
 class NetworkManager {
     
     static let shared = NetworkManager()
-    static var weatherData: [Item] = []
     static var weatherSentenceData: String?
     static var weatherStatusData: [StatusItem] = []
     static var weatherTemperatureData: [TemperatureItem]?
@@ -45,7 +44,7 @@ class NetworkManager {
             case .success(let data):
                 completion(.success(data.response.body.items.item))
             case .failure(let error):
-                print("Error: 데이터 받아오기 실패, \(error.localizedDescription)")
+                print("Error: 단기 날씨 데이터 받아오기 실패, \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
@@ -56,8 +55,7 @@ class NetworkManager {
         NetworkManager.shared.fetchWeatherData(x: x, y: y, completion: { result in
             switch result {
             case .success(let data):
-                NetworkManager.weatherData = data
-                CategoryManager.todayWeatherData = CategoryManager.shared.forecastForDate(items: NetworkManager.weatherData, fcstDate: Date())
+                CategoryManager.shared.forecastForDates(items: data, fcstDate: Date())
             case .failure(let error):
                 print(error) // 추후에 Alert창 호출로 변경
             }
@@ -80,7 +78,7 @@ class NetworkManager {
             case .success(let data):
                 completion(.success(data.response.body.items.item))
             case.failure(let error):
-                print("Error: 데이터 받아오기 실패, \(error.localizedDescription)")
+                print("Error: 오늘 날씨 문장 데이터 받아오기 실패, \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
@@ -92,7 +90,6 @@ class NetworkManager {
             switch result {
             case .success(let data):
                 NetworkManager.weatherSentenceData = data[0].wfSv
-                self.delegate?.dataReload()
             case .failure(let error):
                 print(error)
             }
@@ -115,7 +112,7 @@ class NetworkManager {
             case .success(let data):
                 completion(.success(data.response.body.items.item))
             case.failure(let error):
-                print("Error: 데이터 받아오기 실패, \(error.localizedDescription)")
+                print("Error: 중기 날씨 상태 데이터 받아오기 실패, \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
@@ -127,7 +124,6 @@ class NetworkManager {
             switch result {
             case .success(let data):
                 NetworkManager.weatherStatusData = data
-                self.delegate?.dataReload()
             case .failure(let error):
                 print(error)
             }
@@ -150,7 +146,7 @@ class NetworkManager {
             case .success(let data):
                 completion(.success(data.response.body.items.item))
             case.failure(let error):
-                print("Error: 데이터 받아오기 실패, \(error.localizedDescription)")
+                print("Error: 중기 날씨 기온 데이터 받아오기 실패, \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
@@ -162,7 +158,6 @@ class NetworkManager {
             switch result {
             case .success(let data):
                 NetworkManager.weatherTemperatureData = data
-                self.delegate?.dataReload()
             case .failure(let error):
                 print(error)
             }
@@ -178,5 +173,17 @@ extension NetworkManager {
         let currentDateString = formatter.string(from: Date())
         
         return currentDateString
+    }
+    
+    func getAfterDate(day: Int) -> Date {
+        let today = Date()
+        var dateComponents = DateComponents()
+        dateComponents.day = day
+
+        if let tomorrow = Calendar.current.date(byAdding: dateComponents, to: today) {
+            return tomorrow
+        } else {
+            return Date()
+        }
     }
 }

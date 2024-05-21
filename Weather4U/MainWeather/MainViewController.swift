@@ -102,9 +102,8 @@ class MainViewController: BaseViewController {
         gradientDown.locations = [0, 0.4, 0.9, 1]
         maskedDownView.layer.mask = gradientDown
         view.addSubview(maskedDownView)
-        
+
         networkManager()
-//        self.array = CombinedData
         
         if MainViewController.isModal == true {
             moveToSearch.isHidden = true
@@ -530,6 +529,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return UICollectionViewCell()
             }
             //뷰모델에 있는 정보들을 가지고 셀을 만들겠다
+            setViewModels()
             let viewModel = cellViewModels[indexPath.item]
             cell.configure(with: viewModel)
             
@@ -542,6 +542,10 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         } else if collectionView == todayPrecipitation {
             guard let cell = todayPrecipitation.dequeueReusableCell(withReuseIdentifier: ChartCollectionViewCell.identifier, for: indexPath) as? ChartCollectionViewCell else {
                 return UICollectionViewCell()
+            }
+            
+            if !CategoryManager.threeDaysWeatherData.isEmpty {
+                cell.setEntries()
             }
             return cell
         } else if collectionView == feels {
@@ -579,9 +583,11 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         guard let cell = weekWeather.dequeueReusableCell(withIdentifier: "WeekWeatherCell", for: indexPath) as? WeekWeatherCell else {
             return UITableViewCell()
         }
-        if let data = NetworkManager.weatherTemperatureData {
-            cell.tempHigh.text = "\(data[0].taMax3)°"
-            cell.tempLow.text = "\(data[0].taMin3)°"
+        if !CategoryManager.weekForecast.isEmpty {
+            cell.pop.text = "\(CategoryManager.weekForecast[indexPath.row].rainPercent)%"
+            cell.icon.image = UIImage(named: "sun2")
+            cell.tempHigh.text = "\(CategoryManager.weekForecast[indexPath.row].highTemp)°"
+            cell.tempLow.text = "\(CategoryManager.weekForecast[indexPath.row].lowTemp)°"
         }
         return cell
     }
@@ -603,7 +609,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         weekWeatherH.backgroundColor = UIColor(named: "cell")
         
         let label = UILabel()
-        label.text = "Week Forcast"
+        label.text = "Week Forecast"
         label.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
         label.textColor = UIColor(named: "font")
         
@@ -634,12 +640,13 @@ extension MainViewController: DataReloadDelegate {
             self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
             self.tempHigh.text = "H: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
             self.tempLow.text = "L: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"
-            self.weatherExplanation.text = NetworkManager.weatherSentenceData
             self.weekWeather.reloadData()
             self.status.reloadData()
             self.todayWeather.reloadData()
             self.todayPrecipitation.reloadData()
             self.updateAppearanceBasedOnWeather(for: self.weatherStatus)
+            CategoryManager.shared.weeksTemperatureStatus()
+            print(CategoryManager.weekForecast)
         }
     }
 }
