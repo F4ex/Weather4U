@@ -64,7 +64,8 @@ class MainViewController: BaseViewController {
     
     //그라데이션 레이어와 마스크 해줄 레이어 만들기
     let maskedUpView = UIView(frame: CGRect(x: 0, y: 782, width: 393, height: 70))
-    var maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 67))
+    let maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 67))
+
     let gradientUp = CAGradientLayer()
     let gradientDown = CAGradientLayer()
     
@@ -117,7 +118,9 @@ class MainViewController: BaseViewController {
         if MainViewController.isModal == true {
             moveToSearch.isHidden = true
             moveToDress.isHidden = true
-            self.gradientDown.colors = [UIColor.clear.cgColor]
+
+            gradientDown.colors = [UIColor.clear.cgColor]
+
             setModalPage()
         }
         
@@ -414,6 +417,7 @@ class MainViewController: BaseViewController {
         guard let context = persistentContainer?.viewContext else { return }
         
         let addLocation = LocationAllData(context: context)
+
         //        addLocation.bookTitle = detailBook?.title
         //        addLocation.bookPrice = Int64(detailBook!.salePrice)
         //        addLocation.bookAuthor = detailBook?.authors.joined(separator: ", ")
@@ -430,9 +434,6 @@ class MainViewController: BaseViewController {
     }
 }
     
-    //MARK: - 데이터 연결
-
-
 //MARK: - 컬렉션뷰 설정
 //헤더뷰 정의하기
 //헤더에 어떤 내용 넣어줄지 정하기
