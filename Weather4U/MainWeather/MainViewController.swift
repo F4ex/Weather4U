@@ -252,7 +252,7 @@ class MainViewController: BaseViewController {
     //MARK: - UI 디테일
     override func configureUI() {
         
-        location.text = city.rawValue
+        location.text = MainViewController.selectRegion?.Region
         location.font = UIFont(name: "Apple SD Gothic Neo", size: 34)
         
         moveToDress.setImage(UIImage(systemName: "hanger"), for: .normal)
@@ -636,6 +636,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
 extension MainViewController: DataReloadDelegate {
     func dataReload() {
         DispatchQueue.main.async {
+            self.location.text = MainViewController.selectRegion?.Region
             self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
             self.tempHigh.text = "H: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
             self.tempLow.text = "L: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"

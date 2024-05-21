@@ -55,6 +55,7 @@ class CoreDataManager {
         do {
             let locationAllDatas = try context.fetch(request)
             CoreDataManager.addLocationData = locationAllDatas
+            MyWeatherPageTableViewController.array = locationAllDatas
         } catch {
             print("Error fetching data from CoreData: \(error.localizedDescription)")
         }

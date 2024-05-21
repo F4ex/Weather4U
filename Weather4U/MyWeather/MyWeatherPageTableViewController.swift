@@ -28,7 +28,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         tableView.separatorColor = .clear
         
         // 테이블 뷰 설정
-        tableView.register(MyWeatherPageTableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(MyWeatherPageTableViewCell.self, forCellReuseIdentifier: "NormalCellIdentifier")
         tableView.register(FirstTableViewCell.self, forCellReuseIdentifier: "FirstCellIdentifier")
         tableView.delegate = self
         
