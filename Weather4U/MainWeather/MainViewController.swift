@@ -54,8 +54,12 @@ class MainViewController: BaseViewController {
     var city: City = .서울특별시 //City의 디폴트 값인 서울로 현재의 위치를 표시하겠다
     var weatherData: [WeatherData] = []
     var weatherStatus: String = "Sunny"
-    let maskedView = UIView(frame: CGRect(x: 0, y: 798, width: 393, height: 200))
-    let gradient = CAGradientLayer() //그라데이션 레이어와 마스크 해줄 레이어 만들기
+    
+    //그라데이션 레이어와 마스크 해줄 레이어 만들기
+    let maskedUpView = UIView(frame: CGRect(x: 0, y: 782, width: 393, height: 70))
+    let maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 90))
+    let gradientUp = CAGradientLayer()
+    let gradientDown = CAGradientLayer()
     
     
     override func viewDidLoad() {
@@ -78,13 +82,21 @@ class MainViewController: BaseViewController {
         
         weekWeather.sectionHeaderTopPadding = 0
         
-        maskedView.backgroundColor = view.backgroundColor //마스킹 컬러는 백그라운드 컬러로
-        gradient.frame = maskedView.bounds
-        gradient.colors = [UIColor.clear.cgColor, UIColor.white.cgColor, UIColor.white.cgColor, UIColor.white.cgColor] // 그라디언트 색상 정하기
-        gradient.locations = [0, 0.2, 0.5, 0.7] //그라디언트 색상 넣을 영역 정하기
-        //젠체 화면을 1이라 생각했을때 0%에 clear, 20%엔 white, 50%, 70%에도 화이트 넣기
-        maskedView.layer.mask = gradient // 그라데이션한 레이어를 화면에 마스킹하기
-        view.addSubview(maskedView)
+        maskedUpView.backgroundColor = view.backgroundColor //마스킹 컬러는 백그라운드 컬러로
+        gradientUp.frame = maskedUpView.bounds
+        gradientUp.colors = [UIColor.clear.cgColor, UIColor.clear.cgColor, UIColor.white.cgColor, UIColor.white.cgColor] // 그라디언트 색상 정하기
+        gradientUp.locations = [0, 0.2, 0.9, 1] //그라디언트 색상 넣을 영역 정하기
+        //젠체 화면을 1이라 생각했을때 0%에 clear, 20%엔 white, 90%, 100%에도 화이트 넣기
+        maskedUpView.layer.mask = gradientUp // 그라데이션한 레이어를 화면에 마스킹하기
+        view.addSubview(maskedUpView)
+        
+        maskedDownView.backgroundColor = view.backgroundColor //마스킹 컬러는 백그라운드 컬러로
+        gradientDown.frame = maskedDownView.bounds
+        gradientDown.colors = [UIColor.white.cgColor, UIColor.white.cgColor, UIColor.clear.cgColor, UIColor.clear.cgColor]
+        gradientDown.locations = [0, 0.3, 0.9, 1]
+        maskedDownView.layer.mask = gradientDown
+        view.addSubview(maskedDownView)
+        
         
         NetworkManager.shared.receiveWeatherData()
         NetworkManager.shared.receiveWeatherStatus()
@@ -113,7 +125,7 @@ class MainViewController: BaseViewController {
     override func constraintLayout() {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints(){
-            $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            $0.top.equalTo(view)
             $0.left.right.bottom.equalTo(view)
         }
         scrollView.addSubview(contentView)
