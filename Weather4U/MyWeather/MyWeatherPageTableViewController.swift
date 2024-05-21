@@ -35,7 +35,6 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 테이블 뷰 삭제
         tableView.isEditing = false
         
- 
         // 테이블 뷰 reload
         // 날씨 데이터 가져오기
         tableView.reloadData()
