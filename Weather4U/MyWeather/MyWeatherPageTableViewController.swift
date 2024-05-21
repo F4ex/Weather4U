@@ -37,7 +37,6 @@ class MyWeatherPageTableViewController: UITableViewController {
         tableView.isEditing = false
         
         // 테이블 뷰 reload
-        // 날씨 데이터 가져오기
         tableView.reloadData()
     }
     
@@ -74,6 +73,34 @@ class MyWeatherPageTableViewController: UITableViewController {
         if indexPath.row == 0 {
             let firstCell: FirstTableViewCell = tableView.dequeueReusableCell(withIdentifier: "FirstCellIdentifier", for: indexPath) as! FirstTableViewCell
             return firstCell
+        } else {
+            // 일반적인 셀을 생성하고 반환하는 로직
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NormalCellIdentifier", for: indexPath) as! MyWeatherPageTableViewCell
+            // 데이터를 셀에 적용하는 로직
+            let data = weatherData[indexPath.row - 1] // 배열 인덱스 조정
+            cell.cityLabel.text = city // 예시 데이터 설정
+            return cell
+        }
+    }
+
+    
+        cell.cityLabel.text = city
+        cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
+        
+        let tempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
+        let highTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0") ?? 0.0
+        let lowTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "0") ?? 0.0
+    
+        
+        if SearchViewController.isCelsius {
+            let tCelsius = (tempCelsius).rounded()
+            let hCelsius = (highTempCelsius).rounded()
+            let lCelsius = (lowTempCelsius).rounded()
+            
+            cell.tempLabel.text = "\(Int(tCelsius))°"
+            cell.highLabel.text = "H: \(Int(hCelsius))°"
+            cell.lowLabel.text = "L: \(Int(lCelsius))°"
+            
         } else {
             let cell: MyWeatherPageTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MyWeatherPageTableViewCell
             
@@ -160,11 +187,13 @@ class MyWeatherPageTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+
+func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30 // 각 섹션 사이의 공간을 조절하는 높이
     }
     
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // 셀의 높이 설정
         if SearchViewController.isEditMode == false {
             return 111
@@ -172,7 +201,6 @@ class MyWeatherPageTableViewController: UITableViewController {
             return 100
         }
     }
-}
 
 extension MyWeatherPageTableViewController {
     

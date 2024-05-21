@@ -49,6 +49,29 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         [cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
             contentView.addSubview($0)
         }
+
+                cityLabel.textColor = .black
+
+                cityLabel.font = UIFont.systemFont(ofSize: 24, weight: .regular)
+                
+                tempLabel.textColor = .black
+                tempLabel.font = UIFont.systemFont(ofSize: 26, weight: .regular)
+                
+                highLabel.textColor = .black
+                highLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+                
+                lowLabel.textColor = .black
+                lowLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+                
+                weatherLabel.textColor = .black
+                weatherLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+                
+                cellImageView.backgroundColor = .white
+                
+                [cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
+                    contentView.addSubview($0)
+                }
+
         
         
         [cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
