@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct TodayWeather {
-    let todayTime: String   // 오늘 시간별 값
+struct Weather {
+    let time: String   // 오늘 시간별 값
     let POP: String   // 강수확률(%)
     let PTY: String   // 강수형태(코드값)
     let PCP: String   // 1시간 강수량(1mm)
@@ -23,6 +23,20 @@ struct TodayWeather {
     let WAV: String   // 파고(M)
     let VEC: String   // 풍향(deg)
     let WSD: String   // 풍속(m/s)
+}
+
+struct WeekForecast {
+    let status: String
+    let highTemp: String
+    let lowTemp: String
+    let rainPercent: String
+}
+
+struct DayForecast {
+    let status: String
+    let temp: String
+    let PCP: String
+    let SNO: String
 }
 
 enum Category: String, CaseIterable {
@@ -45,72 +59,81 @@ enum Category: String, CaseIterable {
 class CategoryManager {
     
     static let shared = CategoryManager()
-    static var todayWeatherData: [TodayWeather] = []
+    static var threeDaysWeatherData: [[Weather]] = []
+    static var weekForecast: [WeekForecast] = []
     weak var delegate: DataReloadDelegate?
     
     private init() { }
     
-    func forecastForDate(items: [Item], fcstDate: Date) -> [TodayWeather] {
-        var todayWeatherList: [TodayWeather] = []
+    // MARK: - 3일치 날씨상태를 나타내는 [[Weather]] 배열을 반환하는 함수
+    func forecastForDates(items: [Item], fcstDate: Date) {
+        var weatherDataForThreeDays: [[Weather]] = [[], [], []]
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
-        let currentDate = formatter.string(from: fcstDate)
         
-        // 특정 날짜에 해당하는 아이템들을 필터링합니다.
-        let filteredItems = items.filter { $0.fcstDate == currentDate }
+        let calendar = Calendar.current
+        let todayDate = calendar.startOfDay(for: fcstDate)
+        let tomorrowDate = calendar.date(byAdding: .day, value: 1, to: todayDate)!
+        let dayAfterTomorrowDate = calendar.date(byAdding: .day, value: 2, to: todayDate)!
+
+        // 오늘, 내일, 모레 날짜에 해당하는 데이터를 추출합니다.
+        let dates = [todayDate, tomorrowDate, dayAfterTomorrowDate]
         
-        // 시간별로 그룹핑합니다.
-        let groupedByTime = Dictionary(grouping: filteredItems) { $0.fcstTime }
-        
-        // 각 시간별로 TodayWeather 객체를 생성합니다.
-        for (time, items) in groupedByTime {
-            var weatherDict = [String: String]()
+        for (index, date) in dates.enumerated() {
+            let currentDate = formatter.string(from: date)
             
-            // 각 카테고리별 최신 값을 딕셔너리에 저장합니다.
-            items.forEach { item in
-                let value: String
-                switch item.category {
-                case Category.PTY.rawValue:
-                    value = rainTypeDescription(from: item.fcstValue)
-                case Category.SKY.rawValue:
-                    value = skyStatusDescription(from: item.fcstValue)
-                default:
-                    value = item.fcstValue
+            // 특정 날짜에 해당하는 아이템들을 필터링합니다.
+            let filteredItems = items.filter { $0.fcstDate == currentDate }
+            
+            // 시간별로 그룹핑합니다.
+            let groupedByTime = Dictionary(grouping: filteredItems) { $0.fcstTime }
+            
+            // 각 시간별로 Weather 객체를 생성합니다.
+            for (time, items) in groupedByTime {
+                var weatherDict = [String: String]()
+                
+                // 각 카테고리별 최신 값을 딕셔너리에 저장합니다.
+                items.forEach { item in
+                    let value: String
+                    switch item.category {
+                    case Category.PTY.rawValue:
+                        value = rainTypeDescription(from: item.fcstValue)
+                    case Category.SKY.rawValue:
+                        value = skyStatusDescription(from: item.fcstValue)
+                    default:
+                        value = item.fcstValue
+                    }
+                    weatherDict[item.category] = value
                 }
-                weatherDict[item.category] = value
+                
+                // Weather 객체를 생성하여 리스트에 추가합니다.
+                let weather = Weather(
+                    time: time,
+                    POP: weatherDict["POP"] ?? "0", // 강수확률
+                    PTY: weatherDict["PTY"] ?? "0", // 강수형태
+                    PCP: weatherDict["PCP"] ?? "0", // 1시간 강수량
+                    REH: weatherDict["REH"] ?? "0", // 습도
+                    SNO: weatherDict["SNO"] ?? "0", // 1시간 신적설
+                    SKY: weatherDict["SKY"] ?? "0", // 하늘상태
+                    TMP: weatherDict["TMP"] ?? "0", // 1시간 기온
+                    TMN: weatherDict["TMN"] ?? "0", // 일 최저기온
+                    TMX: weatherDict["TMX"] ?? "0", // 일 최고기온
+                    UUU: weatherDict["UUU"] ?? "0", // 풍속(동서성분)
+                    VVV: weatherDict["VVV"] ?? "0", // 풍속(남북성분)
+                    WAV: weatherDict["WAV"] ?? "0", // 파고
+                    VEC: weatherDict["VEC"] ?? "0", // 풍향
+                    WSD: weatherDict["WSD"] ?? "0"  // 풍속
+                )
+                weatherDataForThreeDays[index].append(weather)
             }
-            
-            // TodayWeather 객체를 생성하여 리스트에 추가합니다.
-            let weather = TodayWeather(
-                todayTime: time,
-                POP: weatherDict["POP"] ?? "0", // 강수확률
-                PTY: weatherDict["PTY"] ?? "0", // 강수형태
-                PCP: weatherDict["PCP"] ?? "0", // 1시간 강수량
-                REH: weatherDict["REH"] ?? "0", // 습도
-                SNO: weatherDict["SNO"] ?? "0", // 1시간 신적설
-                SKY: weatherDict["SKY"] ?? "0", // 하늘상태
-                TMP: weatherDict["TMP"] ?? "0", // 1시간 기온
-                TMN: weatherDict["TMN"] ?? "0", // 일 최저기온
-                TMX: weatherDict["TMX"] ?? "0", // 일 최고기온
-                UUU: weatherDict["UUU"] ?? "0", // 풍속(동서성분)
-                VVV: weatherDict["VVV"] ?? "0", // 풍속(남북성분)
-                WAV: weatherDict["WAV"] ?? "0", // 파고
-                VEC: weatherDict["VEC"] ?? "0", // 풍향
-                WSD: weatherDict["WSD"] ?? "0"  // 풍속
-            )
-            
-            todayWeatherList.append(weather)
+            // 시간별로 정렬합니다.
+            weatherDataForThreeDays[index].sort { $0.time < $1.time }
         }
-        
-        // 시간별로 정렬합니다.
-        todayWeatherList.sort { $0.todayTime < $1.todayTime }
+        CategoryManager.threeDaysWeatherData = weatherDataForThreeDays
         self.delegate?.dataReload()
-        return todayWeatherList
     }
 
-
-    
-    // 강수형태 설명 반환 함수
+    // MARK: - 강수형태 설명 반환 함수
     func rainTypeDescription(from code: String) -> String {
         switch code {
         case "0": return "없음"
@@ -122,7 +145,7 @@ class CategoryManager {
         }
     }
     
-    // 하늘상태 설명 반환 함수
+    // MARK: - 하늘상태 설명 반환 함수
     func skyStatusDescription(from code: String) -> String {
         switch code {
         case "1": return "Sunny"
@@ -132,6 +155,7 @@ class CategoryManager {
         }
     }
     
+    // MARK: - 오늘 날짜의 날씨상태를 반환해주는 함수
     func getTodayWeatherDataValue(dataKey: Category, currentTime: Bool = true, highTemp: Bool = false) -> String? {
         var currentTimeString = ""
         
@@ -143,7 +167,7 @@ class CategoryManager {
             currentTimeString = highTemp ? "1500" : "0600"
         }
         
-        guard let forecastAtTime = CategoryManager.todayWeatherData.first(where: { $0.todayTime == currentTimeString }) else {
+        guard let forecastAtTime = CategoryManager.threeDaysWeatherData.first?.first(where: { $0.time == currentTimeString }) else {
             print("\(currentTimeString)시 데이터가 없습니다.")
             return nil
         }
@@ -179,4 +203,43 @@ class CategoryManager {
             return forecastAtTime.WSD
         }
     }
+    
+    // MARK: - 일주일 날씨 및 기온을 나타내는 [WeekForecast]배열을 반환하는 함수
+    func weeksTemperatureStatus() {
+        var weekForecast: [WeekForecast] = []
+
+        // 현재 시간 기준 오늘의 날씨 상태, 최고 기온 및 최저 기온을 기반으로 WeekForecast 객체 생성
+        for _ in 0..<3 {
+            let week = WeekForecast(
+                status: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-",
+                highTemp: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-",
+                lowTemp: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-",
+                rainPercent: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .POP) ?? "-"
+            )
+            weekForecast.append(week)
+        }
+
+        // NetworkManager를 통해 받아온 주간 날씨 데이터를 기반으로 WeekForecast 객체 생성
+        if let weatherStatusData = NetworkManager.weatherStatusData.first,
+           let weatherTemperatureData = NetworkManager.weatherTemperatureData?.first {
+            let days = [(weatherStatusData.wf3Pm, weatherTemperatureData.taMax3, weatherTemperatureData.taMin3, weatherStatusData.rnSt3Pm),
+                        (weatherStatusData.wf4Pm, weatherTemperatureData.taMax4, weatherTemperatureData.taMin4, weatherStatusData.rnSt4Pm),
+                        (weatherStatusData.wf5Pm, weatherTemperatureData.taMax5, weatherTemperatureData.taMin5, weatherStatusData.rnSt5Pm),
+                        (weatherStatusData.wf6Pm, weatherTemperatureData.taMax6, weatherTemperatureData.taMin6, weatherStatusData.rnSt6Pm),
+                        (weatherStatusData.wf7Pm, weatherTemperatureData.taMax7, weatherTemperatureData.taMin7, weatherStatusData.rnSt7Pm)]
+
+            for day in days {
+                let week = WeekForecast(
+                    status: day.0,
+                    highTemp: String(day.1),
+                    lowTemp: String(day.2),
+                    rainPercent: String(day.3)
+                )
+                weekForecast.append(week)
+            }
+        }
+        CategoryManager.weekForecast = weekForecast
+//        self.delegate?.dataReload()
+    }
+
 }
