@@ -16,9 +16,8 @@ class MyWeatherPageTableViewController: UITableViewController {
     }
     
     
-    var array: [LocationAllData] = []
+    static var array: [LocationAllData] = []
     
-    var weatherData: [Item] = []
     var city: String = "Seoul"
     
     override func viewDidLoad() {
@@ -38,24 +37,19 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 테이블 뷰 reload
         // 날씨 데이터 가져오기
         tableView.reloadData()
+        
+        CoreDataManager.shared.readData()
+        
+        tableView.reloadData()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        getData()
+        CoreDataManager.shared.readData()
         
         tableView.reloadData()
-    }
-    
-    private func getData() {
-        guard let context = self.persistentContainer?.viewContext else { return }
-        
-        let request = LocationAllData.fetchRequest()
-        
-        if let array = try? context.fetch(request) {
-            self.array = array
-        }
     }
     
 
@@ -66,7 +60,7 @@ class MyWeatherPageTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return array.count
+        return MyWeatherPageTableViewController.array.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -160,7 +154,8 @@ extension MyWeatherPageTableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            weatherData.remove(at: indexPath.row)
+            MyWeatherPageTableViewController.array.remove(at: indexPath.row)
+            CoreDataManager.shared.deleteData(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
@@ -171,7 +166,7 @@ extension MyWeatherPageTableViewController {
                         navigationController.popToRootViewController(animated: true)
                     }
                 } else {
-                    print("Selected: \(weatherData[indexPath.row])")
+                    print("Selected: \(MyWeatherPageTableViewController.array[indexPath.row])")
                 }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -179,7 +174,8 @@ extension MyWeatherPageTableViewController {
     // 드래그 앤 드롭
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let dragItem = UIDragItem(itemProvider: NSItemProvider())
-        dragItem.localObject = weatherData[indexPath.row]
+        dragItem.localObject = MyWeatherPageTableViewController.array[indexPath.row]
+        
         return [ dragItem ]
     }
     
@@ -189,8 +185,10 @@ extension MyWeatherPageTableViewController {
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         // Update the model
-        let mover = weatherData.remove(at: sourceIndexPath.row)
-        weatherData.insert(mover, at: destinationIndexPath.row)
+        let mover = MyWeatherPageTableViewController.array.remove(at: sourceIndexPath.row)
+        MyWeatherPageTableViewController.array.insert(mover, at: destinationIndexPath.row)
+        
+        CoreDataManager.shared.updateCoreDataOrder()
     }
     
 }

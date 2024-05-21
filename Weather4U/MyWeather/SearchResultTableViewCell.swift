@@ -17,7 +17,7 @@ class SearchResultTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         contentView.addSubview(locationNameLabel)
-        locationNameLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
+        locationNameLabel.font = UIFont(name: "AppleSDGothicNeo-SemiBold", size: 15)
         locationNameLabel.textColor = .black
         locationNameLabel.layer.masksToBounds = true
         locationNameLabel.snp.makeConstraints {
