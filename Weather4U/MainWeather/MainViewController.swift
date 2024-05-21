@@ -65,7 +65,6 @@ class MainViewController: BaseViewController {
     //그라데이션 레이어와 마스크 해줄 레이어 만들기
     let maskedUpView = UIView(frame: CGRect(x: 0, y: 782, width: 393, height: 70))
     let maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 67))
-
     let gradientUp = CAGradientLayer()
     let gradientDown = CAGradientLayer()
     

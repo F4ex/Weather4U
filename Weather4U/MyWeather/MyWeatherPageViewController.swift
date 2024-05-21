@@ -11,7 +11,7 @@ import UIKit
 class MyWeatherPageViewController: BaseViewController {
    
     let myWeatherTable = MyWeatherPageTableViewController()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,8 +20,6 @@ class MyWeatherPageViewController: BaseViewController {
         backgroundView.backgroundColor = .white
         view.addSubview(backgroundView)
 
-        
-        
         configureUI()
     }
     
@@ -32,7 +30,7 @@ class MyWeatherPageViewController: BaseViewController {
         myWeatherTable.didMove(toParent: self) // 부모 뷰 컨트롤러를 설정
         
         myWeatherTable.view.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(15)
+            make.top.equalToSuperview().offset(50)
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(20)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(5)
         }
