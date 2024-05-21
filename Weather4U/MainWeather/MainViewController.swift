@@ -4,12 +4,19 @@
 //
 //  Created by 이시안 on 5/14/24.
 //
-
+import CoreData
 import SnapKit
 import Then
 import UIKit
 
 class MainViewController: BaseViewController {
+    
+    var persistentContainer: NSPersistentContainer? {
+        (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+    }
+    
+    
+    static var isModal = false
     
     let scrollView = UIScrollView()
     let contentView = UIView()
@@ -106,6 +113,14 @@ class MainViewController: BaseViewController {
         //여기서 한번 적어주면 아래에는 shared 까지만 써줘도 됨
         //아 그러네 받아온다! 라는 함수니깐
         //아래에는 정보를 입력해주는거고!
+        
+        if MainViewController.isModal == true {
+            moveToSearch.isHidden = true
+            moveToDress.isHidden = true
+            
+            setModalPage()
+        }
+        
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -345,7 +360,77 @@ class MainViewController: BaseViewController {
         view.backgroundColor = backgroundColor
         temperature.textColor = temperatureColor
     }
-}
+
+       
+    func setModalPage() {
+        let cancelButton = UIButton()
+        let addButton = UIButton()
+        
+        [cancelButton, addButton].forEach {
+            view.addSubview($0)
+        }
+        
+//        cancelButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Heavy", size: 17)
+        cancelButton.setTitleColor(UIColor(named: "font"), for: .normal)
+        cancelButton.addTarget(self, action: #selector(tappedCancelButton), for: .touchUpInside)
+        
+        
+//        addButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        addButton.setTitle("Add", for: .normal)
+        addButton.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Heavy", size: 17)
+        addButton.setTitleColor(UIColor(named: "font"), for: .normal)
+        addButton.addTarget(self, action: #selector(tappedAddButton), for: .touchUpInside)
+        
+        cancelButton.snp.makeConstraints {
+            $0.top.left.equalTo(view.safeAreaLayoutGuide).inset(15)
+//            $0.height.equalTo(20)
+//            $0.width.equalTo(50)
+        }
+        
+        addButton.snp.makeConstraints {
+            $0.top.right.equalTo(view.safeAreaLayoutGuide).inset(15)
+//            $0.height.equalTo(cancelButton.snp.height)
+//            $0.width.equalTo(cancelButton.snp.width)
+        }
+        
+    }
+    
+    
+    @objc func tappedCancelButton() {
+        print("Cancel")
+        
+        MyWeatherPageTableViewController().tableView.reloadData()
+        MainViewController.isModal = false
+        dismiss(animated: true)
+        
+    }
+    
+    @objc func tappedAddButton() {
+        print("Add")
+        
+        //코어데이터에 저장
+        guard let context = persistentContainer?.viewContext else { return }
+        
+                let addLocation = LocationAllData(context: context)
+        //        addLocation.bookTitle = detailBook?.title
+        //        addLocation.bookPrice = Int64(detailBook!.salePrice)
+        //        addLocation.bookAuthor = detailBook?.authors.joined(separator: ", ")
+        //        addLocation.bookThumbnail = detailBook?.thumbnail
+        
+        try? context.save()
+        
+        let request = LocationAllData.fetchRequest()
+        _ = try? context.fetch(request)
+        
+        MyWeatherPageTableViewController().tableView.reloadData()
+        MainViewController.isModal = false
+        dismiss(animated: true)
+    }
+    
+    //MARK: - 데이터 연결
+
 
 //MARK: - 컬렉션뷰 설정
 //헤더뷰 정의하기
@@ -515,4 +600,3 @@ extension MainViewController: DataReloadDelegate {
         }
     }
 }
-
