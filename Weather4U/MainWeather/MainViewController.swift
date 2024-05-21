@@ -64,7 +64,7 @@ class MainViewController: BaseViewController {
     
     //그라데이션 레이어와 마스크 해줄 레이어 만들기
     let maskedUpView = UIView(frame: CGRect(x: 0, y: 782, width: 393, height: 70))
-    let maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 90))
+    var maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 67))
     let gradientUp = CAGradientLayer()
     let gradientDown = CAGradientLayer()
     
@@ -100,7 +100,7 @@ class MainViewController: BaseViewController {
         maskedDownView.backgroundColor = view.backgroundColor //마스킹 컬러는 백그라운드 컬러로
         gradientDown.frame = maskedDownView.bounds
         gradientDown.colors = [UIColor.white.cgColor, UIColor.white.cgColor, UIColor.clear.cgColor, UIColor.clear.cgColor]
-        gradientDown.locations = [0, 0.3, 0.9, 1]
+        gradientDown.locations = [0, 0.4, 0.9, 1]
         maskedDownView.layer.mask = gradientDown
         view.addSubview(maskedDownView)
         
@@ -117,7 +117,7 @@ class MainViewController: BaseViewController {
         if MainViewController.isModal == true {
             moveToSearch.isHidden = true
             moveToDress.isHidden = true
-            
+            self.gradientDown.colors = [UIColor.clear.cgColor]
             setModalPage()
         }
         
