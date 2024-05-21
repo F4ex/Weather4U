@@ -5,6 +5,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>Alata-Regular</string>
+		<string>BarlowSemiCondensed-Regular.ttf</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
