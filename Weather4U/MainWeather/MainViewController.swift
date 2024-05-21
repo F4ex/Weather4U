@@ -360,8 +360,8 @@ class MainViewController: BaseViewController {
         view.backgroundColor = backgroundColor
         temperature.textColor = temperatureColor
     }
-
-       
+    
+    
     func setModalPage() {
         let cancelButton = UIButton()
         let addButton = UIButton()
@@ -370,14 +370,14 @@ class MainViewController: BaseViewController {
             view.addSubview($0)
         }
         
-//        cancelButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        //        cancelButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Heavy", size: 17)
         cancelButton.setTitleColor(UIColor(named: "font"), for: .normal)
         cancelButton.addTarget(self, action: #selector(tappedCancelButton), for: .touchUpInside)
         
         
-//        addButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        //        addButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
         addButton.setTitle("Add", for: .normal)
         addButton.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Heavy", size: 17)
         addButton.setTitleColor(UIColor(named: "font"), for: .normal)
@@ -385,14 +385,14 @@ class MainViewController: BaseViewController {
         
         cancelButton.snp.makeConstraints {
             $0.top.left.equalTo(view.safeAreaLayoutGuide).inset(15)
-//            $0.height.equalTo(20)
-//            $0.width.equalTo(50)
+            //            $0.height.equalTo(20)
+            //            $0.width.equalTo(50)
         }
         
         addButton.snp.makeConstraints {
             $0.top.right.equalTo(view.safeAreaLayoutGuide).inset(15)
-//            $0.height.equalTo(cancelButton.snp.height)
-//            $0.width.equalTo(cancelButton.snp.width)
+            //            $0.height.equalTo(cancelButton.snp.height)
+            //            $0.width.equalTo(cancelButton.snp.width)
         }
         
     }
@@ -413,7 +413,7 @@ class MainViewController: BaseViewController {
         //코어데이터에 저장
         guard let context = persistentContainer?.viewContext else { return }
         
-                let addLocation = LocationAllData(context: context)
+        let addLocation = LocationAllData(context: context)
         //        addLocation.bookTitle = detailBook?.title
         //        addLocation.bookPrice = Int64(detailBook!.salePrice)
         //        addLocation.bookAuthor = detailBook?.authors.joined(separator: ", ")
@@ -428,6 +428,7 @@ class MainViewController: BaseViewController {
         MainViewController.isModal = false
         dismiss(animated: true)
     }
+}
     
     //MARK: - 데이터 연결
 
