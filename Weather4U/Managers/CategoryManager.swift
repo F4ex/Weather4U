@@ -100,6 +100,8 @@ class CategoryManager {
                         value = rainTypeDescription(from: item.fcstValue)
                     case Category.SKY.rawValue:
                         value = skyStatusDescription(from: item.fcstValue)
+                    case Category.TMP.rawValue:
+                        value = item.fcstValue
                     default:
                         value = item.fcstValue
                     }

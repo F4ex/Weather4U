@@ -50,7 +50,6 @@ class NetworkManager {
         NetworkManager.shared.fetchWeatherData(x: x, y: y, completion: { result in
             switch result {
             case .success(let data):
-                print(data)
                 CategoryManager.shared.forecastForDates(items: data, fcstDate: Date())
             case .failure(let error):
                 print(error) // 추후에 Alert창 호출로 변경
