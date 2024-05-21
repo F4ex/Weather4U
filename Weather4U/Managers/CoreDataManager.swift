@@ -86,4 +86,21 @@ class CoreDataManager {
             print("Failed to delete data: \(error.localizedDescription)")
         }
     }
+    
+    func updateCoreDataOrder() {
+        guard let viewContext = self.persistentContainer?.viewContext else {
+            print("Error: Can't access CoreData view context")
+            return
+        }
+        
+        for (index, data) in MyWeatherPageTableViewController.array.enumerated() {
+            data.order = Int16(index)
+        }
+        do {
+            try viewContext.save()
+            print("CoreData order updated successfully")
+        } catch {
+            print("Failed to update CoreData order: \(error.localizedDescription)")
+        }
+    }
 }

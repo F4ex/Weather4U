@@ -14,9 +14,8 @@ class MainViewController: BaseViewController {
     var persistentContainer: NSPersistentContainer? {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
-    
-    
     static var isModal = false
+    static var selectRegion : CombinedData?   // 배열이 아닌 값 하나
     
     let scrollView = UIScrollView()
     let contentView = UIView()
@@ -65,7 +64,6 @@ class MainViewController: BaseViewController {
     //그라데이션 레이어와 마스크 해줄 레이어 만들기
     let maskedUpView = UIView(frame: CGRect(x: 0, y: 782, width: 393, height: 70))
     let maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 67))
-
     let gradientUp = CAGradientLayer()
     let gradientDown = CAGradientLayer()
     
@@ -104,15 +102,8 @@ class MainViewController: BaseViewController {
         gradientDown.locations = [0, 0.4, 0.9, 1]
         maskedDownView.layer.mask = gradientDown
         view.addSubview(maskedDownView)
-        
-        
-        NetworkManager.shared.receiveWeatherData()
-        NetworkManager.shared.receiveWeatherStatus()
-        NetworkManager.shared.receiveWeatherTemperature()
-        JSONManager.shared.loadJSONToLocationData()
-        //여기서 한번 적어주면 아래에는 shared 까지만 써줘도 됨
-        //아 그러네 받아온다! 라는 함수니깐
-        //아래에는 정보를 입력해주는거고!
+
+        networkManager()
         
         if MainViewController.isModal == true {
             moveToSearch.isHidden = true
@@ -125,17 +116,39 @@ class MainViewController: BaseViewController {
         
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        // 인터페이스 스타일이 변경될 때마다 UI 업데이트
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            updateAppearanceBasedOnWeather(for: weatherStatus)
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
+        
+        //뷰가 나타날 때마다 업데이트
+        readData()
+    }
+    
+    //MARK: - 네트워크 매니저
+    
+    func networkManager() {
+        guard let unwrapArray = MainViewController.selectRegion else { return }
+        NetworkManager.shared.receiveWeatherData(x: Int16(unwrapArray.X), y: Int16(unwrapArray.Y))
+        NetworkManager.shared.receiveWeatherStatus(regID: unwrapArray.Status)
+        NetworkManager.shared.receiveWeatherTemperature(regID: unwrapArray.Temperature)
+        JSONManager.shared.loadJSONToLocationData()
+    }
+    
+    //데이터 조회
+    func readData() {
+        guard let context = self.persistentContainer?.viewContext else {
+            print("Error: Can't access Core Data view context")
+            return
+        }
+        
+        let request = LocationAllData.fetchRequest()
+        
+        do {
+            let locationAllDatas = try context.fetch(request)
+            CoreDataManager.addLocationData = locationAllDatas
+        } catch {
+            print("Error fetching data from CoreData: \(error.localizedDescription)")
+        }
     }
     
     //MARK: - 오토레이아웃
@@ -236,16 +249,14 @@ class MainViewController: BaseViewController {
     
     //MARK: - UI 디테일
     override func configureUI() {
+        
         location.text = city.rawValue
         location.font = UIFont(name: "Apple SD Gothic Neo", size: 34)
-        location.textColor = UIColor(named: "font")
         
         moveToDress.setImage(UIImage(systemName: "hanger"), for: .normal)
-        moveToDress.tintColor = UIColor(named: "font")
         moveToDress.addTarget(self, action: #selector(clickToStyle), for: .touchUpInside)
         
         moveToSearch.setImage(UIImage(systemName: "list.bullet"), for: .normal)
-        moveToSearch.tintColor = UIColor(named: "font")
         moveToSearch.addTarget(self, action: #selector(clickToSearch), for: .touchUpInside)
         
         temperature.font = UIFont(name: "Alata-Regular", size: 50)
@@ -253,16 +264,13 @@ class MainViewController: BaseViewController {
         temperature.shadowOffset = CGSize(width: 0, height: 4)
         
         tempHigh.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
-        tempHigh.textColor = UIColor(named: "font")
         
         tempLow.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 15)
-        tempLow.textColor = UIColor(named: "font")
         
         weatherExplanation.text = NetworkManager.weatherSentenceData ?? "No Data"
         weatherExplanation.textAlignment = .center
         weatherExplanation.numberOfLines = 2
         weatherExplanation.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
-        weatherExplanation.textColor = UIColor(named: "font")
         
         status.register(StatusCell.self, forCellWithReuseIdentifier: "StatusCell")
         status.backgroundColor = view.backgroundColor
@@ -270,17 +278,13 @@ class MainViewController: BaseViewController {
         todayWeather.register(TodayWeatherCell.self, forCellWithReuseIdentifier: "TodayWeatherCell")
         //헤더뷰 등록하기
         todayWeather.register(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CollectionHeaderView")
-        todayWeather.backgroundColor = UIColor(named: "cell")
         todayWeather.layer.cornerRadius = 15
         
         todayPrecipitation.register(ChartCollectionViewCell.self, forCellWithReuseIdentifier: "ChartCollectionViewCell")
-        todayPrecipitation.backgroundColor = UIColor(named: "cell")
         todayPrecipitation.layer.cornerRadius = 15
         
         weekWeather.register(WeekWeatherCell.self, forCellReuseIdentifier: "WeekWeatherCell")
-        weekWeather.backgroundColor = UIColor(named: "cell")
         weekWeather.layer.cornerRadius = 15
-        
         
         footerMessage.text = "Weather4U will be by your side, cheering you on through your day."
         footerMessage.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
@@ -294,52 +298,63 @@ class MainViewController: BaseViewController {
     }
     
     
-    // MARK: - 버튼 연결
-    @objc func clickToSearch() {
-        let vc = SearchViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    @objc func clickToStyle() {
-        let vc = StyleViewController()
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    
     //MARK: - 날씨별 배경 및 메인아이콘 변경
     func updateAppearanceBasedOnWeather(for weatherStatus: String) {
         var Icon = UIImage()
         var backgroundColor = UIColor()
         var temperatureColor = UIColor()
+        var locationC = UIColor()
+        var moveToDressC = UIColor()
+        var moveToSearchC = UIColor()
+        var tempHighC = UIColor()
+        var tempLowC = UIColor()
+        var weatherExplanationC = UIColor()
+        var todayWeatherC = UIColor()
+        var todayPrecipitationC = UIColor()
+        var weekWeatherC = UIColor()
+        
         
         switch weatherStatus {
-        case "Sunny":
+        case "Sunny", "Mostly Cloudy":
+            Icon = (weatherStatus == "Sunny" ? UIImage(named: "sun") : UIImage(named: "sun&cloud"))!
             Icon = UIImage(named: "sun")!
             backgroundColor = UIColor(named: "Background")!
             temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
-        case "Mostly Cloudy":
-            Icon = UIImage(named: "sun&cloud")!
-            backgroundColor = UIColor(named: "BackGroundR")!
-            temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
-        case "Cloudy":
-            Icon = UIImage(named: "cloudy")!
-            backgroundColor = UIColor(named: "BackGroundR")!
-            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
-        case "비":
-            Icon = UIImage(named: "rain")!
-            backgroundColor = UIColor(named: "BackGroundR")!
-            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
-        case "소나기":
-            Icon = UIImage(named: "heavyRain")!
+            locationC = UIColor(named: "font")!
+            moveToDressC = UIColor(named: "font")!
+            moveToSearchC = UIColor(named: "font")!
+            tempHighC = UIColor(named: "font")!
+            tempLowC = UIColor(named: "font")!
+            weatherExplanationC = UIColor(named: "font")!
+            todayWeatherC = UIColor(named: "cell")!
+            todayPrecipitationC = UIColor(named: "cell")!
+            weekWeatherC = UIColor(named: "cell")!
+        case "Cloudy", "비", "소나기":
+            Icon = (weatherStatus == "Cloudy" ? UIImage(named: "cloudy") : weatherStatus == "비" ? UIImage(named: "rain") : UIImage(named: "heavyRain"))!
             backgroundColor = UIColor(named: "BackGroundR")!
             temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
-        case "비/눈":
-            Icon = UIImage(named: "snow&rain")!
+            locationC = UIColor(named: "fontR")!
+            moveToDressC = UIColor(named: "fontR")!
+            moveToSearchC = UIColor(named: "fontR")!
+            tempHighC = UIColor(named: "fontR")!
+            tempLowC = UIColor(named: "fontR")!
+            weatherExplanationC = UIColor(named: "fontR")!
+            todayWeatherC = UIColor(named: "cellR")!
+            todayPrecipitationC = UIColor(named: "cellR")!
+            weekWeatherC = UIColor(named: "cellR")!
+        case "비/눈", "눈":
+            Icon = (weatherStatus == "비/눈" ? UIImage(named: "snow&rain") : UIImage(named: "snow"))!
             backgroundColor = UIColor(named: "BackGroundS")!
-            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
-        case "눈":
-            Icon = UIImage(named: "snow")!
-            backgroundColor = UIColor(named: "BackGroundS")!
-            temperatureColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
+            temperatureColor = weatherStatus == "눈" ? UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1) : UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+            locationC = UIColor(named: "fontS")!
+            moveToDressC = UIColor(named: "fontS")!
+            moveToSearchC = UIColor(named: "fontS")!
+            tempHighC = UIColor(named: "fontS")!
+            tempLowC = UIColor(named: "fontS")!
+            weatherExplanationC = UIColor(named: "fontS")!
+            todayWeatherC = UIColor(named: "cellS")!
+            todayPrecipitationC = UIColor(named: "cellS")!
+            weekWeatherC = UIColor(named: "cellS")!
         default:
             Icon = UIImage(named: "sun")!
             backgroundColor = UIColor(named: "Background")!
@@ -361,10 +376,44 @@ class MainViewController: BaseViewController {
         weatherImage.image = Icon
         view.backgroundColor = backgroundColor
         temperature.textColor = temperatureColor
+        location.textColor = locationC
+        moveToDress.tintColor = moveToDressC
+        moveToSearch.tintColor = moveToSearchC
+        tempHigh.textColor = tempHighC
+        tempLow.textColor = tempLowC
+        weatherExplanation.textColor = weatherExplanationC
+        todayWeather.backgroundColor = todayWeatherC
+        todayPrecipitation.backgroundColor = todayPrecipitationC
+        weekWeather.backgroundColor = weekWeatherC
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        // 인터페이스 스타일이 변경될 때마다 UI 업데이트
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateAppearanceBasedOnWeather(for: weatherStatus)
+        }
+    }
+    
+    // MARK: - 버튼 연결
+    @objc func clickToSearch() {
+        let vc = SearchViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    @objc func clickToStyle() {
+        let vc = StyleViewController()
+        self.present(vc, animated: true, completion: nil)
     }
     
     
+    
     func setModalPage() {
+        
+        if MainViewController.isModal == true {
+            location.text = MainViewController.selectRegion?.Region
+            print(MainViewController.selectRegion?.Region ?? "-")
+        }
+       
         let cancelButton = UIButton()
         let addButton = UIButton()
         
@@ -396,7 +445,6 @@ class MainViewController: BaseViewController {
             //            $0.height.equalTo(cancelButton.snp.height)
             //            $0.width.equalTo(cancelButton.snp.width)
         }
-        
     }
     
     
@@ -412,27 +460,20 @@ class MainViewController: BaseViewController {
     @objc func tappedAddButton() {
         print("Add")
         
-        //코어데이터에 저장
-        guard let context = persistentContainer?.viewContext else { return }
-        
-        let addLocation = LocationAllData(context: context)
 
-        //        addLocation.bookTitle = detailBook?.title
-        //        addLocation.bookPrice = Int64(detailBook!.salePrice)
-        //        addLocation.bookAuthor = detailBook?.authors.joined(separator: ", ")
-        //        addLocation.bookThumbnail = detailBook?.thumbnail
-        
-        try? context.save()
-        
-        let request = LocationAllData.fetchRequest()
-        _ = try? context.fetch(request)
+        guard let unwrapArray = MainViewController.selectRegion else {
+            return
+        }
+        CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
+
+        try? context.save()   
         
         MyWeatherPageTableViewController().tableView.reloadData()
         MainViewController.isModal = false
         dismiss(animated: true)
     }
 }
-    
+
 //MARK: - 컬렉션뷰 설정
 //헤더뷰 정의하기
 //헤더에 어떤 내용 넣어줄지 정하기

@@ -20,10 +20,15 @@ class NetworkManager {
     // 최저 기온 : 예측 시간(fcst_time) - 0600
     // 최고 기온 : 예측 시간(fcst_time) - 1500
     
+    static var nx : Int16 = 60
+    static var ny : Int16 = 127
+    static var ncode : Int16 = 108
+    static var ID : String = "11B00000"
+    
     
     
     // MARK: - 3일치 날씨 데이터 받아오기
-    func fetchWeatherData(x: Int16 = 60, y: Int16 = 127, completion: @escaping (Result<[Item], Error>) -> Void) {
+    func fetchWeatherData(x: Int16 = nx, y: Int16 = ny, completion: @escaping (Result<[Item], Error>) -> Void) {
         let currentDateString = self.currentDateToString()
         let url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
@@ -46,7 +51,7 @@ class NetworkManager {
     }
     
     // MARK: - 3일치 날씨 데이터 배열에 담기
-    func receiveWeatherData(x: Int16 = 60, y: Int16 = 127) {
+    func receiveWeatherData(x: Int16 = nx, y: Int16 = ny) {
         NetworkManager.shared.fetchWeatherData(x: x, y: y, completion: { result in
             switch result {
             case .success(let data):
@@ -58,7 +63,7 @@ class NetworkManager {
     }
     
     // MARK: - 오늘 날씨 문장 데이터 받아오기
-    func fetchWeatherSentence(sentenceCode: Int16 = 108, completion: @escaping (Result<[SentenceItem], Error>) -> Void) {
+    func fetchWeatherSentence(sentenceCode: Int16 = ncode, completion: @escaping (Result<[SentenceItem], Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidFcst"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let formatter = DateFormatter()
@@ -92,7 +97,7 @@ class NetworkManager {
     }
     
     // MARK: - 3일 ~ 7일 날씨 상태 데이터 받아오기
-    func fetchWeatherStatus(regID: String = "11B00000", completion: @escaping (Result<[StatusItem], Error>) -> Void) {
+    func fetchWeatherStatus(regID: String = ID, completion: @escaping (Result<[StatusItem], Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let formatter = DateFormatter()
@@ -114,7 +119,7 @@ class NetworkManager {
     }
     
     // MARK: - 3일 ~ 7일 날씨 상태 데이터 배열에 담기
-    func receiveWeatherStatus(regID: String = "11B00000") {
+    func receiveWeatherStatus(regID: String = ID) {
         NetworkManager.shared.fetchWeatherStatus(regID: regID, completion: { result in
             switch result {
             case .success(let data):
@@ -126,7 +131,7 @@ class NetworkManager {
     }
     
     // MARK: - 3일 ~ 7일 날씨 최고, 최저 기온 데이터 받아오기
-    func fetchWeatherTemperature(regID: String = "11B10101", completion: @escaping (Result<[TemperatureItem], Error>) -> Void) {
+    func fetchWeatherTemperature(regID: String = ID, completion: @escaping (Result<[TemperatureItem], Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let formatter = DateFormatter()
@@ -148,7 +153,7 @@ class NetworkManager {
     }
     
     // MARK: - 3일 ~ 7일 날씨 최고, 최저 기온 데이터 배열에 담기
-    func receiveWeatherTemperature(regID: String = "11B10101") {
+    func receiveWeatherTemperature(regID: String = ID) {
         NetworkManager.shared.fetchWeatherTemperature(regID: regID, completion: { result in
             switch result {
             case .success(let data):
