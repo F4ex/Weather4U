@@ -64,7 +64,7 @@ class MainViewController: BaseViewController {
     
     //그라데이션 레이어와 마스크 해줄 레이어 만들기
     let maskedUpView = UIView(frame: CGRect(x: 0, y: 782, width: 393, height: 70))
-    let maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 90))
+    let maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 67))
     let gradientUp = CAGradientLayer()
     let gradientDown = CAGradientLayer()
     
@@ -100,7 +100,7 @@ class MainViewController: BaseViewController {
         maskedDownView.backgroundColor = view.backgroundColor //마스킹 컬러는 백그라운드 컬러로
         gradientDown.frame = maskedDownView.bounds
         gradientDown.colors = [UIColor.white.cgColor, UIColor.white.cgColor, UIColor.clear.cgColor, UIColor.clear.cgColor]
-        gradientDown.locations = [0, 0.3, 0.9, 1]
+        gradientDown.locations = [0, 0.4, 0.9, 1]
         maskedDownView.layer.mask = gradientDown
         view.addSubview(maskedDownView)
         
@@ -118,6 +118,7 @@ class MainViewController: BaseViewController {
             moveToSearch.isHidden = true
             moveToDress.isHidden = true
             
+            gradientDown.colors = [UIColor.clear.cgColor]
             setModalPage()
         }
         
@@ -360,8 +361,8 @@ class MainViewController: BaseViewController {
         view.backgroundColor = backgroundColor
         temperature.textColor = temperatureColor
     }
-
-       
+    
+    
     func setModalPage() {
         let cancelButton = UIButton()
         let addButton = UIButton()
@@ -370,14 +371,14 @@ class MainViewController: BaseViewController {
             view.addSubview($0)
         }
         
-//        cancelButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        //        cancelButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Heavy", size: 17)
         cancelButton.setTitleColor(UIColor(named: "font"), for: .normal)
         cancelButton.addTarget(self, action: #selector(tappedCancelButton), for: .touchUpInside)
         
         
-//        addButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        //        addButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
         addButton.setTitle("Add", for: .normal)
         addButton.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Heavy", size: 17)
         addButton.setTitleColor(UIColor(named: "font"), for: .normal)
@@ -385,14 +386,14 @@ class MainViewController: BaseViewController {
         
         cancelButton.snp.makeConstraints {
             $0.top.left.equalTo(view.safeAreaLayoutGuide).inset(15)
-//            $0.height.equalTo(20)
-//            $0.width.equalTo(50)
+            //            $0.height.equalTo(20)
+            //            $0.width.equalTo(50)
         }
         
         addButton.snp.makeConstraints {
             $0.top.right.equalTo(view.safeAreaLayoutGuide).inset(15)
-//            $0.height.equalTo(cancelButton.snp.height)
-//            $0.width.equalTo(cancelButton.snp.width)
+            //            $0.height.equalTo(cancelButton.snp.height)
+            //            $0.width.equalTo(cancelButton.snp.width)
         }
         
     }
@@ -413,7 +414,7 @@ class MainViewController: BaseViewController {
         //코어데이터에 저장
         guard let context = persistentContainer?.viewContext else { return }
         
-                let addLocation = LocationAllData(context: context)
+        _ = LocationAllData(context: context)
         //        addLocation.bookTitle = detailBook?.title
         //        addLocation.bookPrice = Int64(detailBook!.salePrice)
         //        addLocation.bookAuthor = detailBook?.authors.joined(separator: ", ")
@@ -428,10 +429,8 @@ class MainViewController: BaseViewController {
         MainViewController.isModal = false
         dismiss(animated: true)
     }
+}
     
-    //MARK: - 데이터 연결
-
-
 //MARK: - 컬렉션뷰 설정
 //헤더뷰 정의하기
 //헤더에 어떤 내용 넣어줄지 정하기
