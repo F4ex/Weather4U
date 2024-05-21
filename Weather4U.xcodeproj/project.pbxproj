@@ -152,6 +152,15 @@
 			path = MainWeather;
 			sourceTree = "<group>";
 		};
+		95AB0DEB2BFCA9D8007975D9 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				95B07D9E2BF3C6BB00F80AC5 /* Alata-Regular */,
+				95AB0DE72BFC8DD4007975D9 /* BarlowSemiCondensed-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		95CFF7DE2BFA471A00CE65EF /* WeatherStyle */ = {
 			isa = PBXGroup;
 			children = (
@@ -179,10 +188,9 @@
 		FFE5DCB52BF1B463004EE3F7 /* Weather4U */ = {
 			isa = PBXGroup;
 			children = (
+				95AB0DEB2BFCA9D8007975D9 /* Fonts */,
 				FFE5DD2C2BFAE677004EE3F7 /* Managers */,
 				FFE5DD2B2BFAE5E8004EE3F7 /* Models */,
-				95B07D9E2BF3C6BB00F80AC5 /* Alata-Regular */,
-				95AB0DE72BFC8DD4007975D9 /* BarlowSemiCondensed-Regular.ttf */,
 				FFE5DCB62BF1B463004EE3F7 /* AppDelegate.swift */,
 				FFE5DCB82BF1B463004EE3F7 /* SceneDelegate.swift */,
 				9545B8052BF3081900EE36B8 /* MainWeather */,

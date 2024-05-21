@@ -16,8 +16,9 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
     let styleDetail = UILabel()
     let temperature = UILabel()
     var weatherData: [WeatherData] = []
-    var weatherStatus: String = "Sunny"
-
+    var temperatureNow: String = ""
+    var weatherStatus: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "Background")
@@ -27,6 +28,7 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
         NetworkManager.shared.delegate = self
         CategoryManager.shared.delegate = self
         updateAppearanceBasedOnWeather(for: weatherStatus)
+        updateTextBasedOnTemperature(for: temperatureNow)
         
         NetworkManager.shared.receiveWeatherData()
         NetworkManager.shared.receiveWeatherTemperature()
@@ -56,7 +58,7 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
             $0.left.right.equalTo(view).inset(40)
         }
         temperature.snp.makeConstraints(){
-            $0.top.equalTo(styleDetail.snp.bottom).offset(30)
+            $0.top.equalTo(image.snp.bottom).offset(56)
             $0.centerX.equalTo(view)
         }
     }
@@ -66,8 +68,8 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
     func updateAppearanceBasedOnWeather(for weatherStatus: String) {
         var backgroundColor = UIColor()
         var logoColor = UIColor()
-        var styleDetailColor = UIColor()
         var styleTitleColor = UIColor()
+        var styleDetailColor = UIColor()
         var temperatureColor = UIColor()
         
         switch weatherStatus {
@@ -119,6 +121,34 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
         temperature.textColor = temperatureColor
     }
     
+    
+    func updateTextBasedOnTemperature(for temperatureNow: String) {
+        var styleDetailText = String()
+        // 정해진 숫자 영역에 따라 다른 문장 내보내기
+        if let temperature = Int(temperatureNow) {
+            switch temperature {
+            case ..<5:
+                styleDetailText = "It is very cold weather. Recommend : Thick padding, A heavy down jacket, A hat, Gloves, A scarf. You should minimize heat loss as much as possible."
+            case 5..<10:
+                styleDetailText = "It's cold weather. Recommend : Thick coats or Padded jackets. Keep your body temperature maintained."
+            case 10..<15:
+                styleDetailText = "It's chilly weather. Recommend : thick jackets, knits, and scarves."
+            case 15..<20:
+                styleDetailText = "It's a bit chilly. Recommend : Light jacket, Sweater, Cardigan, Jeans, or Cotton pants."
+            case 20..<23:
+                styleDetailText = "It's cool weather. Recommend : Long-sleeve t-shirts, Thin knits, Cardigans, Cotton pants, Long skirts. In the morning and evening, you may need a light jacket."
+            case 23..<28:
+                styleDetailText = "It's warm or slightly hot. Recommend : Shorts, Skirts, Thin shirts or short-sleeved T-shirts"
+            case 28...:
+                styleDetailText = "It's very hot weather.  Recommend : Shorts, Short-sleeved T-shirts, Sleeveless tops, Thin dresses. Apply sunscreen for UV protection."
+            default:
+                styleDetailText = "We don't have temperature data"
+            }
+            styleDetail.text = styleDetailText
+        }
+    }
+    
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         // 인터페이스 스타일이 변경될 때마다 UI 업데이트
@@ -127,30 +157,30 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
         }
     }
     
-    
     override func configureUI() {
         logo.text = "Weather4U"
         logo.font = UIFont(name: "Apple SD Gothic Neo", size: 14)
         logo.textAlignment = .center
         
         styleTitle.text = "Style Today"
-        styleTitle.font = UIFont(name: "Apple SD Gothic Neo", size: 40)
+        styleTitle.font = UIFont(name: "Alata-Regular", size: 33)
         styleTitle.textAlignment = .center
         
         image.backgroundColor = .white
         
-        styleDetail.text = "설명설명설명설명설명설명설명설명설명설명설명설명"
         styleDetail.font = UIFont(name: "Apple SD Gothic Neo", size: 17)
         styleDetail.textAlignment = .center
-        styleDetail.numberOfLines = 2
+        styleDetail.numberOfLines = 3
         
-        temperature.font = UIFont(name: "BarlowSemiCondensed-Regular", size: 300)
+        temperature.font = UIFont(name: "BarlowSemiCondensed-Regular", size: 270)
         temperature.textAlignment = .center
     }
     
     func dataReload() {
         DispatchQueue.main.async {
-            self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
+            self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")"
+            self.temperatureNow = self.temperature.text ?? "" //temperatureNow는 temperature.text에 받아오는 값으로 해주겠다
+            self.updateTextBasedOnTemperature(for: self.temperatureNow) //온도별 조건문 self.temperatureNow 의 정보 사용하겠다
         }
     }
 }
