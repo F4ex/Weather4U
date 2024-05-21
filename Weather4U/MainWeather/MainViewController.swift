@@ -62,6 +62,12 @@ class MainViewController: BaseViewController {
     var weatherData: [WeatherData] = []
     var weatherStatus: String = "Sunny"
     
+    //그라데이션 레이어와 마스크 해줄 레이어 만들기
+    let maskedUpView = UIView(frame: CGRect(x: 0, y: 782, width: 393, height: 70))
+    let maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 90))
+    let gradientUp = CAGradientLayer()
+    let gradientDown = CAGradientLayer()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,6 +88,22 @@ class MainViewController: BaseViewController {
         CategoryManager.shared.delegate = self
         
         weekWeather.sectionHeaderTopPadding = 0
+        
+        maskedUpView.backgroundColor = view.backgroundColor //마스킹 컬러는 백그라운드 컬러로
+        gradientUp.frame = maskedUpView.bounds
+        gradientUp.colors = [UIColor.clear.cgColor, UIColor.clear.cgColor, UIColor.white.cgColor, UIColor.white.cgColor] // 그라디언트 색상 정하기
+        gradientUp.locations = [0, 0.2, 0.9, 1] //그라디언트 색상 넣을 영역 정하기
+        //젠체 화면을 1이라 생각했을때 0%에 clear, 20%엔 white, 90%, 100%에도 화이트 넣기
+        maskedUpView.layer.mask = gradientUp // 그라데이션한 레이어를 화면에 마스킹하기
+        view.addSubview(maskedUpView)
+        
+        maskedDownView.backgroundColor = view.backgroundColor //마스킹 컬러는 백그라운드 컬러로
+        gradientDown.frame = maskedDownView.bounds
+        gradientDown.colors = [UIColor.white.cgColor, UIColor.white.cgColor, UIColor.clear.cgColor, UIColor.clear.cgColor]
+        gradientDown.locations = [0, 0.3, 0.9, 1]
+        maskedDownView.layer.mask = gradientDown
+        view.addSubview(maskedDownView)
+        
         
         NetworkManager.shared.receiveWeatherData()
         NetworkManager.shared.receiveWeatherStatus()
@@ -118,7 +140,7 @@ class MainViewController: BaseViewController {
     override func constraintLayout() {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints(){
-            $0.top.equalTo(self.view.safeAreaLayoutGuide)
+            $0.top.equalTo(view)
             $0.left.right.bottom.equalTo(view)
         }
         scrollView.addSubview(contentView)
@@ -134,7 +156,7 @@ class MainViewController: BaseViewController {
         }
         
         location.snp.makeConstraints(){
-            $0.top.equalTo(contentView).offset(34)
+            $0.top.equalTo(contentView).offset(33)
             $0.centerX.equalTo(contentView)
         }
         moveToDress.snp.makeConstraints(){
@@ -150,7 +172,7 @@ class MainViewController: BaseViewController {
             $0.height.equalTo(24)
         }
         imageView.snp.makeConstraints(){
-            $0.top.equalTo(location.snp.bottom)
+            $0.top.equalTo(location.snp.bottom).offset(-5)
             $0.bottom.equalTo(temperature.snp.top)
         }
         weatherImage.snp.makeConstraints(){
@@ -209,16 +231,6 @@ class MainViewController: BaseViewController {
         }
     }
     
-    func setGradientColor() {
-        let colorTop =  UIColor(red: 255.0/255.0, green: 149.0/255.0, blue: 0.0/255.0, alpha: 1.0).cgColor
-        let colorBottom = UIColor(red: 255.0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0).cgColor
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [colorTop, colorBottom]
-        gradientLayer.locations = [0.0, 1.0]
-        gradientLayer.frame = scrollView.bounds
-        scrollView.layer.insertSublayer(gradientLayer, at: 0)
-    }
-    
     
     //MARK: - UI 디테일
     override func configureUI() {
@@ -255,7 +267,7 @@ class MainViewController: BaseViewController {
         
         todayWeather.register(TodayWeatherCell.self, forCellWithReuseIdentifier: "TodayWeatherCell")
         //헤더뷰 등록하기
-        todayWeather.register(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CollectionHeaderView.identifier)
+        todayWeather.register(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CollectionHeaderView")
         todayWeather.backgroundColor = UIColor(named: "cell")
         todayWeather.layer.cornerRadius = 15
         
@@ -348,8 +360,8 @@ class MainViewController: BaseViewController {
         view.backgroundColor = backgroundColor
         temperature.textColor = temperatureColor
     }
-    
-    
+
+       
     func setModalPage() {
         let cancelButton = UIButton()
         let addButton = UIButton()
@@ -418,8 +430,8 @@ class MainViewController: BaseViewController {
     }
     
     //MARK: - 데이터 연결
-    
-}
+
+
 //MARK: - 컬렉션뷰 설정
 //헤더뷰 정의하기
 //헤더에 어떤 내용 넣어줄지 정하기
@@ -427,8 +439,8 @@ class MainViewController: BaseViewController {
 class CollectionHeaderView: UICollectionReusableView {
     static let identifier = "CollectionViewHeaderView"
     
-    private let titleLabel = UILabel()
-    private let icon = UIImageView()
+    let titleLabel = UILabel()
+    let icon = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -439,7 +451,6 @@ class CollectionHeaderView: UICollectionReusableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     func configure() {
         titleLabel.text = "Hourly Forcast"
         titleLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
@@ -447,7 +458,6 @@ class CollectionHeaderView: UICollectionReusableView {
         
         icon.image = UIImage(systemName: "clock")
         icon.tintColor = UIColor(named: "font")
-        
     }
 }
 
@@ -459,7 +469,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
         case status:
@@ -499,19 +508,21 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             //뷰모델에 있는 정보들을 가지고 셀을 만들겠다
             let viewModel = cellViewModel2[indexPath.item]
             cell.configure(with: viewModel)
-            
             return cell
         }
         return UICollectionViewCell()
     }
     
-    //헤더뷰 제공하기
+    // 헤더 뷰 제공하기
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader else {
             return UICollectionReusableView()
         }
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionHeaderView.identifier, for: indexPath) as! CollectionHeaderView
-        return header
+        if collectionView == todayWeather {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionHeaderView.identifier, for: indexPath) as! CollectionHeaderView
+            return header
+        }
+        return UICollectionReusableView()
     }
 }
 
@@ -589,5 +600,3 @@ extension MainViewController: DataReloadDelegate {
         }
     }
 }
-
-

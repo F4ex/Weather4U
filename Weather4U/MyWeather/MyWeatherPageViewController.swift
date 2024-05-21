@@ -15,8 +15,11 @@ class MyWeatherPageViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // 전체 화면을 덮는 배경 뷰 추가
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = .white
+        view.addSubview(backgroundView)
 
-        view.backgroundColor = .white
         
         
         configureUI()

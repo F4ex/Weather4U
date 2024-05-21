@@ -85,18 +85,18 @@ class MyWeatherPageTableViewController: UITableViewController {
             let hCelsius = (highTempCelsius).rounded()
             let lCelsius = (lowTempCelsius).rounded()
             
-            cell.tempLabel.text = "\(Int(tCelsius))°C"
-            cell.highLabel.text = "H: \(Int(hCelsius))°C"
-            cell.lowLabel.text = "L: \(Int(lCelsius))°C"
+            cell.tempLabel.text = "\(Int(tCelsius))°"
+            cell.highLabel.text = "H: \(Int(hCelsius))°"
+            cell.lowLabel.text = "L: \(Int(lCelsius))°"
             
         } else {
             let tempFahrenheit = (tempCelsius * 1.8 + 32).rounded()
             let highTempFahrenheit = (highTempCelsius * 1.8 + 32).rounded()
             let lowTempFahrenheit = (lowTempCelsius * 1.8 + 32).rounded()
             
-            cell.tempLabel.text = "\(Int(tempFahrenheit))°F"
-            cell.highLabel.text = "H: \(Int(highTempFahrenheit))°F"
-            cell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°F"
+            cell.tempLabel.text = "\(Int(tempFahrenheit))°"
+            cell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
+            cell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
         }
         
         // 이미지 설정
