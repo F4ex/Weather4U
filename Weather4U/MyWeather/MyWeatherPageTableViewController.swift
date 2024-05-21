@@ -4,12 +4,19 @@
 //
 //  Created by 강태영 on 5/13/24.
 //
-
+import CoreData
 import UIKit
 import Alamofire
 import SnapKit
 
 class MyWeatherPageTableViewController: UITableViewController {
+    
+    var persistentContainer: NSPersistentContainer? {
+        (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+    }
+    
+    
+    var array: [LocationAllData] = []
     
     var weatherData: [Item] = []
     var city: String = "Seoul"
@@ -33,6 +40,24 @@ class MyWeatherPageTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        getData()
+        
+        tableView.reloadData()
+    }
+    
+    private func getData() {
+        guard let context = self.persistentContainer?.viewContext else { return }
+        
+        let request = LocationAllData.fetchRequest()
+        
+        if let array = try? context.fetch(request) {
+            self.array = array
+        }
+    }
+    
 
     // MARK: - Table view data source
     
@@ -41,7 +66,7 @@ class MyWeatherPageTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return array.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
