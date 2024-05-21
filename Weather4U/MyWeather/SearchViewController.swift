@@ -24,7 +24,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
     static var isEditMode = false
     static var isCelsius = true
     static var isFahrenheit = false
-    static var result : [CombinedData] = []
+    static var result : [CombinedData] = []  // 검색결과 - 지역명
     
     
     let weatherLabel = UILabel()

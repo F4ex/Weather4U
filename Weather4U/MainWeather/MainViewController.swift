@@ -15,6 +15,7 @@ class MainViewController: BaseViewController {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     static var isModal = false
+    static var selectRegion : CombinedData?   // 배열이 아닌 값 하나
     
     let scrollView = UIScrollView()
     let contentView = UIView()
@@ -102,15 +103,8 @@ class MainViewController: BaseViewController {
         maskedDownView.layer.mask = gradientDown
         view.addSubview(maskedDownView)
         
-        
-        NetworkManager.shared.receiveWeatherData()
-        NetworkManager.shared.receiveWeatherStatus()
-        NetworkManager.shared.receiveWeatherSentence()
-        NetworkManager.shared.receiveWeatherTemperature()
-        JSONManager.shared.loadJSONToLocationData()
-        //여기서 한번 적어주면 아래에는 shared 까지만 써줘도 됨
-        //아 그러네 받아온다! 라는 함수니깐
-        //아래에는 정보를 입력해주는거고!
+        networkManager()
+//        self.array = CombinedData
         
         if MainViewController.isModal == true {
             moveToSearch.isHidden = true
@@ -126,6 +120,36 @@ class MainViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
+        
+        //뷰가 나타날 때마다 업데이트
+        readData()
+    }
+    
+    //MARK: - 네트워크 매니저
+    
+    func networkManager() {
+        guard let unwrapArray = MainViewController.selectRegion else { return }
+        NetworkManager.shared.receiveWeatherData(x: Int16(unwrapArray.X), y: Int16(unwrapArray.Y))
+        NetworkManager.shared.receiveWeatherStatus(regID: unwrapArray.Status)
+        NetworkManager.shared.receiveWeatherTemperature(regID: unwrapArray.Temperature)
+        JSONManager.shared.loadJSONToLocationData()
+    }
+    
+    //데이터 조회
+    func readData() {
+        guard let context = self.persistentContainer?.viewContext else {
+            print("Error: Can't access Core Data view context")
+            return
+        }
+        
+        let request = LocationAllData.fetchRequest()
+        
+        do {
+            let locationAllDatas = try context.fetch(request)
+            CoreDataManager.addLocationData = locationAllDatas
+        } catch {
+            print("Error fetching data from CoreData: \(error.localizedDescription)")
+        }
     }
     
     //MARK: - 오토레이아웃
@@ -226,6 +250,7 @@ class MainViewController: BaseViewController {
     
     //MARK: - UI 디테일
     override func configureUI() {
+        
         location.text = city.rawValue
         location.font = UIFont(name: "Apple SD Gothic Neo", size: 34)
         
@@ -384,6 +409,12 @@ class MainViewController: BaseViewController {
     
     
     func setModalPage() {
+        
+        if MainViewController.isModal == true {
+            location.text = MainViewController.selectRegion?.Region
+            print(MainViewController.selectRegion?.Region ?? "-")
+        }
+       
         let cancelButton = UIButton()
         let addButton = UIButton()
         
@@ -430,27 +461,20 @@ class MainViewController: BaseViewController {
     @objc func tappedAddButton() {
         print("Add")
         
-        //코어데이터에 저장
-        guard let context = persistentContainer?.viewContext else { return }
-        
-        _ = LocationAllData(context: context)
 
-        //        addLocation.bookTitle = detailBook?.title
-        //        addLocation.bookPrice = Int64(detailBook!.salePrice)
-        //        addLocation.bookAuthor = detailBook?.authors.joined(separator: ", ")
-        //        addLocation.bookThumbnail = detailBook?.thumbnail
-        
-        try? context.save()
-        
-        let request = LocationAllData.fetchRequest()
-        _ = try? context.fetch(request)
+        guard let unwrapArray = MainViewController.selectRegion else {
+            return
+        }
+        CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
+
+        try? context.save()   
         
         MyWeatherPageTableViewController().tableView.reloadData()
         MainViewController.isModal = false
         dismiss(animated: true)
     }
 }
-    
+
 //MARK: - 컬렉션뷰 설정
 //헤더뷰 정의하기
 //헤더에 어떤 내용 넣어줄지 정하기
