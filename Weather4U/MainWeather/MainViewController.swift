@@ -86,7 +86,9 @@ class MainViewController: BaseViewController {
         NetworkManager.shared.delegate = self
         CategoryManager.shared.delegate = self
         
-        CoreDataManager.shared.readFirstData()
+        if MainViewController.selectRegion == nil {
+            CoreDataManager.shared.readFirstData()
+        }
         
         weekWeather.sectionHeaderTopPadding = 0
         
