@@ -9,7 +9,7 @@ import UIKit
 
 class SearchResultTableViewController: UITableViewController {
     
-    //    var result: [LocationDatum] = []
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +20,10 @@ class SearchResultTableViewController: UITableViewController {
         
     }
     
+   
+
+    
+    
     func setTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -27,7 +31,7 @@ class SearchResultTableViewController: UITableViewController {
         tableView.backgroundColor = .white
         
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultTableViewCell.identifier, for: indexPath) as! SearchResultTableViewCell
         
@@ -49,7 +53,10 @@ class SearchResultTableViewController: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let modalVC = ModalViewController()
+        
+        MainViewController.isModal = true
+        
+        let modalVC = MainViewController()
         
         present(modalVC, animated: true, completion: nil)
     }
