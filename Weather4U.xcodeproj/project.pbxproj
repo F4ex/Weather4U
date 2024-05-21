@@ -13,6 +13,7 @@
 		9545B8072BF3085300EE36B8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545B8062BF3085300EE36B8 /* MainViewController.swift */; };
 		9545B8092BF3252800EE36B8 /* StatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545B8082BF3252800EE36B8 /* StatusCell.swift */; };
 		9545B80B2BF3255A00EE36B8 /* TodayWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545B80A2BF3255A00EE36B8 /* TodayWeatherCell.swift */; };
+		95AB0DEA2BFC99FD007975D9 /* BarlowSemiCondensed-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95AB0DE72BFC8DD4007975D9 /* BarlowSemiCondensed-Regular.ttf */; };
 		95B07D9F2BF3C6BB00F80AC5 /* Alata-Regular in Resources */ = {isa = PBXBuildFile; fileRef = 95B07D9E2BF3C6BB00F80AC5 /* Alata-Regular */; };
 		95CB6EB62BF7604500C56685 /* CellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CB6EB52BF7604500C56685 /* CellModel.swift */; };
 		95CFF7DD2BFA46CB00CE65EF /* StyleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CFF7DC2BFA46CB00CE65EF /* StyleViewController.swift */; };
@@ -71,6 +72,7 @@
 		9545B8062BF3085300EE36B8 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		9545B8082BF3252800EE36B8 /* StatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCell.swift; sourceTree = "<group>"; };
 		9545B80A2BF3255A00EE36B8 /* TodayWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayWeatherCell.swift; sourceTree = "<group>"; };
+		95AB0DE72BFC8DD4007975D9 /* BarlowSemiCondensed-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BarlowSemiCondensed-Regular.ttf"; sourceTree = "<group>"; };
 		95B07D9E2BF3C6BB00F80AC5 /* Alata-Regular */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Alata-Regular"; sourceTree = "<group>"; };
 		95CB6EB52BF7604500C56685 /* CellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellModel.swift; sourceTree = "<group>"; };
 		95CFF7DC2BFA46CB00CE65EF /* StyleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleViewController.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				FFE5DD2C2BFAE677004EE3F7 /* Managers */,
 				FFE5DD2B2BFAE5E8004EE3F7 /* Models */,
 				95B07D9E2BF3C6BB00F80AC5 /* Alata-Regular */,
+				95AB0DE72BFC8DD4007975D9 /* BarlowSemiCondensed-Regular.ttf */,
 				FFE5DCB62BF1B463004EE3F7 /* AppDelegate.swift */,
 				FFE5DCB82BF1B463004EE3F7 /* SceneDelegate.swift */,
 				9545B8052BF3081900EE36B8 /* MainWeather */,
@@ -303,6 +306,7 @@
 				FFE5DD092BF38B18004EE3F7 /* weatherSentenceLocationData.json in Resources */,
 				FFE5DCC32BF1B465004EE3F7 /* Assets.xcassets in Resources */,
 				FFE5DD082BF38B18004EE3F7 /* weatherStatusLocationData.json in Resources */,
+				95AB0DEA2BFC99FD007975D9 /* BarlowSemiCondensed-Regular.ttf in Resources */,
 				FFE5DCC62BF1B465004EE3F7 /* Base in Resources */,
 				95B07D9F2BF3C6BB00F80AC5 /* Alata-Regular in Resources */,
 				FFE5DD072BF38B18004EE3F7 /* weatherTemperatureLocationData.json in Resources */,
