@@ -539,6 +539,11 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             guard let cell = todayWeather.dequeueReusableCell(withReuseIdentifier: "TodayWeatherCell", for: indexPath) as? TodayWeatherCell else {
                 return UICollectionViewCell()
             }
+            if !CategoryManager.dayForecast.isEmpty {
+                cell.time.text = CategoryManager.dayForecast[indexPath.row].time
+                cell.icon.image = UIImage(named: "sun")
+                cell.temperature.text = CategoryManager.dayForecast[indexPath.row].temp
+            }
             return cell
         } else if collectionView == todayPrecipitation {
             guard let cell = todayPrecipitation.dequeueReusableCell(withReuseIdentifier: ChartCollectionViewCell.identifier, for: indexPath) as? ChartCollectionViewCell else {
@@ -648,6 +653,7 @@ extension MainViewController: DataReloadDelegate {
             self.todayPrecipitation.reloadData()
             self.updateAppearanceBasedOnWeather(for: self.weatherStatus)
             CategoryManager.shared.weeksTemperatureStatus()
+            CategoryManager.shared.dayForecast()
             print(CategoryManager.weekForecast)
         }
     }
