@@ -135,7 +135,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         
         settingButton.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
         settingButton.frame.size = CGSize(width: 30, height: 30)
-//        settingButton.tintColor = .black
+        settingButton.tintColor = UIColor(named: "font")
         
         let configuration = UIButton.Configuration.plain()
         settingButton.configuration = configuration
@@ -243,7 +243,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         let attributedTitle = NSAttributedString(string: "Done", attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue])
         doneButton.setAttributedTitle(attributedTitle, for: .normal)
         doneButton.addTarget(self, action: #selector(tappedDone), for: .touchUpInside)
-        doneButton.setTitleColor(.black, for: .normal)
+        doneButton.setTitleColor(UIColor(named: "font"), for: .normal)
         doneButton.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 17)
         doneButton.frame.size = CGSize(width: 30, height: 50)
         

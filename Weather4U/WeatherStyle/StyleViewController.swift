@@ -12,7 +12,7 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
     
     let logo = UILabel()
     let styleTitle = UILabel()
-    let image = UIImageView()
+    let styleImage = UIImageView()
     let styleDetail = UILabel()
     let temperature = UILabel()
     var weatherData: [WeatherData] = []
@@ -36,7 +36,7 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
     }
     
     override func constraintLayout() {
-        [logo, styleTitle, image, styleDetail, temperature].forEach(){
+        [logo, styleTitle, styleImage, styleDetail, temperature].forEach(){
             view.addSubview($0)
         }
         logo.snp.makeConstraints(){
@@ -47,18 +47,18 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
             $0.top.equalTo(logo.snp.bottom).offset(40)
             $0.centerX.equalTo(view)
         }
-        image.snp.makeConstraints(){
+        styleImage.snp.makeConstraints(){
             $0.top.equalTo(styleTitle.snp.bottom).offset(25)
             $0.centerX.equalTo(view)
             $0.width.height.equalTo(297)
         }
         styleDetail.snp.makeConstraints(){
-            $0.top.equalTo(image.snp.bottom).offset(33)
+            $0.top.equalTo(styleImage.snp.bottom).offset(33)
             $0.centerX.equalTo(view)
             $0.left.right.equalTo(view).inset(30)
         }
         temperature.snp.makeConstraints(){
-            $0.top.equalTo(image.snp.bottom).offset(76)
+            $0.top.equalTo(styleImage.snp.bottom).offset(76)
             $0.centerX.equalTo(view)
         }
     }
@@ -69,6 +69,7 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
         var backgroundColor = UIColor()
         var logoColor = UIColor()
         var styleTitleColor = UIColor()
+        var image = UIImage()
         var styleDetailColor = UIColor()
         var temperatureColor = UIColor()
         
@@ -94,21 +95,17 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
         default:
             backgroundColor = UIColor(named: "Background")!
             logoColor = UIColor(named: "font")!
+            image = UIImage(named: "day")!
             styleDetailColor = UIColor(named: "font")!
             styleTitleColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
             temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 0.3)
         }
         if traitCollection.userInterfaceStyle == .dark {
             switch weatherStatus {
-            case "Cloudy":
-                backgroundColor = UIColor(named: "Background")!
-                logoColor = UIColor(named: "font")!
-                styleDetailColor = UIColor(named: "font")!
-                styleTitleColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
-                temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 0.3)
             default:
                 backgroundColor = UIColor(named: "Background")!
                 logoColor = UIColor(named: "font")!
+                image = UIImage(named: "night")!
                 styleDetailColor = UIColor(named: "font")!
                 styleTitleColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
                 temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 0.3)
@@ -117,6 +114,7 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
         view.backgroundColor = backgroundColor
         logo.textColor = logoColor
         styleTitle.textColor = styleTitleColor
+        styleImage.image = image
         styleDetail.textColor = styleDetailColor
         temperature.textColor = temperatureColor
     }
@@ -138,7 +136,7 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
             case 20..<23:
                 styleDetailText = "It's cool weather. \nLong-sleeve t-shirts, Thin knits, Cotton pants, Long skirts. In the morning and evening, you may need a light jacket."
             case 23..<28:
-                styleDetailText = "It's warm or slightly hot. \nShorts, Skirts, Thin shirts or short-sleeved T-shirts"
+                styleDetailText = "It's warm or slightly hot. \nShorts, Skirts, Thin shirts or short-sleeved T-shirts."
             case 28...:
                 styleDetailText = "It's very hot weather.  \nShorts, Short-sleeved T-shirts, Thin dresses. Apply sunscreen for UV protection."
             default:
@@ -165,8 +163,6 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
         styleTitle.text = "Style Today"
         styleTitle.font = UIFont(name: "Alata-Regular", size: 33)
         styleTitle.textAlignment = .center
-        
-        image.backgroundColor = .white
         
         styleDetail.font = UIFont(name: "Apple SD Gothic Neo", size: 17)
         styleDetail.textAlignment = .center
