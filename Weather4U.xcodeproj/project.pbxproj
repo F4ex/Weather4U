@@ -51,6 +51,8 @@
 		FFE5DD2A2BF78406004EE3F7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FFE5DD292BF78406004EE3F7 /* Alamofire */; };
 		FFE5DD2E2BFAEB39004EE3F7 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DD2D2BFAEB39004EE3F7 /* CoreDataManager.swift */; };
 		FFE5DD302BFAEE2B004EE3F7 /* DataReloadDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DD2F2BFAEE2B004EE3F7 /* DataReloadDelegate.swift */; };
+		FFE5DD322BFE1787004EE3F7 /* UVData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DD312BFE1787004EE3F7 /* UVData.swift */; };
+		FFE5DD342BFE2A2C004EE3F7 /* PerceivedTemperatureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DD332BFE2A2C004EE3F7 /* PerceivedTemperatureData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -108,6 +110,8 @@
 		FFE5DD0A2BF5A798004EE3F7 /* ChartCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartCollectionViewCell.swift; sourceTree = "<group>"; };
 		FFE5DD2D2BFAEB39004EE3F7 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		FFE5DD2F2BFAEE2B004EE3F7 /* DataReloadDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataReloadDelegate.swift; sourceTree = "<group>"; };
+		FFE5DD312BFE1787004EE3F7 /* UVData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVData.swift; sourceTree = "<group>"; };
+		FFE5DD332BFE2A2C004EE3F7 /* PerceivedTemperatureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerceivedTemperatureData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +227,8 @@
 				95FE07DE2BF336F0004D2139 /* WeatherData.swift */,
 				FFE5DCF42BF309E0004EE3F7 /* LocationData.swift */,
 				FFE5DD002BF3630A004EE3F7 /* WeatherStatusData.swift */,
+				FFE5DD312BFE1787004EE3F7 /* UVData.swift */,
+				FFE5DD332BFE2A2C004EE3F7 /* PerceivedTemperatureData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -343,6 +349,8 @@
 				95FE07E22BF35203004D2139 /* WeekWeatherCell.swift in Sources */,
 				7B09E6EF2BF1D91800248D0B /* SearchViewController.swift in Sources */,
 				FFE5DCF22BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift in Sources */,
+				FFE5DD342BFE2A2C004EE3F7 /* PerceivedTemperatureData.swift in Sources */,
+				FFE5DD322BFE1787004EE3F7 /* UVData.swift in Sources */,
 				FFE5DCB72BF1B463004EE3F7 /* AppDelegate.swift in Sources */,
 				FFE5DCED2BF30302004EE3F7 /* BaseViewController.swift in Sources */,
 				FFE5DCB92BF1B463004EE3F7 /* SceneDelegate.swift in Sources */,

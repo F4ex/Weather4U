@@ -124,4 +124,20 @@ class WeekWeatherCell: UITableViewCell {
             self.icon.image = UIImage(systemName: "sun.min")
         }
     }
+    
+    func setDrop(rainPercent: Int) {
+        // 강수 확률에 따른 이미지 변경
+        switch rainPercent {
+        case 0..<25:
+            self.drop.image = UIImage(systemName: "drop")
+        case 25..<50:
+            self.drop.image = UIImage(named: "drop_Little")
+        case 50..<75:
+            self.drop.image = UIImage(systemName: "drop_Half")
+        case 75...100:
+            self.drop.image = UIImage(systemName: "drop.fill")
+        default:
+            self.drop.image = UIImage(systemName: "drop")
+        }
+    }
 }

@@ -567,6 +567,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         if !CategoryManager.weekForecast.isEmpty {
             cell.setDay(indexPath: indexPath.row)
             cell.pop.text = "\(CategoryManager.weekForecast[indexPath.row].rainPercent)%"
+            cell.setDrop(rainPercent: Int(CategoryManager.weekForecast[indexPath.row].rainPercent) ?? 0)
             cell.setIcon(status: CategoryManager.weekForecast[indexPath.row].status)
             cell.tempHigh.text = "\(CategoryManager.weekForecast[indexPath.row].highTemp)°"
             cell.tempLow.text = "\(CategoryManager.weekForecast[indexPath.row].lowTemp)°"
@@ -630,7 +631,6 @@ extension MainViewController: DataReloadDelegate {
             self.todayWeather.reloadData()
             self.todayPrecipitation.reloadData()
             self.updateAppearanceBasedOnWeather(for: self.weatherStatus)
-            print(CategoryManager.weekForecast)
         }
     }
 }

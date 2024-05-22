@@ -158,7 +158,7 @@ class CategoryManager {
         case "1": return "Sunny"
         case "3": return "Mostly Cloudy"
         case "4": return "Cloudy"
-        default: return "알 수 없음"
+        default: return "Rain / Snow"
         }
     }
     
