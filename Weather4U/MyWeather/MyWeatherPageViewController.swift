@@ -19,10 +19,9 @@ class MyWeatherPageViewController: BaseViewController {
     }
     
     override func configureUI() {
+        view.addSubview(myWeatherTable.tableView)
         
-        view.addSubview(myWeatherTable.view)
-        
-        myWeatherTable.view.snp.makeConstraints { make in
+        myWeatherTable.tableView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(50)
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(20)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(5)

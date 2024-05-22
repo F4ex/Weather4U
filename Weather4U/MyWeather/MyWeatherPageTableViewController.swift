@@ -18,7 +18,7 @@ class MyWeatherPageTableViewController: UITableViewController {
     
     static var array: [LocationAllData] = []
     
-    var city: String = "Seoul"
+//    var city: String = "Seoul"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +50,7 @@ class MyWeatherPageTableViewController: UITableViewController {
     }
     
     
+    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -58,8 +59,8 @@ class MyWeatherPageTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
-            let firstCell: FirstTableViewCell = tableView.dequeueReusableCell(withIdentifier: "FirstCellIdentifier", for: indexPath) as! FirstTableViewCell
-
+            let firstCell = tableView.dequeueReusableCell(withIdentifier: "FirstCellIdentifier", for: indexPath) as! FirstTableViewCell
+            firstCell.selectionStyle = .none
             firstCell.locationLabel.text = "My Location"
             firstCell.cityLabel.text = "Seoul"
             
@@ -85,7 +86,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
                 firstCell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
             }
-            // 배경색 설정
+           // 배경색 설정
             switch firstCell.weatherLabel.text {
             case "sunny":
                 firstCell.contentView.backgroundColor = UIColor(named: "Background")
@@ -132,9 +133,8 @@ class MyWeatherPageTableViewController: UITableViewController {
             }
             return firstCell
         } else {
-            // 일반적인 셀을 생성하고 반환하는 로직
-            let cell = tableView.dequeueReusableCell(withIdentifier: "NormalCellIdentifier", for: indexPath) as! MyWeatherPageTableViewCell
-
+            let cell: MyWeatherPageTableViewCell = tableView.dequeueReusableCell(withIdentifier: "NormalCellIdentifier", for: indexPath) as! MyWeatherPageTableViewCell
+            cell.selectionStyle = .none
             cell.cityLabel.text = MainViewController.selectRegion?.City
             cell.cityDetailLabel.text = "\(MainViewController.selectRegion?.Town ?? "") \(MainViewController.selectRegion?.Village ?? "")"
             cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
@@ -142,7 +142,6 @@ class MyWeatherPageTableViewController: UITableViewController {
             let tempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
             let highTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0") ?? 0.0
             let lowTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "0") ?? 0.0
-            
             
             if SearchViewController.isCelsius {
                 let tCelsius = (tempCelsius).rounded()
@@ -216,10 +215,15 @@ class MyWeatherPageTableViewController: UITableViewController {
                     cell.cellImageView.image = UIImage(named: "sun2")
                 }
                 
-                return cell
+                cell.tempLabel.text = "\(Int(tempFahrenheit))°"
+                cell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
+                cell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
             }
+            
+            return cell
         }
-
+    }
+    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30 // 각 섹션 사이의 공간을 조절하는 높이
     }
