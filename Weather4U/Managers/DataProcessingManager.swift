@@ -5,7 +5,7 @@
 //  Created by t2023-m0056 on 5/13/24.
 //
 
-import Foundation
+import UIKit
 
 struct Weather {
     let time: String   // 오늘 시간별 값
@@ -57,9 +57,9 @@ enum Category: String, CaseIterable {
     case WSD = "WSD"   // 풍속(m/s)
 }
 
-class CategoryManager {
+class DataProcessingManager {
     
-    static let shared = CategoryManager()
+    static let shared = DataProcessingManager()
     static var threeDaysWeatherData: [[Weather]] = []
     static var weekForecast: [WeekForecast] = []
     static var dayForecast: [DayForecast] = []
@@ -137,7 +137,7 @@ class CategoryManager {
             // 시간별로 정렬합니다.
             weatherDataForThreeDays[index].sort { $0.time < $1.time }
         }
-        CategoryManager.threeDaysWeatherData = weatherDataForThreeDays
+        DataProcessingManager.threeDaysWeatherData = weatherDataForThreeDays
     }
 
     // MARK: - 강수형태 설명 반환 함수
@@ -174,7 +174,7 @@ class CategoryManager {
             currentTimeString = highTemp ? "1500" : "0600"
         }
         
-        guard let forecastAtTime = CategoryManager.threeDaysWeatherData.first?.first(where: { $0.time == currentTimeString }) else {
+        guard let forecastAtTime = DataProcessingManager.threeDaysWeatherData.first?.first(where: { $0.time == currentTimeString }) else {
             print("\(currentTimeString)시 데이터가 없습니다.")
             return nil
         }
@@ -218,10 +218,10 @@ class CategoryManager {
         // 현재 시간 기준 오늘의 날씨 상태, 최고 기온 및 최저 기온을 기반으로 WeekForecast 객체 생성
         for _ in 0..<3 {
             let week = WeekForecast(
-                status: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-",
-                highTemp: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0",
-                lowTemp: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-",
-                rainPercent: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .POP) ?? "-"
+                status: DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-",
+                highTemp: DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0",
+                lowTemp: DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-",
+                rainPercent: DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .POP) ?? "-"
             )
             weekForecast.append(week)
         }
@@ -245,7 +245,7 @@ class CategoryManager {
                 weekForecast.append(week)
             }
         }
-        CategoryManager.weekForecast = weekForecast
+        DataProcessingManager.weekForecast = weekForecast
         self.delegate?.dataReload()
     }
     
@@ -264,7 +264,7 @@ class CategoryManager {
         
         // threeDaysWeatherData에서 데이터를 추출합니다.
         for dayIndex in 0..<3 {
-            for weather in CategoryManager.threeDaysWeatherData[dayIndex] {
+            for weather in DataProcessingManager.threeDaysWeatherData[dayIndex] {
                 // 현재 시간부터 24시간까지의 데이터를 추출합니다.
                 if let weatherHour = Int(weather.time), (weatherHour >= currentHour && dayIndex == 0) || (dayIndex > 0) {
                     // DayForecast 객체를 생성하여 배열에 추가합니다.
@@ -279,7 +279,7 @@ class CategoryManager {
                     
                     // 24개의 데이터를 추출하면 반환합니다.
                     if dayForecasts.count == 24 {
-                        CategoryManager.dayForecast = dayForecasts
+                        DataProcessingManager.dayForecast = dayForecasts
                         return
                     }
                 }
@@ -292,9 +292,59 @@ class CategoryManager {
             dayForecasts.append(emptyForecast)
         }
         
-        CategoryManager.dayForecast = dayForecasts
+        DataProcessingManager.dayForecast = dayForecasts
         return
     }
-
-
+    
+    // [불쾌지수 = 0.81 \times 기온 + 0.01 \times 습도 \times (0.99 \times 기온 - 14.3) + 46.3]를 계산하는 함수
+    func discomfortIndexCalculation() -> UIImage? {
+        guard let temperatureString = DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP),
+              let humidityString = DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .REH),
+              let temperature = Double(temperatureString),
+              let humidity = Double(humidityString) else {
+            return nil
+        }
+        
+        let temperatureFactor = 0.81 * temperature
+        let humidityFactor = 0.01 * humidity * (0.99 * temperature - 14.3)
+        let constant = 46.3
+        let discomfortIndex: Double = temperatureFactor + humidityFactor + constant
+        
+        switch discomfortIndex {
+        case 0..<65:
+            return UIImage(named: "smile")
+        case 65..<75:
+            return UIImage(named: "straightFace")
+        case 75..<80:
+            return UIImage(named: "nah")
+        default:
+            return UIImage(named: "frown")
+        }
+    }
+    
+    // [불쾌지수 = 0.81 \times 기온 + 0.01 \times 습도 \times (0.99 \times 기온 - 14.3) + 46.3]를 계산하는 함수
+    func discomfortIndexString() -> String {
+        guard let temperatureString = DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP),
+              let humidityString = DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .REH),
+              let temperature = Double(temperatureString),
+              let humidity = Double(humidityString) else {
+            return ""
+        }
+        
+        let temperatureFactor = 0.81 * temperature
+        let humidityFactor = 0.01 * humidity * (0.99 * temperature - 14.3)
+        let constant = 46.3
+        let discomfortIndex: Double = temperatureFactor + humidityFactor + constant
+        
+        switch discomfortIndex {
+        case 0..<65:
+            return "Perfect"
+        case 65..<75:
+            return "Fine"
+        case 75..<80:
+            return "Bad"
+        default:
+            return "Terrible"
+        }
+    }
 }

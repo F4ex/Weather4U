@@ -28,7 +28,7 @@
 		FFE5DCC32BF1B465004EE3F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFE5DCC22BF1B465004EE3F7 /* Assets.xcassets */; };
 		FFE5DCC62BF1B465004EE3F7 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = FFE5DCC52BF1B465004EE3F7 /* Base */; };
 		FFE5DCE32BF1E491004EE3F7 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCE22BF1E491004EE3F7 /* NetworkManager.swift */; };
-		FFE5DCE52BF203E6004EE3F7 /* CategoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCE42BF203E6004EE3F7 /* CategoryManager.swift */; };
+		FFE5DCE52BF203E6004EE3F7 /* DataProcessingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCE42BF203E6004EE3F7 /* DataProcessingManager.swift */; };
 		FFE5DCED2BF30302004EE3F7 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCEC2BF30302004EE3F7 /* BaseViewController.swift */; };
 		FFE5DCF12BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCEE2BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift */; };
 		FFE5DCF22BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCEF2BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift */; };
@@ -93,7 +93,7 @@
 		FFE5DCC52BF1B465004EE3F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FFE5DCC72BF1B465004EE3F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FFE5DCE22BF1E491004EE3F7 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		FFE5DCE42BF203E6004EE3F7 /* CategoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManager.swift; sourceTree = "<group>"; };
+		FFE5DCE42BF203E6004EE3F7 /* DataProcessingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProcessingManager.swift; sourceTree = "<group>"; };
 		FFE5DCEC2BF30302004EE3F7 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		FFE5DCEE2BF3057C004EE3F7 /* MyWeatherPageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWeatherPageTableViewCell.swift; sourceTree = "<group>"; };
 		FFE5DCEF2BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWeatherPageTableViewController.swift; sourceTree = "<group>"; };
@@ -237,7 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				FFE5DCE22BF1E491004EE3F7 /* NetworkManager.swift */,
-				FFE5DCE42BF203E6004EE3F7 /* CategoryManager.swift */,
+				FFE5DCE42BF203E6004EE3F7 /* DataProcessingManager.swift */,
 				FFE5DCF82BF30CF0004EE3F7 /* JSONManager.swift */,
 				FFE5DD2D2BFAEB39004EE3F7 /* CoreDataManager.swift */,
 			);
@@ -368,7 +368,7 @@
 				7B9BBB1F2BF750E100B72970 /* SearchResultTableViewController.swift in Sources */,
 				FFE5DD0B2BF5A798004EE3F7 /* ChartCollectionViewCell.swift in Sources */,
 				FFE5DCF92BF30CF0004EE3F7 /* JSONManager.swift in Sources */,
-				FFE5DCE52BF203E6004EE3F7 /* CategoryManager.swift in Sources */,
+				FFE5DCE52BF203E6004EE3F7 /* DataProcessingManager.swift in Sources */,
 				95DF8FA92BF79E1C000022CA /* FeelsCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

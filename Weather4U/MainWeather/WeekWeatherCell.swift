@@ -44,6 +44,7 @@ class WeekWeatherCell: UITableViewCell {
         pop.textColor = UIColor(named: "font")
         
         icon.tintColor = UIColor(named: "font")
+        icon.contentMode = .scaleAspectFit //기본제공 아이콘 찌그러지지 않게 하려면 비율고정 필요
         
         tempHigh.text = "00°"
         tempHigh.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
@@ -76,7 +77,7 @@ class WeekWeatherCell: UITableViewCell {
         
         icon.snp.makeConstraints(){
             $0.centerY.equalToSuperview()
-            $0.height.equalTo(35) //-> 과연 아이콘은 수정됐을까 !!!!!!!!
+            $0.width.height.equalTo(35)
             $0.right.equalTo(tempHigh.snp.left).offset(-24)
         }
         

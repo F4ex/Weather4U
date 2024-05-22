@@ -26,7 +26,7 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
         constraintLayout()
         configureUI()
         NetworkManager.shared.delegate = self
-        CategoryManager.shared.delegate = self
+        DataProcessingManager.shared.delegate = self
         updateAppearanceBasedOnWeather(for: weatherStatus)
         updateTextBasedOnTemperature(for: temperatureNow)
     }
@@ -166,14 +166,14 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
         
         temperature.font = UIFont(name: "BarlowSemiCondensed-Regular", size: 270)
         temperature.textAlignment = .center
-        temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")"
+        temperature.text = "\(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")"
         temperatureNow = self.temperature.text ?? "" //temperatureNow는 temperature.text에 받아오는 값으로 해주겠다
         updateTextBasedOnTemperature(for: self.temperatureNow) //온도별 조건문 self.temperatureNow 의 정보 사용하겠다
     }
     
     func dataReload() {
         DispatchQueue.main.async {
-            self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")"
+            self.temperature.text = "\(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")"
             self.temperatureNow = self.temperature.text ?? "" //temperatureNow는 temperature.text에 받아오는 값으로 해주겠다
             self.updateTextBasedOnTemperature(for: self.temperatureNow) //온도별 조건문 self.temperatureNow 의 정보 사용하겠다
         }

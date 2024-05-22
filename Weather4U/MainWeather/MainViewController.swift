@@ -64,7 +64,7 @@ class MainViewController: BaseViewController {
     
     //그라데이션 레이어와 마스크 해줄 레이어 만들기
     let maskedUpView = UIView(frame: CGRect(x: 0, y: 782, width: 393, height: 70))
-    let maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 67))
+    let maskedDownView = UIView(frame: CGRect(x: 0, y: 123, width: 393, height: 67))
     let gradientUp = CAGradientLayer()
     let gradientDown = CAGradientLayer()
     
@@ -85,7 +85,7 @@ class MainViewController: BaseViewController {
         feels.delegate = self
         feels.dataSource = self
         NetworkManager.shared.delegate = self
-        CategoryManager.shared.delegate = self
+        DataProcessingManager.shared.delegate = self
         
         if MainViewController.selectRegion == nil {
             CoreDataManager.shared.readFirstData()
@@ -172,7 +172,6 @@ class MainViewController: BaseViewController {
             $0.width.equalTo(30)
             $0.height.equalTo(24)
         }
-        
         location.snp.makeConstraints(){
             $0.top.equalTo(view).offset(82)
             $0.centerX.equalTo(view)
@@ -181,7 +180,6 @@ class MainViewController: BaseViewController {
             $0.top.equalTo(location.snp.bottom).offset(5)
             $0.centerX.equalTo(view)
         }
-    
         scrollView.snp.makeConstraints(){
             $0.top.equalTo(view).offset(146)
             $0.left.right.bottom.equalTo(view)
@@ -200,15 +198,15 @@ class MainViewController: BaseViewController {
         }
         
         imageView.snp.makeConstraints(){ //<- 공간이 너무 뜸, 수정 필요 수정해야함!!!!!!!!
-            $0.top.equalTo(contentView).offset(10)
+            $0.top.equalTo(contentView)
             $0.bottom.equalTo(temperature.snp.top)
         }
         weatherImage.snp.makeConstraints(){
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.centerY.equalTo(imageView)
+            $0.top.equalTo(imageView)
         }
         temperature.snp.makeConstraints(){
-            $0.top.equalTo(contentView).offset(383)
+            $0.top.equalTo(373)
             $0.left.equalTo(contentView).offset(164)
         }
         tempHigh.snp.makeConstraints(){
@@ -462,7 +460,6 @@ class MainViewController: BaseViewController {
     
     
     func setModalPage() {
-        
         if MainViewController.isModal == true {
             location.text = MainViewController.selectRegion?.City
             locationDetail.text = "\(String(describing: MainViewController.selectRegion?.Town ?? "")) \(String(describing: MainViewController.selectRegion?.Village ?? ""))"
@@ -554,12 +551,12 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             guard let cell = todayWeather.dequeueReusableCell(withReuseIdentifier: "TodayWeatherCell", for: indexPath) as? TodayWeatherCell else {
                 return UICollectionViewCell()
             }
-            if !CategoryManager.dayForecast.isEmpty {
-                let timeString = CategoryManager.dayForecast[indexPath.row].time
+            if !DataProcessingManager.dayForecast.isEmpty {
+                let timeString = DataProcessingManager.dayForecast[indexPath.row].time
                 let hourString = String(timeString.prefix(2))
                 cell.time.text = hourString + "시"
-                cell.setIcon(status: CategoryManager.dayForecast[indexPath.row].status)
-                cell.temperature.text = CategoryManager.dayForecast[indexPath.row].temp + "°"
+                cell.setIcon(status: DataProcessingManager.dayForecast[indexPath.row].status)
+                cell.temperature.text = DataProcessingManager.dayForecast[indexPath.row].temp + "°"
             }
             return cell
         } else if collectionView == todayPrecipitation {
@@ -567,7 +564,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return UICollectionViewCell()
             }
             
-            if !CategoryManager.threeDaysWeatherData.isEmpty {
+            if !DataProcessingManager.threeDaysWeatherData.isEmpty {
                 cell.setEntries()
             }
             return cell
@@ -576,6 +573,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return UICollectionViewCell()
             }
             //뷰모델에 있는 정보들을 가지고 셀을 만들겠다
+            setViewModels2()
             let viewModel = cellViewModel2[indexPath.item]
             cell.configure(with: viewModel)
             return cell
@@ -628,13 +626,13 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         guard let cell = weekWeather.dequeueReusableCell(withIdentifier: "WeekWeatherCell", for: indexPath) as? WeekWeatherCell else {
             return UITableViewCell()
         }
-        if !CategoryManager.weekForecast.isEmpty {
+        if !DataProcessingManager.weekForecast.isEmpty {
             cell.setDay(indexPath: indexPath.row)
-            cell.pop.text = "\(CategoryManager.weekForecast[indexPath.row].rainPercent)%"
-            cell.setDrop(rainPercent: Int(CategoryManager.weekForecast[indexPath.row].rainPercent) ?? 0)
-            cell.setIcon(status: CategoryManager.weekForecast[indexPath.row].status)
-            cell.tempHigh.text = "\(CategoryManager.weekForecast[indexPath.row].highTemp)°"
-            cell.tempLow.text = "\(CategoryManager.weekForecast[indexPath.row].lowTemp)°"
+            cell.pop.text = "\(DataProcessingManager.weekForecast[indexPath.row].rainPercent)%"
+            cell.setDrop(rainPercent: Int(DataProcessingManager.weekForecast[indexPath.row].rainPercent) ?? 0)
+            cell.setIcon(status: DataProcessingManager.weekForecast[indexPath.row].status)
+            cell.tempHigh.text = "\(DataProcessingManager.weekForecast[indexPath.row].highTemp)°"
+            cell.tempLow.text = "\(DataProcessingManager.weekForecast[indexPath.row].lowTemp)°"
         }
         return cell
     }
@@ -686,14 +684,15 @@ extension MainViewController: DataReloadDelegate {
         DispatchQueue.main.async {
             self.location.text = MainViewController.selectRegion?.City
             self.locationDetail.text = "\(MainViewController.selectRegion?.Town ?? "") \(MainViewController.selectRegion?.Village ?? "")"
-            self.weatherStatus = CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-"
-            self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
-            self.tempHigh.text = "H: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
-            self.tempLow.text = "L: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"
+            self.weatherStatus = DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-"
+            self.temperature.text = "\(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
+            self.tempHigh.text = "H: \(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
+            self.tempLow.text = "L: \(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"
             self.weekWeather.reloadData()
             self.status.reloadData()
             self.todayWeather.reloadData()
             self.todayPrecipitation.reloadData()
+            self.feels.reloadData()
             self.updateAppearanceBasedOnWeather(for: self.weatherStatus)
         }
     }

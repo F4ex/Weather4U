@@ -18,8 +18,8 @@ var cellViewModels: [StatusCellViewModel] = []
 
 func setViewModels() {
     cellViewModels = [StatusCellViewModel(propertyName: "UV INDEX", iconImage: UIImage(systemName: "sun.max"), num: "\(NetworkManager.uvData?.item[0]["h0"] ?? "-") Grade"),
-                      StatusCellViewModel(propertyName: "WIND", iconImage: UIImage(systemName: "wind"), num: "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .WSD) ?? "-")m/s"),
-                      StatusCellViewModel(propertyName: "HUMIDITY", iconImage: UIImage(systemName: "drop"), num: "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .REH) ?? "-")%")
+                      StatusCellViewModel(propertyName: "WIND", iconImage: UIImage(systemName: "wind"), num: "\(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .WSD) ?? "-")m/s"),
+                      StatusCellViewModel(propertyName: "HUMIDITY", iconImage: UIImage(systemName: "drop"), num: "\(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .REH) ?? "-")%")
     ]
 }
 
@@ -41,7 +41,13 @@ struct FeelsCellViewModel {
     }
 }
 
-var cellViewModel2 = [
-    FeelsCellViewModel(PropertyName: "Feels Like", IconImage: UIImage(systemName: "thermometer.high"), Num: "00°", DescriptionLabel: "Apparent Temperature Difference: \(00)°"),
-    FeelsCellViewModel(PropertyName: "Mood Forecast", IconImage: UIImage(systemName: "heart.circle"), FaceIcon: UIImage(systemName: "face.smiling"), GradeLabel: "Perfect!")
-]
+var cellViewModel2: [FeelsCellViewModel] = []
+func setViewModels2() {
+    cellViewModel2 = [FeelsCellViewModel(PropertyName: "Feels Like", IconImage: UIImage(systemName: "thermometer.high"),
+                           Num: "\(NetworkManager.perceivedTemperatureData?.item[0]["h1"] ?? "-")°",
+                           DescriptionLabel: "Apparent Temperature Difference: \(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"),
+                      FeelsCellViewModel(PropertyName: "Mood Forecast", IconImage: UIImage(systemName: "heart.circle"), 
+                                         FaceIcon: DataProcessingManager.shared.discomfortIndexCalculation() ?? UIImage(named: "laugh"),
+                                         GradeLabel: DataProcessingManager.shared.discomfortIndexString())
+    ]
+}
