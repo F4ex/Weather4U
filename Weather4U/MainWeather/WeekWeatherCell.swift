@@ -43,8 +43,6 @@ class WeekWeatherCell: UITableViewCell {
         pop.font = UIFont(name: "Apple SD Gothic Neo", size: 12)
         pop.textColor = UIColor(named: "font")
         
-        icon.backgroundColor = .white
-        
         tempHigh.text = "00°"
         tempHigh.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
         tempHigh.textColor = UIColor(named: "font")

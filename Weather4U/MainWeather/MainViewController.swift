@@ -563,9 +563,9 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return UICollectionViewCell()
             }
             if !CategoryManager.dayForecast.isEmpty {
-                cell.time.text = CategoryManager.dayForecast[indexPath.row].time
-                cell.icon.image = UIImage(named: "sun")
-                cell.temperature.text = CategoryManager.dayForecast[indexPath.row].temp
+                cell.time.text = CategoryManager.dayForecast[indexPath.row].time + "시"
+                cell.icon.image = UIImage(systemName: "sun.max")
+                cell.temperature.text = CategoryManager.dayForecast[indexPath.row].temp + "°"
             }
             return cell
         } else if collectionView == todayPrecipitation {
@@ -614,7 +614,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         }
         if !CategoryManager.weekForecast.isEmpty {
             cell.pop.text = "\(CategoryManager.weekForecast[indexPath.row].rainPercent)%"
-            cell.icon.image = UIImage(named: "sun2")
+            cell.icon.image = UIImage(systemName: "sun.max")
             cell.tempHigh.text = "\(CategoryManager.weekForecast[indexPath.row].highTemp)°"
             cell.tempLow.text = "\(CategoryManager.weekForecast[indexPath.row].lowTemp)°"
         }

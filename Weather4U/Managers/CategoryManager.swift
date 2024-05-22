@@ -249,9 +249,8 @@ class CategoryManager {
     func dayForecast() {
         // 현재 시간을 가져옵니다.
         let now = Date()
-        let calendar = Calendar.current
         let formatter = DateFormatter()
-        formatter.dateFormat = "HH"
+        formatter.dateFormat = "HH00"
         
         // 현재 시간을 시간 단위로 추출합니다.
         let currentHour = Int(formatter.string(from: now)) ?? 0
