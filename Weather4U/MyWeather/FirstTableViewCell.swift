@@ -50,7 +50,7 @@ class FirstTableViewCell: UITableViewCell {
         weatherImageView.image = UIImage(named: "sun2")
         weatherImageView.contentMode = .scaleAspectFit
         
-        // Add subviews to contentView
+        // contentView에 추가
         [locationLabel, cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, weatherImageView].forEach {
             contentView.addSubview($0)
         }
@@ -59,7 +59,7 @@ class FirstTableViewCell: UITableViewCell {
         locationLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(11)
             make.leading.equalToSuperview().offset(20)
-            make.width.equalTo(124)
+            make.width.equalTo(190)
             make.height.equalTo(29)
         }
         
@@ -73,28 +73,28 @@ class FirstTableViewCell: UITableViewCell {
         tempLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(63)
             make.leading.equalToSuperview().inset(20)
-            make.width.equalTo(42)
+            make.width.equalTo(60)
             make.height.equalTo(41)
         }
         
         weatherLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(55)
             make.leading.equalToSuperview().offset(96)
-            make.width.equalTo(35)
+            make.width.equalTo(70)
             make.height.equalTo(16)
         }
         
         highLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(81)
             make.leading.equalToSuperview().offset(96)
-            make.width.equalTo(37)
+            make.width.equalTo(40)
             make.height.equalTo(16)
         }
         
         lowLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(81)
             make.leading.equalToSuperview().inset(140)
-            make.width.equalTo(37)
+            make.width.equalTo(40)
             make.height.equalTo(16)
         }
         

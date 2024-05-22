@@ -53,28 +53,28 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         cityLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(19)
             make.leading.equalToSuperview().inset(20)
-            make.width.equalTo(42)
+            make.width.equalTo(60)
             make.height.equalTo(29)
         }
         
         tempLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(57)
             make.leading.equalToSuperview().inset(20)
-            make.width.equalTo(42)
+            make.width.equalTo(60)
             make.height.equalTo(41)
         }
         
         weatherLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(55)
             make.leading.equalToSuperview().offset(96)
-            make.width.equalTo(35)
+            make.width.equalTo(70)
             make.height.equalTo(16)
         }
         
         highLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(81)
             make.leading.equalToSuperview().offset(96)
-            make.width.equalTo(37)
+            make.width.equalTo(40)
             make.height.equalTo(16)
         }
         
