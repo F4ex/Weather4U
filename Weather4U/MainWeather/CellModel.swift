@@ -17,7 +17,7 @@ struct StatusCellViewModel {
 var cellViewModels: [StatusCellViewModel] = []
 
 func setViewModels() {
-    cellViewModels = [StatusCellViewModel(propertyName: "UV INDEX", iconImage: UIImage(systemName: "sun.max"), num: "-"),
+    cellViewModels = [StatusCellViewModel(propertyName: "UV INDEX", iconImage: UIImage(systemName: "sun.max"), num: "\(NetworkManager.uvData?.item[0]["h0"] ?? "-") Grade"),
                       StatusCellViewModel(propertyName: "WIND", iconImage: UIImage(systemName: "wind"), num: "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .WSD) ?? "-")m/s"),
                       StatusCellViewModel(propertyName: "HUMIDITY", iconImage: UIImage(systemName: "drop"), num: "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .REH) ?? "-")%")
     ]

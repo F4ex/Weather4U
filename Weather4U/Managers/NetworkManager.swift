@@ -14,6 +14,7 @@ class NetworkManager {
     static var weatherSentenceData: String?
     static var weatherStatusData: [StatusItem]?
     static var weatherTemperatureData: [TemperatureItem]?
+    static var uvData: UVItems?
     weak var delegate: DataReloadDelegate?
     private init() { }
     
@@ -25,6 +26,7 @@ class NetworkManager {
     static var ncode : Int16 = 108
     static var ID : String = "11B00000"
     static var regID: String = "11B10101"
+    static var areaNo: String = "1100000000"
     
     
     
@@ -165,8 +167,53 @@ class NetworkManager {
         })
     }
     
+    // MARK: - 자외선지수 데이터 받아오기
+    func fetchUVValue(areaNo: String = areaNo, completion: @escaping (Result<UVItems, Error>) -> Void) {
+        let url = "http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4"
+        let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMddHH"
+        let currentDateString = formatter.string(from: Date())
+        let parameters: Parameters = ["dataType": "JSON",
+                                      "time": currentDateString,
+                                      "areaNo": areaNo,
+                                      "serviceKey": serviceKey]
+        AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: UVData.self) { response in
+            switch response.result {
+            case .success(let data):
+                completion(.success(data.response.body.items))
+            case.failure(let error):
+                print("Error: 자외선지수 데이터 받아오기 실패, \(error.localizedDescription)")
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    // MARK: - 체감온도(여름철) 데이터 받아오기
+    func fetchUVValue(areaNo: String = areaNo, completion: @escaping (Result<PerceivedTemperatureItems, Error>) -> Void) {
+        let url = "http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getSenTaIdxV4"
+        let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMddHH"
+        let currentDateString = formatter.string(from: Date())
+        let parameters: Parameters = ["dataType": "JSON",
+                                      "time": currentDateString,
+                                      "areaNo": areaNo,
+                                      "requestCode": "A42"
+                                      "serviceKey": serviceKey]
+        AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: PerceivedTemperatureData.self) { response in
+            switch response.result {
+            case .success(let data):
+                completion(.success(data.response.body.items))
+            case.failure(let error):
+                print("Error: 체감온도(여름철) 데이터 받아오기 실패, \(error.localizedDescription)")
+                completion(.failure(error))
+            }
+        }
+    }
+    
     // MARK: - 모든 날씨 데이터 받아오기
-    func fetchAllWeatherData(x: Int16 = nx, y: Int16 = ny, sentence: Int16 = ncode, status: String = ID, temperature: String = regID) {
+    func fetchAllWeatherData(x: Int16 = nx, y: Int16 = ny, sentence: Int16 = ncode, status: String = ID, temperature: String = regID, areaNo: String = areaNo) {
         let dispatchGroup = DispatchGroup()
         
         // MARK: - 3일치 날씨 데이터 가공해서 배열에 담기
@@ -212,6 +259,18 @@ class NetworkManager {
             switch result {
             case .success(let data):
                 NetworkManager.weatherTemperatureData = data
+            case .failure(let error):
+                print(error)
+            }
+        })
+        
+        // MARK: - UV 데이터 변수에 담기
+        dispatchGroup.enter()
+        NetworkManager.shared.fetchUVValue(areaNo: areaNo, completion: { result in
+            defer { dispatchGroup.leave() }
+            switch result {
+            case .success(let data):
+                NetworkManager.uvData = data
             case .failure(let error):
                 print(error)
             }
