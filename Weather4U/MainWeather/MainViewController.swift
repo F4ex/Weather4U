@@ -265,6 +265,7 @@ class MainViewController: BaseViewController {
         locationDetail.text = "동, 구 텍스트 여기로"
         locationDetail.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
         locationDetail.textAlignment = .center
+
         
         moveToDress.setImage(UIImage(systemName: "hanger"), for: .normal)
         moveToDress.addTarget(self, action: #selector(clickToStyle), for: .touchUpInside)
@@ -658,6 +659,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
 extension MainViewController: DataReloadDelegate {
     func dataReload() {
         DispatchQueue.main.async {
+            self.location.text = MainViewController.selectRegion?.Region
             self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
             self.tempHigh.text = "H: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
             self.tempLow.text = "L: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"

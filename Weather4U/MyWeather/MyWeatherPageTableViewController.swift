@@ -28,7 +28,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         tableView.separatorColor = .clear
         
         // 테이블 뷰 설정
-        tableView.register(MyWeatherPageTableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(MyWeatherPageTableViewCell.self, forCellReuseIdentifier: "NormalCellIdentifier")
         tableView.register(FirstTableViewCell.self, forCellReuseIdentifier: "FirstCellIdentifier")
         tableView.delegate = self
         
@@ -62,6 +62,9 @@ class MyWeatherPageTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let firstCell: FirstTableViewCell = tableView.dequeueReusableCell(withIdentifier: "FirstCellIdentifier", for: indexPath) as! FirstTableViewCell
+            FirstTableViewCell().locationLabel.text = "My Location"
+            FirstTableViewCell().weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
+            
             return firstCell
         } else {
             // 일반적인 셀을 생성하고 반환하는 로직
@@ -84,6 +87,9 @@ class MyWeatherPageTableViewController: UITableViewController {
                 cell.tempLabel.text = "\(Int(tCelsius))°"
                 cell.highLabel.text = "H: \(Int(hCelsius))°"
                 cell.lowLabel.text = "L: \(Int(lCelsius))°"
+                FirstTableViewCell().tempLabel.text = "\(Int(tCelsius))°"
+                FirstTableViewCell().highLabel.text = "H: \(Int(hCelsius))°"
+                FirstTableViewCell().lowLabel.text = "L: \(Int(lCelsius))°"
                 
             } else {
                 let cell: MyWeatherPageTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MyWeatherPageTableViewCell
