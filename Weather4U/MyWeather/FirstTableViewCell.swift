@@ -30,13 +30,13 @@ class FirstTableViewCell: UITableViewCell {
         // 폰트 및 색상 설정
 
         locationLabel.textColor = UIColor(named: "font")
-        locationLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 24)
+        locationLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 22)
         
         cityLabel.textColor = UIColor(named: "font")
         cityLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
         
         tempLabel.textColor = UIColor(named: "cell")
-        tempLabel.font = UIFont(name: "Apple SD Gothic Neo-Bold", size: 34)
+        tempLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 34)
         
         highLabel.textColor = UIColor(named: "font")
         highLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
@@ -45,7 +45,7 @@ class FirstTableViewCell: UITableViewCell {
         lowLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
         
         weatherLabel.textColor = UIColor(named: "font")
-        weatherLabel.font = UIFont(name: "Apple SD Gothic Neo-Bold", size: 13)
+        weatherLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 13)
         
         weatherImageView.image = UIImage(named: "sun2")
         weatherImageView.contentMode = .scaleAspectFit
@@ -62,27 +62,27 @@ class FirstTableViewCell: UITableViewCell {
         }
         
         cityLabel.snp.makeConstraints { make in
-            make.top.equalTo(locationLabel.snp.bottom)
+            make.top.equalTo(locationLabel.snp.bottom).offset(2)
             make.leading.equalToSuperview().inset(20)
         }
         
         tempLabel.snp.makeConstraints { make in
-            make.top.equalTo(locationLabel.snp.bottom).offset(8)
+            make.top.equalTo(cityLabel.snp.bottom).offset(8)
             make.leading.equalToSuperview().inset(20)
         }
         
         weatherLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(55)
+            make.top.equalToSuperview().offset(63)
             make.leading.equalToSuperview().offset(96)
         }
         
         highLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(81)
+            make.top.equalTo(weatherLabel.snp.bottom).offset(3)
             make.leading.equalToSuperview().offset(96)
         }
         
         lowLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(81)
+            make.top.equalTo(weatherLabel.snp.bottom).offset(3)
             make.leading.equalToSuperview().inset(140)
         }
         
