@@ -95,7 +95,7 @@ class MainViewController: BaseViewController {
         gradientUp.frame = maskedUpView.bounds
         gradientUp.colors = [UIColor.clear.cgColor, UIColor.clear.cgColor, UIColor.white.cgColor, UIColor.white.cgColor] // 그라디언트 색상 정하기
         gradientUp.locations = [0, 0.2, 0.9, 1] //그라디언트 색상 넣을 영역 정하기
-        //젠체 화면을 1이라 생각했을때 0%에 clear, 20%엔 white, 90%, 100%에도 화이트 넣기
+        //전체 화면을 1이라 생각했을때 0%에 clear, 20%엔 white, 90%, 100%에도 화이트 넣기
         maskedUpView.layer.mask = gradientUp // 그라데이션한 레이어를 화면에 마스킹하기
         view.addSubview(maskedUpView)
         
@@ -216,7 +216,7 @@ class MainViewController: BaseViewController {
         }
         weatherExplanation.snp.makeConstraints(){
             $0.top.equalTo(tempHigh.snp.bottom).offset(6)
-            $0.horizontalEdges.equalTo(contentView).inset(47)
+            $0.left.right.equalTo(contentView).inset(20)
         }
         status.snp.makeConstraints(){
             $0.top.equalTo(weatherExplanation.snp.bottom).offset(18)
@@ -341,7 +341,7 @@ class MainViewController: BaseViewController {
             tempHighC = UIColor(named: "font")!
             tempLowC = UIColor(named: "font")!
             weatherExplanationC = UIColor(named: "font")!
-            weatherExplanationText = (weatherStatus == "Sunny" ? "써니데이" : "살짝 흐림데이")
+            weatherExplanationText = (weatherStatus == "Sunny" ? "It's a beautiful sunny day, perfect for a walk." : "The sky is moderately cloudy, providing a nice shade.")
             todayWeatherC = UIColor(named: "cell")!
             todayPrecipitationC = UIColor(named: "cell")!
             weekWeatherC = UIColor(named: "cell")!
@@ -356,7 +356,7 @@ class MainViewController: BaseViewController {
             tempHighC = UIColor(named: "fontR")!
             tempLowC = UIColor(named: "fontR")!
             weatherExplanationC = UIColor(named: "fontR")!
-            weatherExplanationText = (weatherStatus == "Cloudy" ? "흐린데이" : weatherStatus == "비" ? "비온데이" : "소나기데이")
+            weatherExplanationText = (weatherStatus == "Cloudy" ? "It's a gloomy day outside, a perfect time for a warm cup of tea and some cozy indoor activities." : weatherStatus == "비" ? "Rain is pouring down today. Remember to take your umbrella." : "Watch out for sudden showers. Keeping an umbrella handy is a smart choice!")
             todayWeatherC = UIColor(named: "cellR")!
             todayPrecipitationC = UIColor(named: "cellR")!
             weekWeatherC = UIColor(named: "cellR")!
@@ -371,7 +371,7 @@ class MainViewController: BaseViewController {
             tempHighC = UIColor(named: "fontS")!
             tempLowC = UIColor(named: "fontS")!
             weatherExplanationC = UIColor(named: "fontS")!
-            weatherExplanationText = (weatherStatus == "비/눈" ? "비도오고 눈도 옵니데이" : "눈이옵니다")
+            weatherExplanationText = (weatherStatus == "비/눈" ? "Today's weather is a mix of rain and snow. Take extra caution on slippery roads" : "A snowy blanket covers the ground today. Bundle up warmly and revel in the winter magic.")
             todayWeatherC = UIColor(named: "cellS")!
             todayPrecipitationC = UIColor(named: "cellS")!
             weekWeatherC = UIColor(named: "cellS")!
@@ -387,10 +387,12 @@ class MainViewController: BaseViewController {
                 Icon = UIImage(named: "moon&cloud")!
                 backgroundColor = UIColor(named: "Background")!
                 temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
+                weatherExplanationText = "Despite the cloudy night, let the light within your heart guide you through darkness."
             default:
                 Icon = UIImage(named: "moon")!
                 backgroundColor = UIColor(named: "Background")!
                 temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
+                weatherExplanationText = "The night sky is clear and stars are twinkling brightly. It's a perfect moment for stargazing and wishes."
             }
         }
         weatherImage.image = Icon
