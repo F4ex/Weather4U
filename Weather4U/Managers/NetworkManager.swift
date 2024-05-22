@@ -85,7 +85,7 @@ class NetworkManager {
     }
     
     // MARK: - 오늘 날씨 문장 데이터 변수에 담기
-    func receiveWeatherSentence(sentenceCode: Int16 = 108) {
+    func receiveWeatherSentence(sentenceCode: Int16 = ncode) {
         NetworkManager.shared.fetchWeatherSentence(sentenceCode: sentenceCode, completion: { result in
             switch result {
             case .success(let data):

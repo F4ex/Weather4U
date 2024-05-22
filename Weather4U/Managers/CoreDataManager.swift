@@ -10,7 +10,7 @@ import UIKit
 
 class CoreDataManager {
     static let shared = CoreDataManager()
-    static var addLocationData: [LocationAllData] = []
+    static var addLocationData: [LocationAllData] = []  // 코어데이터가 저장되는 배열
     
     private init() { }
     
@@ -18,7 +18,7 @@ class CoreDataManager {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     
-    func createCoreData(combinedData: CombinedData) {
+    func createCoreData(combinedData: CombinedData) {    // 코어데이터 저장
         guard let context = self.persistentContainer?.viewContext else {
             print("Error: Can't access Core Data view context")
             return
