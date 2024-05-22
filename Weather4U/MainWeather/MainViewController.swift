@@ -60,7 +60,7 @@ class MainViewController: BaseViewController {
     let logo = UIImageView()
     var city: City = .서울특별시 //City의 디폴트 값인 서울로 현재의 위치를 표시하겠다
     var weatherData: [WeatherData] = []
-    var weatherStatus: String = "Sunny"
+    var weatherStatus: String = "Cloudy"
     
     //그라데이션 레이어와 마스크 해줄 레이어 만들기
     let maskedUpView = UIView(frame: CGRect(x: 0, y: 782, width: 393, height: 70))
@@ -667,6 +667,7 @@ extension MainViewController: DataReloadDelegate {
     func dataReload() {
         DispatchQueue.main.async {
             self.location.text = MainViewController.selectRegion?.Region
+            self.weatherStatus = CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-"
             self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
             self.tempHigh.text = "H: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
             self.tempLow.text = "L: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"
