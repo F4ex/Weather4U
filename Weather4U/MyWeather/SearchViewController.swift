@@ -37,7 +37,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         super.viewDidLoad()
         
         navigationController?.navigationBar.isHidden = false
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         searchTable.tableView.isHidden = true
         
@@ -154,7 +154,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         
         settingButton.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
         settingButton.frame.size = CGSize(width: 30, height: 30)
-        settingButton.tintColor = .black
+//        settingButton.tintColor = .black
         
         let configuration = UIButton.Configuration.plain()
         settingButton.configuration = configuration

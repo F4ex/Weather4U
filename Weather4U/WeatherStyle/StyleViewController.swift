@@ -44,21 +44,21 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
             $0.centerX.equalTo(view)
         }
         styleTitle.snp.makeConstraints(){
-            $0.top.equalTo(logo.snp.bottom).offset(50)
+            $0.top.equalTo(logo.snp.bottom).offset(40)
             $0.centerX.equalTo(view)
         }
         image.snp.makeConstraints(){
-            $0.top.equalTo(styleTitle.snp.bottom).offset(35)
+            $0.top.equalTo(styleTitle.snp.bottom).offset(25)
             $0.centerX.equalTo(view)
             $0.width.height.equalTo(297)
         }
         styleDetail.snp.makeConstraints(){
             $0.top.equalTo(image.snp.bottom).offset(33)
             $0.centerX.equalTo(view)
-            $0.left.right.equalTo(view).inset(40)
+            $0.left.right.equalTo(view).inset(30)
         }
         temperature.snp.makeConstraints(){
-            $0.top.equalTo(image.snp.bottom).offset(56)
+            $0.top.equalTo(image.snp.bottom).offset(76)
             $0.centerX.equalTo(view)
         }
     }
@@ -128,19 +128,19 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
         if let temperature = Int(temperatureNow) {
             switch temperature {
             case ..<5:
-                styleDetailText = "It is very cold weather. Recommend : Thick padding, A heavy down jacket, A hat, Gloves, A scarf. You should minimize heat loss as much as possible."
+                styleDetailText = "It is very cold weather. \nThick padding, A heavy down jacket, A hat, Gloves. You should minimize heat loss as much as possible."
             case 5..<10:
-                styleDetailText = "It's cold weather. Recommend : Thick coats or Padded jackets. Keep your body temperature maintained."
+                styleDetailText = "It's cold weather. \nThick coats or Padded jackets. * Keep your body temperature maintained."
             case 10..<15:
-                styleDetailText = "It's chilly weather. Recommend : thick jackets, knits, and scarves."
+                styleDetailText = "It's chilly weather. \nthick jackets, knits, and scarves."
             case 15..<20:
-                styleDetailText = "It's a bit chilly. Recommend : Light jacket, Sweater, Cardigan, Jeans, or Cotton pants."
+                styleDetailText = "It's a bit chilly. \nLight jacket, Sweater, Jeans, or Cotton pants."
             case 20..<23:
-                styleDetailText = "It's cool weather. Recommend : Long-sleeve t-shirts, Thin knits, Cardigans, Cotton pants, Long skirts. In the morning and evening, you may need a light jacket."
+                styleDetailText = "It's cool weather. \nLong-sleeve t-shirts, Thin knits, Cotton pants, Long skirts. In the morning and evening, you may need a light jacket."
             case 23..<28:
-                styleDetailText = "It's warm or slightly hot. Recommend : Shorts, Skirts, Thin shirts or short-sleeved T-shirts"
+                styleDetailText = "It's warm or slightly hot. \nShorts, Skirts, Thin shirts or short-sleeved T-shirts"
             case 28...:
-                styleDetailText = "It's very hot weather.  Recommend : Shorts, Short-sleeved T-shirts, Sleeveless tops, Thin dresses. Apply sunscreen for UV protection."
+                styleDetailText = "It's very hot weather.  \nShorts, Short-sleeved T-shirts, Thin dresses. Apply sunscreen for UV protection."
             default:
                 styleDetailText = "We don't have temperature data"
             }
@@ -170,7 +170,7 @@ class StyleViewController: BaseViewController, DataReloadDelegate {
         
         styleDetail.font = UIFont(name: "Apple SD Gothic Neo", size: 17)
         styleDetail.textAlignment = .center
-        styleDetail.numberOfLines = 3
+        styleDetail.numberOfLines = 0
         
         temperature.font = UIFont(name: "BarlowSemiCondensed-Regular", size: 270)
         temperature.textAlignment = .center
