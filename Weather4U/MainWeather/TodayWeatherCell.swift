@@ -40,6 +40,7 @@ class TodayWeatherCell: UICollectionViewCell {
         temperature.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
         temperature.textColor = UIColor(named: "font")
     }
+    
     func constraintLayout() {
         time.snp.makeConstraints(){
             $0.top.equalToSuperview().offset(12)
@@ -53,6 +54,20 @@ class TodayWeatherCell: UICollectionViewCell {
         temperature.snp.makeConstraints(){
             $0.top.equalTo(icon.snp.bottom).offset(7)
             $0.centerX.equalToSuperview()
+        }
+    }
+    
+    func setIcon(status: String) {
+        // 날씨 상태에 따른 이미지 변경
+        switch status {
+        case "Sunny":
+            self.icon.image = UIImage(systemName: "sun.min")
+        case "Mostly Cloudy":
+            self.icon.image = UIImage(systemName: "cloud.rain")
+        case "Cloudy":
+            self.icon.image = UIImage(systemName: "cloud")
+        default:
+            self.icon.image = UIImage(systemName: "sun.min")
         }
     }
 }

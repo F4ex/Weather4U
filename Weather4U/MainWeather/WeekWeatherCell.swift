@@ -104,4 +104,24 @@ class WeekWeatherCell: UITableViewCell {
             self.day.text = "N/A"
         }
     }
+    
+    func setIcon(status: String) {
+        // 날씨 상태에 따른 이미지 변경
+        switch status {
+        case "Sunny", "맑음":
+            self.icon.image = UIImage(systemName: "sun.min")
+        case "Mostly Cloudy", "구름많음":
+            self.icon.image = UIImage(systemName: "cloud")
+        case "Cloudy", "흐림":
+            self.icon.image = UIImage(systemName: "cloud.sun")
+        case "흐리고 비", "흐리고 소나기", "구름많고 비":
+            self.icon.image = UIImage(systemName: "cloud.rain")
+        case "구름많고 눈", "흐리고 눈":
+            self.icon.image = UIImage(systemName: "cloud.snow")
+        case "구름많고 비/눈", "흐리고 비/눈":
+            self.icon.image = UIImage(systemName: "cloud.sleet")
+        default:
+            self.icon.image = UIImage(systemName: "sun.min")
+        }
+    }
 }

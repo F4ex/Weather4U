@@ -272,14 +272,13 @@ class CategoryManager {
                         time: weather.time,
                         status: weather.SKY,  // 하늘 상태
                         temp: weather.TMP,    // 기온
-                        PCP: weather.PCP,     // 강수량
-                        SNO: weather.SNO      // 신적설
+                        PCP: weather.POP,     // 강수확률
+                        SNO: weather.PTY      // 강수형태
                     )
                     dayForecasts.append(forecast)
                     
                     // 24개의 데이터를 추출하면 반환합니다.
                     if dayForecasts.count == 24 {
-                        print(dayForecasts)
                         CategoryManager.dayForecast = dayForecasts
                         return
                     }

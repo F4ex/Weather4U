@@ -484,8 +484,10 @@ class MainViewController: BaseViewController {
         guard let unwrapArray = MainViewController.selectRegion else {
             return
         }
+        print(unwrapArray)
         CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
         CoreDataManager.shared.readData()
+        print(CoreDataManager.addLocationData)
         MyWeatherPageTableViewController().tableView.reloadData()
         MainViewController.isModal = false
         dismiss(animated: true)
@@ -525,7 +527,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 let timeString = CategoryManager.dayForecast[indexPath.row].time
                 let hourString = String(timeString.prefix(2))
                 cell.time.text = hourString + "시"
-                cell.icon.image = UIImage(systemName: "sun.min")
+                cell.setIcon(status: CategoryManager.dayForecast[indexPath.row].status)
                 cell.temperature.text = CategoryManager.dayForecast[indexPath.row].temp + "°"
             }
             return cell
@@ -565,7 +567,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         if !CategoryManager.weekForecast.isEmpty {
             cell.setDay(indexPath: indexPath.row)
             cell.pop.text = "\(CategoryManager.weekForecast[indexPath.row].rainPercent)%"
-            cell.icon.image = UIImage(systemName: "sun.min")
+            cell.setIcon(status: CategoryManager.weekForecast[indexPath.row].status)
             cell.tempHigh.text = "\(CategoryManager.weekForecast[indexPath.row].highTemp)°"
             cell.tempLow.text = "\(CategoryManager.weekForecast[indexPath.row].lowTemp)°"
         }
