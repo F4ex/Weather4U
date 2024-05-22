@@ -34,11 +34,16 @@ class NetworkManager {
     // MARK: - 3일치 날씨 데이터 받아오기
     func fetchWeatherData(x: Int16 = nx, y: Int16 = ny, completion: @escaping (Result<[Item], Error>) -> Void) {
         let currentDateString = self.currentDateToString()
+            
+        // 00시, 01시일 경우 전날 23시 데이터를 요청하기
+        let currentHour = Calendar.current.component(.hour, from: Date())
+        let baseTime = (currentHour == 0 || currentHour == 1) ? "2300" : "0200"
+        let baseDate = (currentHour == 0 || currentHour == 1) ? self.previousDateToString() : currentDateString
         let url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let parameters: Parameters = ["dataType": "JSON",
-                                      "base_date": currentDateString,
-                                      "base_time": "0200",
+                                      "base_date": baseDate,
+                                      "base_time": baseTime,
                                       "nx": x,
                                       "ny": y,
                                       "serviceKey": serviceKey,
@@ -59,7 +64,7 @@ class NetworkManager {
         NetworkManager.shared.fetchWeatherData(x: x, y: y, completion: { result in
             switch result {
             case .success(let data):
-                CategoryManager.shared.forecastForDates(items: data, fcstDate: Date())
+                DataProcessingManager.shared.forecastForDates(items: data, fcstDate: Date())
             case .failure(let error):
                 print(error) // 추후에 Alert창 호출로 변경
             }
@@ -70,9 +75,7 @@ class NetworkManager {
     func fetchWeatherSentence(sentenceCode: Int16 = ncode, completion: @escaping (Result<[SentenceItem], Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidFcst"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd0600"
-        let currentDateString = formatter.string(from: Date())
+        let currentDateString = self.getCurrentTmFcString()
         let parameters: Parameters = ["dataType": "JSON",
                                       "stnId": sentenceCode,
                                       "tmFc": currentDateString,
@@ -104,9 +107,7 @@ class NetworkManager {
     func fetchWeatherStatus(regID: String = ID, completion: @escaping (Result<[StatusItem], Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd0600"
-        let currentDateString = formatter.string(from: Date())
+        let currentDateString = self.getCurrentTmFcString()
         let parameters: Parameters = ["dataType": "JSON",
                                       "regId": regID,
                                       "tmFc": currentDateString,
@@ -138,9 +139,7 @@ class NetworkManager {
     func fetchWeatherTemperature(regID: String = regID, completion: @escaping (Result<[TemperatureItem], Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd0600"
-        let currentDateString = formatter.string(from: Date())
+        let currentDateString = self.getCurrentTmFcString()
         let parameters: Parameters = ["dataType": "JSON",
                                       "regId": regID,
                                       "tmFc": currentDateString,
@@ -223,7 +222,7 @@ class NetworkManager {
             defer { dispatchGroup.leave() }
             switch result {
             case .success(let data):
-                CategoryManager.shared.forecastForDates(items: data, fcstDate: Date())
+                DataProcessingManager.shared.forecastForDates(items: data, fcstDate: Date())
             case .failure(let error):
                 print(error) // 추후에 Alert창 호출로 변경
             }
@@ -283,7 +282,6 @@ class NetworkManager {
             defer { dispatchGroup.leave() }
             switch result {
             case .success(let data):
-                print(data.item[0]["h1"])
                 NetworkManager.perceivedTemperatureData = data
             case .failure(let error):
                 print(error)
@@ -291,8 +289,8 @@ class NetworkManager {
         })
         
         dispatchGroup.notify(queue: .main) {
-            CategoryManager.shared.weeksTemperatureStatus()
-            CategoryManager.shared.dayForecast()
+            DataProcessingManager.shared.weeksTemperatureStatus()
+            DataProcessingManager.shared.dayForecast()
             print("모든 날씨 데이터가 성공적으로 받아졌습니다.")
         }
     }
@@ -317,6 +315,36 @@ extension NetworkManager {
             return tomorrow
         } else {
             return Date()
+        }
+    }
+    
+    // 전날 날짜를 문자열로 반환하는 함수
+    func previousDateToString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+        return formatter.string(from: yesterday)
+    }
+    
+    // 현재 시각에 맞는 tmFc 문자열을 반환하는 함수
+    func getCurrentTmFcString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMddHH00"
+        
+        let now = Date()
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: now)
+        
+        if hour < 6 {
+            let yesterday = calendar.date(byAdding: .day, value: -1, to: now)!
+            formatter.dateFormat = "yyyyMMdd1800"
+            return formatter.string(from: yesterday)
+        } else if hour < 18 {
+            formatter.dateFormat = "yyyyMMdd0600"
+            return formatter.string(from: now)
+        } else {
+            formatter.dateFormat = "yyyyMMdd1800"
+            return formatter.string(from: now)
         }
     }
 }

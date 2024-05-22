@@ -85,7 +85,7 @@ class MainViewController: BaseViewController {
         feels.delegate = self
         feels.dataSource = self
         NetworkManager.shared.delegate = self
-        CategoryManager.shared.delegate = self
+        DataProcessingManager.shared.delegate = self
         
         if MainViewController.selectRegion == nil {
             CoreDataManager.shared.readFirstData()
@@ -549,12 +549,12 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             guard let cell = todayWeather.dequeueReusableCell(withReuseIdentifier: "TodayWeatherCell", for: indexPath) as? TodayWeatherCell else {
                 return UICollectionViewCell()
             }
-            if !CategoryManager.dayForecast.isEmpty {
-                let timeString = CategoryManager.dayForecast[indexPath.row].time
+            if !DataProcessingManager.dayForecast.isEmpty {
+                let timeString = DataProcessingManager.dayForecast[indexPath.row].time
                 let hourString = String(timeString.prefix(2))
                 cell.time.text = hourString + "시"
-                cell.setIcon(status: CategoryManager.dayForecast[indexPath.row].status)
-                cell.temperature.text = CategoryManager.dayForecast[indexPath.row].temp + "°"
+                cell.setIcon(status: DataProcessingManager.dayForecast[indexPath.row].status)
+                cell.temperature.text = DataProcessingManager.dayForecast[indexPath.row].temp + "°"
             }
             return cell
         } else if collectionView == todayPrecipitation {
@@ -562,7 +562,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return UICollectionViewCell()
             }
             
-            if !CategoryManager.threeDaysWeatherData.isEmpty {
+            if !DataProcessingManager.threeDaysWeatherData.isEmpty {
                 cell.setEntries()
             }
             return cell
@@ -591,13 +591,13 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         guard let cell = weekWeather.dequeueReusableCell(withIdentifier: "WeekWeatherCell", for: indexPath) as? WeekWeatherCell else {
             return UITableViewCell()
         }
-        if !CategoryManager.weekForecast.isEmpty {
+        if !DataProcessingManager.weekForecast.isEmpty {
             cell.setDay(indexPath: indexPath.row)
-            cell.pop.text = "\(CategoryManager.weekForecast[indexPath.row].rainPercent)%"
-            cell.setDrop(rainPercent: Int(CategoryManager.weekForecast[indexPath.row].rainPercent) ?? 0)
-            cell.setIcon(status: CategoryManager.weekForecast[indexPath.row].status)
-            cell.tempHigh.text = "\(CategoryManager.weekForecast[indexPath.row].highTemp)°"
-            cell.tempLow.text = "\(CategoryManager.weekForecast[indexPath.row].lowTemp)°"
+            cell.pop.text = "\(DataProcessingManager.weekForecast[indexPath.row].rainPercent)%"
+            cell.setDrop(rainPercent: Int(DataProcessingManager.weekForecast[indexPath.row].rainPercent) ?? 0)
+            cell.setIcon(status: DataProcessingManager.weekForecast[indexPath.row].status)
+            cell.tempHigh.text = "\(DataProcessingManager.weekForecast[indexPath.row].highTemp)°"
+            cell.tempLow.text = "\(DataProcessingManager.weekForecast[indexPath.row].lowTemp)°"
         }
         return cell
     }
@@ -649,10 +649,10 @@ extension MainViewController: DataReloadDelegate {
         DispatchQueue.main.async {
             self.location.text = MainViewController.selectRegion?.City
             self.locationDetail.text = "\(MainViewController.selectRegion?.Town ?? "") \(MainViewController.selectRegion?.Village ?? "")"
-            self.weatherStatus = CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-"
-            self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
-            self.tempHigh.text = "H: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
-            self.tempLow.text = "L: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"
+            self.weatherStatus = DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-"
+            self.temperature.text = "\(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
+            self.tempHigh.text = "H: \(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
+            self.tempLow.text = "L: \(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"
             self.weekWeather.reloadData()
             self.status.reloadData()
             self.todayWeather.reloadData()
