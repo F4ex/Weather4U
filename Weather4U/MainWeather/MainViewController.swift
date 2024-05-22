@@ -559,7 +559,9 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return UICollectionViewCell()
             }
             if !CategoryManager.dayForecast.isEmpty {
-                cell.time.text = CategoryManager.dayForecast[indexPath.row].time + "시"
+                let timeString = CategoryManager.dayForecast[indexPath.row].time
+                let hourString = String(timeString.prefix(2))
+                cell.time.text = hourString + "시"
                 cell.icon.image = UIImage(systemName: "sun.max")
                 cell.temperature.text = CategoryManager.dayForecast[indexPath.row].temp + "°"
             }
@@ -609,6 +611,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
             return UITableViewCell()
         }
         if !CategoryManager.weekForecast.isEmpty {
+            cell.setDay(indexPath: indexPath.row)
             cell.pop.text = "\(CategoryManager.weekForecast[indexPath.row].rainPercent)%"
             cell.icon.image = UIImage(systemName: "sun.max")
             cell.tempHigh.text = "\(CategoryManager.weekForecast[indexPath.row].highTemp)°"

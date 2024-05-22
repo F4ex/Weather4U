@@ -34,6 +34,8 @@ class TodayWeatherCell: UICollectionViewCell {
         time.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 17)
         time.textColor = UIColor(named: "font")
         
+        icon.tintColor = UIColor(named: "font")
+        
         temperature.text = "-°"
         temperature.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
         temperature.textColor = UIColor(named: "font")
