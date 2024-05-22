@@ -12,6 +12,7 @@ import Kingfisher
 class MyWeatherPageTableViewCell: UITableViewCell {
     
     let cityLabel = UILabel()
+    let cityDetailLabel = UILabel()
     let tempLabel = UILabel()
     let highLabel = UILabel()
     let lowLabel = UILabel()
@@ -28,7 +29,11 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         
         // 폰트 및 색상 설정
         cityLabel.textColor = UIColor(named: "font")
-        cityLabel.font = UIFont.systemFont(ofSize: 24, weight: .regular)
+        cityLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 24)
+        
+        
+        cityDetailLabel.textColor = UIColor(named: "font")
+        cityDetailLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
         
         tempLabel.textColor = UIColor(named: "cell")
         tempLabel.font = UIFont.systemFont(ofSize: 34, weight: .semibold)
@@ -45,16 +50,24 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         cellImageView.image = UIImage(named: "sun2")
         cellImageView.contentMode = .scaleAspectFit
         
-        [cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
+        [cityLabel, cityDetailLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
             contentView.addSubview($0)
         }
         
         // Auto Layout constraints 설정
         cityLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(19)
-            make.leading.equalToSuperview().inset(20)
-            make.width.equalTo(60)
+            make.top.equalToSuperview().offset(11)
+            make.leading.equalToSuperview().offset(20)
+            make.width.equalTo(190)
             make.height.equalTo(29)
+        }
+        
+        cityDetailLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(38)
+            make.leading.equalToSuperview().inset(20)
+            make.trailing.equalTo(cellImageView).offset(-20)
+            make.width.equalTo(57)
+            make.height.equalTo(16)
         }
         
         tempLabel.snp.makeConstraints { make in

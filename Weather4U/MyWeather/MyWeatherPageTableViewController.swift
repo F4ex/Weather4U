@@ -91,7 +91,9 @@ class MyWeatherPageTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NormalCellIdentifier", for: indexPath) as! MyWeatherPageTableViewCell
             // 데이터를 셀에 적용하는 로직
             //            let data = weatherData[indexPath.row - 1] // 배열 인덱스 조정
-            cell.cityLabel.text = city
+            
+            cell.cityLabel.text = MainViewController.selectRegion?.City
+            cell.cityDetailLabel.text = "\(MainViewController.selectRegion?.Town ?? "") \(MainViewController.selectRegion?.Village ?? "")"
             cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
             
             let tempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
@@ -112,6 +114,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 let cell: MyWeatherPageTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MyWeatherPageTableViewCell
                 
                 cell.cityLabel.text = city
+                cell.cityDetailLabel.text = "\(MainViewController.selectRegion?.Town ?? "") \(MainViewController.selectRegion?.Village ?? "")"
                 cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
                 let tempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
                 let highTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0") ?? 0.0

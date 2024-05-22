@@ -30,10 +30,11 @@ class FirstTableViewCell: UITableViewCell {
         // 폰트 및 색상 설정
 
         locationLabel.textColor = UIColor(named: "font")
-        locationLabel.font = UIFont.systemFont(ofSize: 24, weight: .regular)
+        locationLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 24)
+        
         
         cityLabel.textColor = UIColor(named: "font")
-        cityLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        cityLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
         
         tempLabel.textColor = UIColor(named: "cell")
         tempLabel.font = UIFont.systemFont(ofSize: 34, weight: .semibold)
