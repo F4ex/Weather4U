@@ -264,7 +264,7 @@ class MainViewController: BaseViewController {
         location.font = UIFont(name: "Apple SD Gothic Neo", size: 30)
         location.textAlignment = .center
         
-        locationDetail.text = "동, 구 텍스트 여기로"
+        locationDetail.text = ""
         locationDetail.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
         locationDetail.textAlignment = .center
 
@@ -437,8 +437,10 @@ class MainViewController: BaseViewController {
     func setModalPage() {
         
         if MainViewController.isModal == true {
-            location.text = MainViewController.selectRegion?.Region
+            location.text = MainViewController.selectRegion?.City
+            locationDetail.text = "\(String(describing: MainViewController.selectRegion?.Town ?? "")) \(String(describing: MainViewController.selectRegion?.Village ?? ""))"
             print(MainViewController.selectRegion?.Region ?? "-")
+            
         }
        
         let cancelButton = UIButton()
@@ -666,7 +668,8 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
 extension MainViewController: DataReloadDelegate {
     func dataReload() {
         DispatchQueue.main.async {
-            self.location.text = MainViewController.selectRegion?.Region
+            self.location.text = MainViewController.selectRegion?.City
+            self.locationDetail.text = "\(MainViewController.selectRegion?.Town ?? "") \(MainViewController.selectRegion?.Village ?? "")"
             self.temperature.text = "\(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
             self.tempHigh.text = "H: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
             self.tempLow.text = "L: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"
