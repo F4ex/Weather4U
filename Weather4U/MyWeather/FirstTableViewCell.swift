@@ -21,8 +21,6 @@ class FirstTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        self.backgroundColor = .white
 
         self.contentView.backgroundColor = UIColor(named: "Background")
 
@@ -106,87 +104,6 @@ class FirstTableViewCell: UITableViewCell {
             make.width.equalTo(121)
             make.height.equalTo(111) // 이미지 뷰의 높이 설정
         }
-    
-//        locationLabel.textColor = .black
-//        locationLabel.font = UIFont.systemFont(ofSize: 24, weight: .regular)
-//        
-//        cityLabel.textColor = .black
-//        cityLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-//        
-//        tempLabel.textColor = .black
-//        tempLabel.font = UIFont.systemFont(ofSize: 34, weight: .semibold)
-//        
-//        highLabel.textColor = .black
-//        highLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-//        
-//        lowLabel.textColor = .black
-//        lowLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-//        
-//        weatherLabel.textColor = .black
-//        weatherLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-//        
-//        cellImageView.backgroundColor = .white
-//        
-//        [locationLabel, cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
-//            contentView.addSubview($0)
-//        }
-//        
-//        
-//        [cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
-//            contentView.addSubview($0)
-//        }
-//        
-//        
-//        // Auto Layout constraints 설정
-//        locationLabel.snp.makeConstraints { make in
-//            make.top.equalToSuperview().inset(20)
-//            make.leading.equalToSuperview().inset(15)
-//            make.trailing.equalToSuperview().inset(200)
-//        }
-//        
-//        cityLabel.snp.makeConstraints { make in
-//            make.top.equalTo(locationLabel.snp.bottom).offset(10)
-//            make.leading.equalToSuperview().inset(15)
-//            make.trailing.equalToSuperview().inset(170)
-//        }
-//        
-//        tempLabel.snp.makeConstraints { make in
-//            make.top.equalTo(cityLabel.snp.bottom).offset(5)
-//            make.leading.equalToSuperview().inset(15)
-//            make.trailing.equalToSuperview().inset(190)
-//            make.bottom.equalToSuperview().inset(20)
-//        }
-//        
-//        weatherLabel.snp.makeConstraints { make in
-//            make.top.equalToSuperview().offset(100)
-//            make.leading.equalToSuperview().offset(55)
-//            make.trailing.equalToSuperview().inset(150)
-//            make.bottom.equalToSuperview().inset(10)
-//        }
-//        
-//        highLabel.snp.makeConstraints { make in
-//            make.top.equalToSuperview().offset(90)
-//            make.leading.equalTo(weatherLabel.snp.trailing).offset(15)
-//            make.bottom.equalToSuperview().inset(10)
-//            make.width.equalTo(lowLabel.snp.width)
-//        }
-//        
-//        lowLabel.snp.makeConstraints { make in
-//            make.top.equalToSuperview().offset(115)
-//            make.bottom.equalToSuperview().inset(10)
-//            make.trailing.equalToSuperview().inset(180)
-//            make.leading.equalTo(highLabel.snp.trailing).offset(5)
-//        }
-//        
-//        cellImageView.contentMode = .scaleAspectFit
-//        
-//        cellImageView.snp.makeConstraints { make in
-//            make.top.bottom.equalToSuperview().inset(0)
-//            make.trailing.bottom.equalToSuperview().inset(15)
-//            make.leading.equalToSuperview().inset(200)
-//            make.height.equalTo(111)
-//            make.width.equalTo(121)
-//        }
     }
     
     override func layoutSubviews() {
@@ -201,4 +118,3 @@ class FirstTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
-

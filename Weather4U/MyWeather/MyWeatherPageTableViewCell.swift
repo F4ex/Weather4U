@@ -22,8 +22,7 @@ class MyWeatherPageTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.backgroundColor = .white
-        
+        self.contentView.backgroundColor = UIColor(named: "Background")
         self.contentView.layer.cornerRadius = 20 // 반경을 조정하여 원하는 둥근 정도를 설정할 수 있습니다.
         self.contentView.layer.masksToBounds = true // 셀의 내용이 경계를 벗어날 때 잘라내기 설정
         
@@ -49,35 +48,6 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         [cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
             contentView.addSubview($0)
         }
-
-                cityLabel.textColor = .black
-
-                cityLabel.font = UIFont.systemFont(ofSize: 24, weight: .regular)
-                
-                tempLabel.textColor = .black
-                tempLabel.font = UIFont.systemFont(ofSize: 26, weight: .regular)
-                
-                highLabel.textColor = .black
-                highLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
-                
-                lowLabel.textColor = .black
-                lowLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
-                
-                weatherLabel.textColor = .black
-                weatherLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-                
-                cellImageView.backgroundColor = .white
-                
-                [cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
-                    contentView.addSubview($0)
-                }
-
-        
-        
-        [cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
-            contentView.addSubview($0)
-        }
-        
         
         // Auto Layout constraints 설정
         cityLabel.snp.makeConstraints { make in
