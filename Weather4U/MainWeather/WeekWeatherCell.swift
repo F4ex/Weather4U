@@ -64,7 +64,7 @@ class WeekWeatherCell: UITableViewCell {
         
         drop.snp.makeConstraints(){
             $0.centerY.equalToSuperview()
-            $0.width.equalTo(12)
+            $0.width.equalTo(12) // -> 물방울 수정!!!!!!!!
             $0.height.equalTo(17.25)
             $0.right.equalTo(pop.snp.left).offset(-5)
         }
@@ -76,7 +76,7 @@ class WeekWeatherCell: UITableViewCell {
         
         icon.snp.makeConstraints(){
             $0.centerY.equalToSuperview()
-            $0.width.height.equalTo(35)
+            $0.height.equalTo(35) //-> 과연 아이콘은 수정됐을까 !!!!!!!!
             $0.right.equalTo(tempHigh.snp.left).offset(-24)
         }
         
