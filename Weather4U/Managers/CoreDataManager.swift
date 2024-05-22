@@ -12,45 +12,11 @@ class CoreDataManager {
     static let shared = CoreDataManager()
     static var addLocationData: [LocationAllData] = []  // 코어데이터가 저장되는 배열
     
-    private init() { initMain() }
+    private init() { }
     
     var persistentContainer: NSPersistentContainer? {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
-    
-    private func initMain() {
-          guard let context = self.persistentContainer?.viewContext else {
-              print("Error: Can't access Core Data view context")
-              return
-          }
-
-          let request = LocationAllData.fetchRequest()
-          request.predicate = NSPredicate(format: "region == %@", "서울특별시")
-
-          do {
-              let seoulData = try context.fetch(request)
-              if seoulData.isEmpty {
-                  let seoul = CombinedData(
-                      Region: "서울특별시",
-                      City: "서울특별시",
-                      Town: "",
-                      Village: "",
-                      X: Int(NetworkManager.nx),
-                      Y: Int(NetworkManager.ny),
-                      Sentence: Int(NetworkManager.ncode),
-                      Status: "11B00000",
-                      Temperature: "11B00000"
-                  )
-                  createCoreData(combinedData: seoul)
-                  print("Main - 서울특별시")
-              } else {
-                  print("서울 데이터가 이미 존재합니다.")
-              }
-          } catch {
-              print("Failed to fetch Seoul data: \(error.localizedDescription)")
-          }
-      }
-    
     
     func createCoreData(combinedData: CombinedData) {    // 코어데이터 저장
         guard let context = self.persistentContainer?.viewContext else {
