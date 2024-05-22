@@ -55,38 +55,45 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         
         // 오토레이아웃 설정
         cityLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(11)
-            make.leading.equalToSuperview().offset(20)
-        }
-        
-        cityDetailLabel.snp.makeConstraints { make in
-            make.top.equalTo(cityLabel.snp.bottom).offset(2)
-            make.leading.equalToSuperview().inset(20)
+            make.top.equalTo(contentView).inset(19)
+            make.leading.equalTo(contentView).inset(20)
+            make.width.equalTo(60)
+            make.height.equalTo(29)
         }
         
         tempLabel.snp.makeConstraints { make in
-            make.top.equalTo(cityDetailLabel.snp.bottom).offset(8)
-            make.leading.equalToSuperview().inset(20)
+            make.top.equalTo(contentView).offset(57)
+            make.leading.equalTo(contentView).inset(20)
+            make.width.equalTo(60)
+            make.height.equalTo(41)
         }
         
         weatherLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(63)
-            make.leading.equalToSuperview().offset(96)
+            make.top.equalTo(contentView).offset(55)
+            make.leading.equalTo(contentView).offset(96)
+            make.width.equalTo(100)
+            make.height.equalTo(16)
         }
         
         highLabel.snp.makeConstraints { make in
-            make.top.equalTo(weatherLabel.snp.bottom).offset(3)
-            make.leading.equalToSuperview().offset(96)
+            make.top.equalTo(contentView).offset(81)
+            make.leading.equalTo(contentView).offset(96)
+            make.width.equalTo(40)
+            make.height.equalTo(16)
         }
         
         lowLabel.snp.makeConstraints { make in
-            make.top.equalTo(weatherLabel.snp.bottom).offset(3)
-            make.leading.equalToSuperview().inset(140)
+            make.top.equalTo(contentView).offset(81)
+            make.leading.equalTo(contentView).inset(140)
+            make.width.equalTo(37)
+            make.height.equalTo(16)
         }
         
         cellImageView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(22)
+            make.top.bottom.equalTo(contentView)
+            make.leading.equalTo(contentView).inset(218)
+            make.width.equalTo(121)
+            make.height.equalTo(111)
         }
     }
     
