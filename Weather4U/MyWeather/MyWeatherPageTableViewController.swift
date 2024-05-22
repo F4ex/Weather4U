@@ -66,9 +66,32 @@ class MyWeatherPageTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let firstCell: FirstTableViewCell = tableView.dequeueReusableCell(withIdentifier: "FirstCellIdentifier", for: indexPath) as! FirstTableViewCell
-            FirstTableViewCell().locationLabel.text = "My Location"
-            FirstTableViewCell().weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
             
+            firstCell.locationLabel.text = "My Location"
+            firstCell.cityLabel.text = "Seoul"
+            
+            let tempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
+            let highTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0") ?? 0.0
+            let lowTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "0") ?? 0.0
+            
+            if SearchViewController.isCelsius {
+                let tCelsius = (tempCelsius).rounded()
+                let hCelsius = (highTempCelsius).rounded()
+                let lCelsius = (lowTempCelsius).rounded()
+                
+                firstCell.tempLabel.text = "\(Int(tCelsius))°"
+                firstCell.highLabel.text = "H: \(Int(hCelsius))°"
+                firstCell.lowLabel.text = "L: \(Int(lCelsius))°"
+                firstCell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
+            } else {
+                let tempFahrenheit = (tempCelsius * 1.8 + 32).rounded()
+                            let highTempFahrenheit = (highTempCelsius * 1.8 + 32).rounded()
+                            let lowTempFahrenheit = (lowTempCelsius * 1.8 + 32).rounded()
+                            
+                            firstCell.tempLabel.text = "\(Int(tempFahrenheit))°"
+                            firstCell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
+                            firstCell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
+            }
             return firstCell
         } else {
             // 일반적인 셀을 생성하고 반환하는 로직
@@ -91,9 +114,6 @@ class MyWeatherPageTableViewController: UITableViewController {
                 cell.tempLabel.text = "\(Int(tCelsius))°"
                 cell.highLabel.text = "H: \(Int(hCelsius))°"
                 cell.lowLabel.text = "L: \(Int(lCelsius))°"
-                FirstTableViewCell().tempLabel.text = "\(Int(tCelsius))°"
-                FirstTableViewCell().highLabel.text = "H: \(Int(hCelsius))°"
-                FirstTableViewCell().lowLabel.text = "L: \(Int(lCelsius))°"
                 
             } else {
                 let cell: MyWeatherPageTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MyWeatherPageTableViewCell
@@ -189,7 +209,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         if SearchViewController.isEditMode == false {
             return 111
         } else {
-            return 100
+            return 110
         }
     }
 }
