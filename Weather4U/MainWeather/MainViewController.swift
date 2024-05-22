@@ -289,8 +289,6 @@ class MainViewController: BaseViewController {
         status.backgroundColor = view.backgroundColor
         
         todayWeather.register(TodayWeatherCell.self, forCellWithReuseIdentifier: "TodayWeatherCell")
-        //헤더뷰 등록하기
-        todayWeather.register(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CollectionHeaderView")
         todayWeather.layer.cornerRadius = 15
         
         todayPrecipitation.register(ChartCollectionViewCell.self, forCellWithReuseIdentifier: "ChartCollectionViewCell")
@@ -497,41 +495,6 @@ class MainViewController: BaseViewController {
 }
 
 //MARK: - 컬렉션뷰 설정
-//헤더뷰 정의하기
-//헤더에 어떤 내용 넣어줄지 정하기
-//헤더뷰 등록은 위쪽 configureUI에 함
-class CollectionHeaderView: UICollectionReusableView {
-    static let identifier = "CollectionViewHeaderView"
-    
-    let titleLabel = UILabel()
-    let icon = UIImageView()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addSubview(titleLabel)
-        addSubview(icon)
-        configure()
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    func configure() {
-        titleLabel.text = "Hourly Forcast"
-        titleLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
-        titleLabel.textColor = UIColor(named: "font")
-        
-        icon.image = UIImage(systemName: "clock")
-        icon.tintColor = UIColor(named: "font")
-    }
-}
-
-//헤더뷰의 크기 정하기
-extension ViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 38)
-    }
-}
-
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
@@ -581,19 +544,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
         return UICollectionViewCell()
     }
-    
-    // 헤더 뷰 제공하기
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionHeader else {
-            return UICollectionReusableView()
-        }
-        if collectionView == todayWeather {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionHeaderView.identifier, for: indexPath) as! CollectionHeaderView
-            return header
-        }
-        return UICollectionReusableView()
-    }
 }
+
 
 //MARK: - 테이블뷰 설정
 extension MainViewController: UITableViewDelegate,UITableViewDataSource {
