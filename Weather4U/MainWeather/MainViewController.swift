@@ -286,7 +286,7 @@ class MainViewController: BaseViewController {
         weatherExplanation.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
         
         status.register(StatusCell.self, forCellWithReuseIdentifier: "StatusCell")
-        status.backgroundColor = view.backgroundColor
+        status.backgroundColor = .clear
         
         todayWeather.register(TodayWeatherCell.self, forCellWithReuseIdentifier: "TodayWeatherCell")
         todayWeather.layer.cornerRadius = 15
@@ -305,7 +305,7 @@ class MainViewController: BaseViewController {
         logo.image = UIImage(named: "weather4U")
         
         feels.register(FeelsCollectionViewCell.self, forCellWithReuseIdentifier: "FeelsCollectionViewCell")
-        feels.backgroundColor = view.backgroundColor
+        feels.backgroundColor = .clear
     }
     
     
@@ -382,11 +382,36 @@ class MainViewController: BaseViewController {
         
         if traitCollection.userInterfaceStyle == .dark {
             switch weatherStatus {
-            case "Cloudy":
-                Icon = UIImage(named: "moon&cloud")!
+            case "Cloudy", "비", "소나기":
+                Icon = (weatherStatus == "Cloudy" ? UIImage(named: "moon&cloud") : weatherStatus == "비" ? UIImage(named: "rain") : UIImage(named: "heavyRain"))!
                 backgroundColor = UIColor(named: "Background")!
                 temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
-                weatherExplanationText = "Despite the cloudy night, let the light within your heart guide you through darkness."
+                locationC = UIColor(named: "font")!
+                locationDetailC = UIColor(named: "font")!
+                moveToDressC = UIColor(named: "font")!
+                moveToSearchC = UIColor(named: "font")!
+                tempHighC = UIColor(named: "font")!
+                tempLowC = UIColor(named: "font")!
+                weatherExplanationC = UIColor(named: "font")!
+                weatherExplanationText = (weatherStatus == "Cloudy" ? "Despite the cloudy night, let the light within your heart guide you through darkness." : weatherStatus == "비" ? "Rain is pouring down today. Remember to take your umbrella." : "Watch out for sudden showers. Keeping an umbrella handy is a smart choice!")
+                todayWeatherC = UIColor(named: "cell")!
+                todayPrecipitationC = UIColor(named: "cell")!
+                weekWeatherC = UIColor(named: "cell")!
+            case "비/눈", "눈":
+                Icon = (weatherStatus == "비/눈" ? UIImage(named: "snow&rain") : UIImage(named: "snow"))!
+                backgroundColor = UIColor(named: "Background")!
+                temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
+                locationC = UIColor(named: "font")!
+                locationDetailC = UIColor(named: "font")!
+                moveToDressC = UIColor(named: "font")!
+                moveToSearchC = UIColor(named: "font")!
+                tempHighC = UIColor(named: "font")!
+                tempLowC = UIColor(named: "font")!
+                weatherExplanationC = UIColor(named: "font")!
+                weatherExplanationText = (weatherStatus == "비/눈" ? "Today's weather is a mix of rain and snow. Take extra caution on slippery roads" : "A snowy blanket covers the ground today. Bundle up warmly and revel in the winter magic.")
+                todayWeatherC = UIColor(named: "cell")!
+                todayPrecipitationC = UIColor(named: "cell")!
+                weekWeatherC = UIColor(named: "cell")!
             default:
                 Icon = UIImage(named: "moon")!
                 backgroundColor = UIColor(named: "Background")!
@@ -409,6 +434,7 @@ class MainViewController: BaseViewController {
         todayPrecipitation.backgroundColor = todayPrecipitationC
         weekWeather.backgroundColor = weekWeatherC
     }
+
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)

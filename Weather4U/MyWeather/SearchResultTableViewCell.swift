@@ -18,7 +18,7 @@ class SearchResultTableViewCell: UITableViewCell {
         
         contentView.addSubview(locationNameLabel)
         locationNameLabel.font = UIFont(name: "AppleSDGothicNeo-SemiBold", size: 15)
-        locationNameLabel.textColor = .black
+        locationNameLabel.textColor = UIColor.label //일반모드 다크모드 전환시 색상 바뀌게
         locationNameLabel.layer.masksToBounds = true
         locationNameLabel.snp.makeConstraints {
             $0.centerY.equalTo(18)

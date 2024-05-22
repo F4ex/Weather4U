@@ -82,6 +82,8 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         cellImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(22)
+            make.width.equalTo(121)
+            make.height.equalTo(111)
         }
     }
     

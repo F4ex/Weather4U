@@ -25,7 +25,7 @@ class SearchResultTableViewController: UITableViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(SearchResultTableViewCell.self, forCellReuseIdentifier: SearchResultTableViewCell.identifier)
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = .systemBackground
         
     }
 

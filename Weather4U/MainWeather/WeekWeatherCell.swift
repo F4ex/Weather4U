@@ -89,7 +89,6 @@ class WeekWeatherCell: UITableViewCell {
             $0.centerY.equalToSuperview()
             $0.right.equalToSuperview().offset(-20)
         }
-        
     }
     
     func setDay(indexPath: Int) {
