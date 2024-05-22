@@ -51,43 +51,43 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         
         // Auto Layout constraints 설정
         cityLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(19)
-            make.leading.equalToSuperview().inset(20)
+            make.top.equalTo(contentView).inset(19)
+            make.leading.equalTo(contentView).inset(20)
             make.width.equalTo(60)
             make.height.equalTo(29)
         }
         
         tempLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(57)
-            make.leading.equalToSuperview().inset(20)
+            make.top.equalTo(contentView).offset(57)
+            make.leading.equalTo(contentView).inset(20)
             make.width.equalTo(60)
             make.height.equalTo(41)
         }
         
         weatherLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(55)
-            make.leading.equalToSuperview().offset(96)
-            make.width.equalTo(70)
+            make.top.equalTo(contentView).offset(55)
+            make.leading.equalTo(contentView).offset(96)
+            make.width.equalTo(100)
             make.height.equalTo(16)
         }
         
         highLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(81)
-            make.leading.equalToSuperview().offset(96)
+            make.top.equalTo(contentView).offset(81)
+            make.leading.equalTo(contentView).offset(96)
             make.width.equalTo(40)
             make.height.equalTo(16)
         }
         
         lowLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(81)
-            make.leading.equalToSuperview().inset(140)
+            make.top.equalTo(contentView).offset(81)
+            make.leading.equalTo(contentView).inset(140)
             make.width.equalTo(37)
             make.height.equalTo(16)
         }
         
         cellImageView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.equalToSuperview().inset(218)
+            make.top.bottom.equalTo(contentView)
+            make.leading.equalTo(contentView).inset(218)
             make.width.equalTo(121)
             make.height.equalTo(111)
         }
