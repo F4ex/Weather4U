@@ -199,7 +199,7 @@ class NetworkManager {
         let parameters: Parameters = ["dataType": "JSON",
                                       "time": currentDateString,
                                       "areaNo": areaNo,
-                                      "requestCode": "A42"
+                                      "requestCode": "A42",
                                       "serviceKey": serviceKey]
         AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: PerceivedTemperatureData.self) { response in
             switch response.result {
