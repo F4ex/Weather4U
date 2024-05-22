@@ -43,6 +43,8 @@ class WeekWeatherCell: UITableViewCell {
         pop.font = UIFont(name: "Apple SD Gothic Neo", size: 12)
         pop.textColor = UIColor(named: "font")
         
+        icon.tintColor = UIColor(named: "font")
+        
         tempHigh.text = "00°"
         tempHigh.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
         tempHigh.textColor = UIColor(named: "font")
@@ -88,5 +90,18 @@ class WeekWeatherCell: UITableViewCell {
             $0.right.equalToSuperview().offset(-20)
         }
         
+    }
+    
+    func setDay(indexPath: Int) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "E"
+        
+        let calendar = Calendar.current
+        if let date = calendar.date(byAdding: .day, value: indexPath, to: Date()) {
+            let dayString = dateFormatter.string(from: date)
+            self.day.text = dayString
+        } else {
+            self.day.text = "N/A"
+        }
     }
 }

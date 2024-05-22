@@ -102,8 +102,12 @@ class CategoryManager {
                         value = rainTypeDescription(from: item.fcstValue)
                     case Category.SKY.rawValue:
                         value = skyStatusDescription(from: item.fcstValue)
-                    case Category.TMP.rawValue:
-                        value = item.fcstValue
+                    case Category.TMP.rawValue, Category.TMN.rawValue, Category.TMX.rawValue:
+                        if let doubleValue = Double(item.fcstValue) {
+                            value = String(format: "%.0f", doubleValue)
+                        } else {
+                            value = item.fcstValue
+                        }
                     default:
                         value = item.fcstValue
                     }
@@ -215,7 +219,7 @@ class CategoryManager {
         for _ in 0..<3 {
             let week = WeekForecast(
                 status: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-",
-                highTemp: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-",
+                highTemp: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0",
                 lowTemp: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-",
                 rainPercent: CategoryManager.shared.getTodayWeatherDataValue(dataKey: .POP) ?? "-"
             )
