@@ -493,7 +493,7 @@ class MainViewController: BaseViewController {
             return
         }
         CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
-        
+        CoreDataManager.shared.readData()
         MyWeatherPageTableViewController().tableView.reloadData()
         MainViewController.isModal = false
         dismiss(animated: true)

@@ -52,29 +52,10 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         let barButton = UIBarButtonItem(customView: settingButton)
         self.navigationItem.rightBarButtonItem = barButton
         
-        
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
         myWeatherTable.tableView.reloadData()
         
     }
     
-    
-    // 코어데이터에 저장된 데이터를 불러오기 (데이터조회)
-    //    private func setProductList() {
-    //        guard let context = self.persistentContainer?.viewContext else { return }
-    //
-    //        let request = MyLocation.fetchRequest()
-    //
-    //        if let array = try? context.fetch(request) {
-    //            self.array = array
-    //        }
-    //    }
     
     //MARK: - searchController
     

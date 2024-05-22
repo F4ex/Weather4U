@@ -19,7 +19,6 @@ class SearchResultTableViewController: UITableViewController {
         tableView.reloadData()
         
     }
-    
    
 
     func setTableView() {

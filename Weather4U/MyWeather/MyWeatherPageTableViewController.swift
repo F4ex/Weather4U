@@ -35,9 +35,6 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 테이블 뷰 삭제
         tableView.isEditing = false
         
-        // 테이블 뷰 reload
-        tableView.reloadData()
-        
         CoreDataManager.shared.readData()
         
         tableView.reloadData()
