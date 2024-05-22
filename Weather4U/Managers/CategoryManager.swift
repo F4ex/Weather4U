@@ -33,6 +33,7 @@ struct WeekForecast {
 }
 
 struct DayForecast {
+    let time: String
     let status: String
     let temp: String
     let PCP: String
@@ -61,6 +62,7 @@ class CategoryManager {
     static let shared = CategoryManager()
     static var threeDaysWeatherData: [[Weather]] = []
     static var weekForecast: [WeekForecast] = []
+    static var dayForecast: [DayForecast] = []
     weak var delegate: DataReloadDelegate?
     
     private init() { }
@@ -241,7 +243,56 @@ class CategoryManager {
             }
         }
         CategoryManager.weekForecast = weekForecast
-//        self.delegate?.dataReload()
     }
+    
+    // MARK: - 24시간 날씨를 [DayForecast] 배열에 담아 반환하는 함수
+    func dayForecast() {
+        // 현재 시간을 가져옵니다.
+        let now = Date()
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH"
+        
+        // 현재 시간을 시간 단위로 추출합니다.
+        let currentHour = Int(formatter.string(from: now)) ?? 0
+        
+        // 24시간 동안의 데이터를 담을 배열을 초기화합니다.
+        var dayForecasts: [DayForecast] = []
+        
+        // threeDaysWeatherData에서 데이터를 추출합니다.
+        for dayIndex in 0..<3 {
+            for weather in CategoryManager.threeDaysWeatherData[dayIndex] {
+                // 현재 시간부터 24시간까지의 데이터를 추출합니다.
+                if let weatherHour = Int(weather.time), (weatherHour >= currentHour && dayIndex == 0) || (dayIndex > 0) {
+                    // DayForecast 객체를 생성하여 배열에 추가합니다.
+                    let forecast = DayForecast(
+                        time: weather.time,
+                        status: weather.SKY,  // 하늘 상태
+                        temp: weather.TMP,    // 기온
+                        PCP: weather.PCP,     // 강수량
+                        SNO: weather.SNO      // 신적설
+                    )
+                    dayForecasts.append(forecast)
+                    
+                    // 24개의 데이터를 추출하면 반환합니다.
+                    if dayForecasts.count == 24 {
+                        print(dayForecasts)
+                        CategoryManager.dayForecast = dayForecasts
+                        return
+                    }
+                }
+            }
+        }
+        
+        // 만약 24개의 데이터를 추출하지 못했다면 남은 데이터를 채워서 반환합니다.
+        while dayForecasts.count < 24 {
+            let emptyForecast = DayForecast(time: "-", status: "0", temp: "0", PCP: "0", SNO: "0")
+            dayForecasts.append(emptyForecast)
+        }
+        
+        CategoryManager.dayForecast = dayForecasts
+        return
+    }
+
 
 }
