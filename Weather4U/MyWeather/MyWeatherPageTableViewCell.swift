@@ -12,6 +12,7 @@ import Kingfisher
 class MyWeatherPageTableViewCell: UITableViewCell {
     
     let cityLabel = UILabel()
+    let cityDetailLabel = UILabel()
     let tempLabel = UILabel()
     let highLabel = UILabel()
     let lowLabel = UILabel()
@@ -28,28 +29,31 @@ class MyWeatherPageTableViewCell: UITableViewCell {
         
         // 폰트 및 색상 설정
         cityLabel.textColor = UIColor(named: "font")
-        cityLabel.font = UIFont.systemFont(ofSize: 24, weight: .regular)
+        cityLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 22)
+        
+        cityDetailLabel.textColor = UIColor(named: "font")
+        cityDetailLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 12)
         
         tempLabel.textColor = UIColor(named: "cell")
-        tempLabel.font = UIFont.systemFont(ofSize: 34, weight: .semibold)
+        tempLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 34)
         
         highLabel.textColor = UIColor(named: "font")
-        highLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        highLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
         
         lowLabel.textColor = UIColor(named: "font")
-        lowLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        lowLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
         
         weatherLabel.textColor = UIColor(named: "font")
-        weatherLabel.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        weatherLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 13)
         
         cellImageView.image = UIImage(named: "sun2")
         cellImageView.contentMode = .scaleAspectFit
         
-        [cityLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
+        [cityLabel, cityDetailLabel, tempLabel, highLabel, lowLabel, weatherLabel, cellImageView].forEach {
             contentView.addSubview($0)
         }
         
-        // Auto Layout constraints 설정
+        // 오토레이아웃 설정
         cityLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView).inset(19)
             make.leading.equalTo(contentView).inset(20)

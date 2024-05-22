@@ -30,22 +30,22 @@ class FirstTableViewCell: UITableViewCell {
         // 폰트 및 색상 설정
 
         locationLabel.textColor = UIColor(named: "font")
-        locationLabel.font = UIFont.systemFont(ofSize: 24, weight: .regular)
+        locationLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 22)
         
         cityLabel.textColor = UIColor(named: "font")
-        cityLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        cityLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
         
         tempLabel.textColor = UIColor(named: "cell")
-        tempLabel.font = UIFont.systemFont(ofSize: 34, weight: .semibold)
+        tempLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 34)
         
         highLabel.textColor = UIColor(named: "font")
-        highLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        highLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
         
         lowLabel.textColor = UIColor(named: "font")
-        lowLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        lowLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
         
         weatherLabel.textColor = UIColor(named: "font")
-        weatherLabel.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        weatherLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 13)
         
         weatherImageView.image = UIImage(named: "sun2")
         weatherImageView.contentMode = .scaleAspectFit

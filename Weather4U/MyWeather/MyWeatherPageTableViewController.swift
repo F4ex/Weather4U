@@ -135,7 +135,8 @@ class MyWeatherPageTableViewController: UITableViewController {
             // 일반적인 셀을 생성하고 반환하는 로직
             let cell = tableView.dequeueReusableCell(withIdentifier: "NormalCellIdentifier", for: indexPath) as! MyWeatherPageTableViewCell
 
-            cell.cityLabel.text = city
+            cell.cityLabel.text = MainViewController.selectRegion?.City
+            cell.cityDetailLabel.text = "\(MainViewController.selectRegion?.Town ?? "") \(MainViewController.selectRegion?.Village ?? "")"
             cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
             
             let tempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0

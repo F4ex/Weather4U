@@ -12,7 +12,7 @@ class NetworkManager {
     
     static let shared = NetworkManager()
     static var weatherSentenceData: String?
-    static var weatherStatusData: [StatusItem] = []
+    static var weatherStatusData: [StatusItem]?
     static var weatherTemperatureData: [TemperatureItem]?
     weak var delegate: DataReloadDelegate?
     private init() { }
@@ -24,6 +24,7 @@ class NetworkManager {
     static var ny : Int16 = 127
     static var ncode : Int16 = 108
     static var ID : String = "11B00000"
+    static var regID: String = "11B10101"
     
     
     
@@ -131,7 +132,7 @@ class NetworkManager {
     }
     
     // MARK: - 3일 ~ 7일 날씨 최고, 최저 기온 데이터 받아오기
-    func fetchWeatherTemperature(regID: String = ID, completion: @escaping (Result<[TemperatureItem], Error>) -> Void) {
+    func fetchWeatherTemperature(regID: String = regID, completion: @escaping (Result<[TemperatureItem], Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let formatter = DateFormatter()
@@ -153,7 +154,7 @@ class NetworkManager {
     }
     
     // MARK: - 3일 ~ 7일 날씨 최고, 최저 기온 데이터 배열에 담기
-    func receiveWeatherTemperature(regID: String = ID) {
+    func receiveWeatherTemperature(regID: String = regID) {
         NetworkManager.shared.fetchWeatherTemperature(regID: regID, completion: { result in
             switch result {
             case .success(let data):
@@ -162,6 +163,65 @@ class NetworkManager {
                 print(error)
             }
         })
+    }
+    
+    // MARK: - 모든 날씨 데이터 받아오기
+    func fetchAllWeatherData(x: Int16 = nx, y: Int16 = ny, sentence: Int16 = ncode, status: String = ID, temperature: String = regID) {
+        let dispatchGroup = DispatchGroup()
+        
+        // MARK: - 3일치 날씨 데이터 가공해서 배열에 담기
+        dispatchGroup.enter()
+        NetworkManager.shared.fetchWeatherData(x: x, y: y, completion: { result in
+            defer { dispatchGroup.leave() }
+            switch result {
+            case .success(let data):
+                CategoryManager.shared.forecastForDates(items: data, fcstDate: Date())
+            case .failure(let error):
+                print(error) // 추후에 Alert창 호출로 변경
+            }
+        })
+        
+        // MARK: - 오늘 날씨 문장 데이터 변수에 담기
+        dispatchGroup.enter()
+        NetworkManager.shared.fetchWeatherSentence(sentenceCode: sentence, completion: { result in
+            defer { dispatchGroup.leave() }
+            switch result {
+            case .success(let data):
+                NetworkManager.weatherSentenceData = data[0].wfSv
+            case .failure(let error):
+                print(error)
+            }
+        })
+        
+        // MARK: - 3일 ~ 7일 날씨 상태 데이터 배열에 담기
+        dispatchGroup.enter()
+        NetworkManager.shared.fetchWeatherStatus(regID: status, completion: { result in
+            defer { dispatchGroup.leave() }
+            switch result {
+            case .success(let data):
+                NetworkManager.weatherStatusData = data
+            case .failure(let error):
+                print(error)
+            }
+        })
+        
+        // MARK: - 3일 ~ 7일 날씨 최고, 최저 기온 데이터 배열에 담기
+        dispatchGroup.enter()
+        NetworkManager.shared.fetchWeatherTemperature(regID: temperature, completion: { result in
+            defer { dispatchGroup.leave() }
+            switch result {
+            case .success(let data):
+                NetworkManager.weatherTemperatureData = data
+            case .failure(let error):
+                print(error)
+            }
+        })
+        
+        dispatchGroup.notify(queue: .main) {
+            CategoryManager.shared.weeksTemperatureStatus()
+            CategoryManager.shared.dayForecast()
+            print("모든 날씨 데이터가 성공적으로 받아졌습니다.")
+        }
     }
 }
 

@@ -134,7 +134,6 @@ class CategoryManager {
             weatherDataForThreeDays[index].sort { $0.time < $1.time }
         }
         CategoryManager.threeDaysWeatherData = weatherDataForThreeDays
-        self.delegate?.dataReload()
     }
 
     // MARK: - 강수형태 설명 반환 함수
@@ -224,7 +223,7 @@ class CategoryManager {
         }
 
         // NetworkManager를 통해 받아온 주간 날씨 데이터를 기반으로 WeekForecast 객체 생성
-        if let weatherStatusData = NetworkManager.weatherStatusData.first,
+        if let weatherStatusData = NetworkManager.weatherStatusData?.first,
            let weatherTemperatureData = NetworkManager.weatherTemperatureData?.first {
             let days = [(weatherStatusData.wf3Pm, weatherTemperatureData.taMax3, weatherTemperatureData.taMin3, weatherStatusData.rnSt3Pm),
                         (weatherStatusData.wf4Pm, weatherTemperatureData.taMax4, weatherTemperatureData.taMin4, weatherStatusData.rnSt4Pm),
@@ -243,6 +242,7 @@ class CategoryManager {
             }
         }
         CategoryManager.weekForecast = weekForecast
+        self.delegate?.dataReload()
     }
     
     // MARK: - 24시간 날씨를 [DayForecast] 배열에 담아 반환하는 함수
