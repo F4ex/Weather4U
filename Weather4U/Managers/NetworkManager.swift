@@ -190,7 +190,7 @@ class NetworkManager {
     }
     
     // MARK: - 체감온도(여름철) 데이터 받아오기
-    func fetchUVValue(areaNo: String = areaNo, completion: @escaping (Result<PerceivedTemperatureItems, Error>) -> Void) {
+    func fetchPerceivedTemperature(areaNo: String = areaNo, completion: @escaping (Result<PerceivedTemperatureItems, Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getSenTaIdxV4"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let formatter = DateFormatter()
