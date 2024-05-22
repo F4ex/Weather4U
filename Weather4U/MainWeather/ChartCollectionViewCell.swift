@@ -107,8 +107,8 @@ class ChartCollectionViewCell: UICollectionViewCell {
         self.entries.removeAll()
         
         for i in 0...6 {
-            if !CategoryManager.dayForecast.isEmpty {
-                let doubleValue = CategoryManager.dayForecast[i].PCP
+            if !DataProcessingManager.dayForecast.isEmpty {
+                let doubleValue = DataProcessingManager.dayForecast[i].PCP
                 self.entries.append(ChartDataEntry(x: Double(i), y: Double(doubleValue) ?? 0.0))
             } else {
                 self.entries.append(ChartDataEntry(x: Double(i), y: Double.random(in: 1...50)))

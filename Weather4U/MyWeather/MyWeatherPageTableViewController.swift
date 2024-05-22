@@ -64,9 +64,9 @@ class MyWeatherPageTableViewController: UITableViewController {
             firstCell.locationLabel.text = "My Location"
             firstCell.cityLabel.text = "Seoul"
             
-            let tempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
-            let highTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0") ?? 0.0
-            let lowTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "0") ?? 0.0
+            let tempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
+            let highTempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0") ?? 0.0
+            let lowTempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "0") ?? 0.0
             
             if SearchViewController.isCelsius {
                 let tCelsius = (tempCelsius).rounded()
@@ -76,7 +76,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.tempLabel.text = "\(Int(tCelsius))°"
                 firstCell.highLabel.text = "H: \(Int(hCelsius))°"
                 firstCell.lowLabel.text = "L: \(Int(lCelsius))°"
-                firstCell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
+                firstCell.weatherLabel.text = (DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
             } else {
                 let tempFahrenheit = (tempCelsius * 1.8 + 32).rounded()
                 let highTempFahrenheit = (highTempCelsius * 1.8 + 32).rounded()
@@ -144,11 +144,11 @@ class MyWeatherPageTableViewController: UITableViewController {
             cell.selectionStyle = .none
             cell.cityLabel.text = MainViewController.selectRegion?.City
             cell.cityDetailLabel.text = "\(MainViewController.selectRegion?.Town ?? "") \(MainViewController.selectRegion?.Village ?? "")"
-            cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
+            cell.weatherLabel.text = (DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
             
-            let tempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
-            let highTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0") ?? 0.0
-            let lowTempCelsius = Double(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "0") ?? 0.0
+            let tempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
+            let highTempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0") ?? 0.0
+            let lowTempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "0") ?? 0.0
             
             if SearchViewController.isCelsius {
                 let tCelsius = (tempCelsius).rounded()
