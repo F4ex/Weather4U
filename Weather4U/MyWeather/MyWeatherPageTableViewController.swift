@@ -60,7 +60,7 @@ class MyWeatherPageTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let firstCell = tableView.dequeueReusableCell(withIdentifier: "FirstCellIdentifier", for: indexPath) as! FirstTableViewCell
-//            firstCell.selectionStyle = .none
+            firstCell.selectionStyle = .none
             firstCell.locationLabel.text = "My Location"
             firstCell.cityLabel.text = "Seoul"
             
@@ -86,11 +86,55 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
                 firstCell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
             }
+           // 배경색 설정
+            switch firstCell.weatherLabel.text {
+            case "sunny":
+                firstCell.contentView.backgroundColor = UIColor(named: "Background")
+                firstCell.tempLabel.textColor = UIColor(named: "cell")
+                firstCell.highLabel.textColor = UIColor.black
+                firstCell.lowLabel.textColor = UIColor.black
+                firstCell.weatherLabel.textColor = UIColor.black
+                firstCell.weatherImageView.image = UIImage(named: "sun2")
+            case "cloudy":
+                firstCell.contentView.backgroundColor = UIColor(named: "BackGroundR")
+                firstCell.tempLabel.textColor = UIColor(named: "fontR")
+                firstCell.highLabel.textColor = UIColor(named: "fontR")
+                firstCell.lowLabel.textColor = UIColor(named: "fontR")
+                firstCell.weatherLabel.textColor = UIColor(named: "fontR")
+                firstCell.weatherImageView.image = UIImage(named:"cloudy2")
+            case "Mostly Cloudy":
+                firstCell.contentView.backgroundColor = UIColor(named: "BackGroundR")
+                firstCell.tempLabel.textColor = UIColor(named: "fontR")
+                firstCell.highLabel.textColor = UIColor(named: "fontR")
+                firstCell.lowLabel.textColor = UIColor(named: "fontR")
+                firstCell.weatherLabel.textColor = UIColor(named: "fontR")
+                firstCell.weatherImageView.image = UIImage(named:"cloudy2")
+            case "rainy":
+                firstCell.contentView.backgroundColor = UIColor(named: "BackGroundR")
+                firstCell.tempLabel.textColor = UIColor(named: "cellR")
+                firstCell.highLabel.textColor = UIColor(named: "fontR")
+                firstCell.lowLabel.textColor = UIColor(named: "fontR")
+                firstCell.weatherLabel.textColor = UIColor(named: "fontR")
+                firstCell.weatherImageView.image = UIImage(named: "heavyRain2")
+            case "snow":
+                firstCell.contentView.backgroundColor = UIColor(named: "BackGroundS")
+                firstCell.tempLabel.textColor = UIColor(named: "fontS")
+                firstCell.highLabel.textColor = UIColor(named: "fontS")
+                firstCell.lowLabel.textColor = UIColor(named: "fontS")
+                firstCell.weatherLabel.textColor = UIColor(named: "fontS")
+                firstCell.weatherImageView.image = UIImage(named: "snow2")
+            default:
+                firstCell.contentView.backgroundColor = UIColor(named: "Background")
+                firstCell.tempLabel.textColor = UIColor(named: "cell")
+                firstCell.highLabel.textColor = UIColor.black
+                firstCell.lowLabel.textColor = UIColor.black
+                firstCell.weatherLabel.textColor = UIColor.black
+                firstCell.weatherImageView.image = UIImage(named: "sun2")
+            }
             return firstCell
         } else {
             let cell: MyWeatherPageTableViewCell = tableView.dequeueReusableCell(withIdentifier: "NormalCellIdentifier", for: indexPath) as! MyWeatherPageTableViewCell
             cell.selectionStyle = .none
-            
             cell.cityLabel.text = MainViewController.selectRegion?.City
             cell.cityDetailLabel.text = "\(MainViewController.selectRegion?.Town ?? "") \(MainViewController.selectRegion?.Village ?? "")"
             cell.weatherLabel.text = (CategoryManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
@@ -109,68 +153,75 @@ class MyWeatherPageTableViewController: UITableViewController {
                 cell.lowLabel.text = "L: \(Int(lCelsius))°"
                 
             } else {
-                let tempFahrenheit = (tempCelsius * 1.8 + 32).rounded()
-                let highTempFahrenheit = (highTempCelsius * 1.8 + 32).rounded()
-                let lowTempFahrenheit = (lowTempCelsius * 1.8 + 32).rounded()
+                    let tempFahrenheit = (tempCelsius * 1.8 + 32).rounded()
+                    let highTempFahrenheit = (highTempCelsius * 1.8 + 32).rounded()
+                    let lowTempFahrenheit = (lowTempCelsius * 1.8 + 32).rounded()
+                    
+                    cell.tempLabel.text = "\(Int(tempFahrenheit))°"
+                    cell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
+                    cell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
+                }
+                
+                // 이미지 설정
+                if let weatherImage = UIImage(named: "sun2") {
+                    cell.cellImageView.image = weatherImage
+                } else {
+                    cell.cellImageView.image = UIImage(named: "defaultWeatherImage")
+                }
+                
+                // 배경색 설정
+                switch cell.weatherLabel.text {
+                case "sunny":
+                    cell.contentView.backgroundColor = UIColor(named: "Background")
+                    cell.tempLabel.textColor = UIColor(named: "cell")
+                    cell.highLabel.textColor = UIColor.black
+                    cell.lowLabel.textColor = UIColor.black
+                    cell.weatherLabel.textColor = UIColor.black
+                    cell.cellImageView.image = UIImage(named: "sun2")
+                case "cloudy":
+                    cell.contentView.backgroundColor = UIColor(named: "BackGroundR")
+                    cell.tempLabel.textColor = UIColor(named: "fontR")
+                    cell.highLabel.textColor = UIColor(named: "fontR")
+                    cell.lowLabel.textColor = UIColor(named: "fontR")
+                    cell.weatherLabel.textColor = UIColor(named: "fontR")
+                    cell.cellImageView.image = UIImage(named:"cloudy2")
+                case "Mostly Cloudy":
+                    cell.contentView.backgroundColor = UIColor(named: "BackGroundR")
+                    cell.tempLabel.textColor = UIColor(named: "fontR")
+                    cell.highLabel.textColor = UIColor(named: "fontR")
+                    cell.lowLabel.textColor = UIColor(named: "fontR")
+                    cell.weatherLabel.textColor = UIColor(named: "fontR")
+                    cell.cellImageView.image = UIImage(named:"cloudy2")
+                case "rainy":
+                    cell.contentView.backgroundColor = UIColor(named: "BackGroundR")
+                    cell.tempLabel.textColor = UIColor(named: "cellR")
+                    cell.highLabel.textColor = UIColor(named: "fontR")
+                    cell.lowLabel.textColor = UIColor(named: "fontR")
+                    cell.weatherLabel.textColor = UIColor(named: "fontR")
+                    cell.cellImageView.image = UIImage(named: "heavyRain2")
+                case "snow":
+                    cell.contentView.backgroundColor = UIColor(named: "BackGroundS")
+                    cell.tempLabel.textColor = UIColor(named: "fontS")
+                    cell.highLabel.textColor = UIColor(named: "fontS")
+                    cell.lowLabel.textColor = UIColor(named: "fontS")
+                    cell.weatherLabel.textColor = UIColor(named: "fontS")
+                    cell.cellImageView.image = UIImage(named: "snow2")
+                default:
+                    cell.contentView.backgroundColor = UIColor(named: "Background")
+                    cell.tempLabel.textColor = UIColor(named: "cell")
+                    cell.highLabel.textColor = UIColor.black
+                    cell.lowLabel.textColor = UIColor.black
+                    cell.weatherLabel.textColor = UIColor.black
+                    cell.cellImageView.image = UIImage(named: "sun2")
+                }
                 
                 cell.tempLabel.text = "\(Int(tempFahrenheit))°"
                 cell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
                 cell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
             }
             
-            // 이미지 설정
-            if let weatherImage = UIImage(named: "sun2") {
-                cell.cellImageView.image = weatherImage
-            } else {
-                cell.cellImageView.image = UIImage(named: "defaultWeatherImage")
-            }
-            
-            // 배경색 설정
-            switch cell.weatherLabel.text {
-            case "sunny":
-                cell.contentView.backgroundColor = UIColor(named: "Background")
-                cell.tempLabel.textColor = UIColor(named: "cell")
-                cell.highLabel.textColor = UIColor.black
-                cell.lowLabel.textColor = UIColor.black
-                cell.weatherLabel.textColor = UIColor.black
-                cell.cellImageView.image = UIImage(named: "sun2")
-            case "cloudy":
-                cell.contentView.backgroundColor = UIColor(named: "BackGroundR")
-                cell.tempLabel.textColor = UIColor(named: "fontR")
-                cell.highLabel.textColor = UIColor(named: "fontR")
-                cell.lowLabel.textColor = UIColor(named: "fontR")
-                cell.weatherLabel.textColor = UIColor(named: "fontR")
-                cell.cellImageView.image = UIImage(named:"cloudy2")
-            case "rainy":
-                cell.contentView.backgroundColor = UIColor(named: "BackGroundR")
-                cell.tempLabel.textColor = UIColor(named: "cellR")
-                cell.highLabel.textColor = UIColor(named: "fontR")
-                cell.lowLabel.textColor = UIColor(named: "fontR")
-                cell.weatherLabel.textColor = UIColor(named: "fontR")
-                cell.cellImageView.image = UIImage(named: "heavyRain2")
-            case "night":
-                cell.contentView.backgroundColor = UIColor(named: "")
-                cell.tempLabel.textColor = UIColor(named: "")
-                cell.cellImageView.image = UIImage(named: "moon2")
-            case "snow":
-                cell.contentView.backgroundColor = UIColor(named: "BackGroundS")
-                cell.tempLabel.textColor = UIColor(named: "fontS")
-                cell.highLabel.textColor = UIColor(named: "fontS")
-                cell.lowLabel.textColor = UIColor(named: "fontS")
-                cell.weatherLabel.textColor = UIColor(named: "fontS")
-                cell.cellImageView.image = UIImage(named: "snow2")
-            default:
-                cell.contentView.backgroundColor = UIColor(named: "Background")
-                cell.tempLabel.textColor = UIColor(named: "cell")
-                cell.highLabel.textColor = UIColor.black
-                cell.lowLabel.textColor = UIColor.black
-                cell.weatherLabel.textColor = UIColor.black
-                cell.cellImageView.image = UIImage(named: "sun2")
-            }
-            
             return cell
         }
-//        return UITableViewCell()
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
