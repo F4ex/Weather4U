@@ -133,9 +133,7 @@ class MainViewController: BaseViewController {
     
     func networkManager() {
         guard let unwrapArray = MainViewController.selectRegion else { return }
-        NetworkManager.shared.receiveWeatherData(x: Int16(unwrapArray.X), y: Int16(unwrapArray.Y))
-        NetworkManager.shared.receiveWeatherStatus(regID: unwrapArray.Status)
-        NetworkManager.shared.receiveWeatherTemperature(regID: unwrapArray.Temperature)
+        NetworkManager.shared.fetchAllWeatherData(x: Int16(unwrapArray.X), y: Int16(unwrapArray.Y), status: unwrapArray.Status, temperature: unwrapArray.Temperature)
         JSONManager.shared.loadJSONToLocationData()
     }
     
@@ -465,14 +463,10 @@ class MainViewController: BaseViewController {
         
         cancelButton.snp.makeConstraints {
             $0.top.left.equalTo(view.safeAreaLayoutGuide).inset(15)
-            //            $0.height.equalTo(20)
-            //            $0.width.equalTo(50)
         }
         
         addButton.snp.makeConstraints {
             $0.top.right.equalTo(view.safeAreaLayoutGuide).inset(15)
-            //            $0.height.equalTo(cancelButton.snp.height)
-            //            $0.width.equalTo(cancelButton.snp.width)
         }
     }
     
@@ -679,8 +673,6 @@ extension MainViewController: DataReloadDelegate {
             self.todayWeather.reloadData()
             self.todayPrecipitation.reloadData()
             self.updateAppearanceBasedOnWeather(for: self.weatherStatus)
-            CategoryManager.shared.weeksTemperatureStatus()
-            CategoryManager.shared.dayForecast()
             print(CategoryManager.weekForecast)
         }
     }
