@@ -41,7 +41,13 @@ struct FeelsCellViewModel {
     }
 }
 
-var cellViewModel2 = [
-    FeelsCellViewModel(PropertyName: "Feels Like", IconImage: UIImage(systemName: "thermometer.high"), Num: "00°", DescriptionLabel: "Apparent Temperature Difference: \(00)°"),
-    FeelsCellViewModel(PropertyName: "Mood Forecast", IconImage: UIImage(systemName: "heart.circle"), FaceIcon: UIImage(systemName: "face.smiling"), GradeLabel: "Perfect!")
-]
+var cellViewModel2: [FeelsCellViewModel] = []
+func setViewModels2() {
+    cellViewModel2 = [FeelsCellViewModel(PropertyName: "Feels Like", IconImage: UIImage(systemName: "thermometer.high"),
+                           Num: "\(NetworkManager.perceivedTemperatureData?.item[0]["h1"] ?? "-")°",
+                           DescriptionLabel: "Apparent Temperature Difference: \(CategoryManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"),
+                      FeelsCellViewModel(PropertyName: "Mood Forecast", IconImage: UIImage(systemName: "heart.circle"), 
+                                         FaceIcon: UIImage(systemName: "face.smiling"),
+                                         GradeLabel: "Perfect!")
+    ]
+}

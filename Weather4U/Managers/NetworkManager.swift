@@ -15,6 +15,7 @@ class NetworkManager {
     static var weatherStatusData: [StatusItem]?
     static var weatherTemperatureData: [TemperatureItem]?
     static var uvData: UVItems?
+    static var perceivedTemperatureData: PerceivedTemperatureItems?
     weak var delegate: DataReloadDelegate?
     private init() { }
     
@@ -271,6 +272,19 @@ class NetworkManager {
             switch result {
             case .success(let data):
                 NetworkManager.uvData = data
+            case .failure(let error):
+                print(error)
+            }
+        })
+        
+        // MARK: - 체감온도(여름철) 데이터 변수에 담기
+        dispatchGroup.enter()
+        NetworkManager.shared.fetchPerceivedTemperature(areaNo: areaNo, completion: { result in
+            defer { dispatchGroup.leave() }
+            switch result {
+            case .success(let data):
+                print(data.item[0]["h1"])
+                NetworkManager.perceivedTemperatureData = data
             case .failure(let error):
                 print(error)
             }

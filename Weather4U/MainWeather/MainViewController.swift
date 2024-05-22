@@ -571,6 +571,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return UICollectionViewCell()
             }
             //뷰모델에 있는 정보들을 가지고 셀을 만들겠다
+            setViewModels2()
             let viewModel = cellViewModel2[indexPath.item]
             cell.configure(with: viewModel)
             return cell
@@ -656,6 +657,7 @@ extension MainViewController: DataReloadDelegate {
             self.status.reloadData()
             self.todayWeather.reloadData()
             self.todayPrecipitation.reloadData()
+            self.feels.reloadData()
             self.updateAppearanceBasedOnWeather(for: self.weatherStatus)
         }
     }
