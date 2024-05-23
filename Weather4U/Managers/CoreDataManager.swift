@@ -10,7 +10,11 @@ import UIKit
 
 class CoreDataManager {
     static let shared = CoreDataManager()
-    static var addLocationData: [LocationAllData] = []  // 코어데이터가 저장되는 배열
+    static var addLocationData: [LocationAllData] = [] { // 코어데이터가 저장되는 배열
+        didSet {
+            NetworkManager.shared.receiveMyWeatherData(addLocationData: CoreDataManager.addLocationData)
+        }
+    }
     
     private init() { }
     
@@ -26,7 +30,7 @@ class CoreDataManager {
         
         let currentCount = self.getCurrentLocationDataCount()
         let newLocation = LocationAllData(context: context)
-        
+
         newLocation.order = Int16(currentCount)
         newLocation.areaNo = Int64(combinedData.AreaNo)
         newLocation.region = combinedData.Region
@@ -174,19 +178,20 @@ class CoreDataManager {
     }
     
     func getCurrentLocationDataCount() -> Int {
-            guard let context = self.persistentContainer?.viewContext else {
-                print("Error: Can't access Core Data view context")
-                return 0
-            }
 
-            let fetchRequest: NSFetchRequest<LocationAllData> = LocationAllData.fetchRequest()
-            
-            do {
-                let count = try context.count(for: fetchRequest)
-                return count
-            } catch {
-                print("Failed to fetch count: \(error.localizedDescription)")
-                return 0
-            }
+        guard let context = self.persistentContainer?.viewContext else {
+            print("Error: Can't access Core Data view context")
+            return 0
         }
+
+        let fetchRequest: NSFetchRequest<LocationAllData> = LocationAllData.fetchRequest()
+        
+        do {
+            let count = try context.count(for: fetchRequest)
+            return count
+        } catch {
+            print("Failed to fetch count: \(error.localizedDescription)")
+            return 0
+        }
+    }
 }

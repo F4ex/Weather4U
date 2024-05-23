@@ -61,7 +61,7 @@ class DataProcessingManager {
     
     static let shared = DataProcessingManager()
     static var threeDaysWeatherData: [[Weather]] = []
-    static var myWeatherDatas: [[Item]] = []
+    static var myWeatherDatas: [[Weather]] = []
     static var weekForecast: [WeekForecast] = []
     static var dayForecast: [DayForecast] = []
     weak var delegate: DataReloadDelegate?
@@ -78,7 +78,7 @@ class DataProcessingManager {
         let todayDate = calendar.startOfDay(for: fcstDate)
         let tomorrowDate = calendar.date(byAdding: .day, value: 1, to: todayDate)!
         let dayAfterTomorrowDate = calendar.date(byAdding: .day, value: 2, to: todayDate)!
-
+        
         // 오늘, 내일, 모레 날짜에 해당하는 데이터를 추출합니다.
         let dates = [todayDate, tomorrowDate, dayAfterTomorrowDate]
         
@@ -141,6 +141,70 @@ class DataProcessingManager {
         DataProcessingManager.threeDaysWeatherData = weatherDataForThreeDays
     }
 
+    // MARK: - MyWeatherData를 처리하는 함수
+    func processingMyWeatherData(items: [[Item]], fcstDate: Date) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        
+        // DataProcessingManager.myWeatherDatas 배열의 크기를 items 배열의 크기와 동일하게 설정합니다.
+        if DataProcessingManager.myWeatherDatas.count != items.count {
+            DataProcessingManager.myWeatherDatas = Array(repeating: [], count: items.count)
+        }
+        
+        for (index, item) in items.enumerated() {
+            let currentDate = formatter.string(from: fcstDate)
+            
+            let filteredItems = item.filter { $0.fcstDate == currentDate }
+            let groupedByTime = Dictionary(grouping: filteredItems) { $0.fcstTime }
+            
+            for (time, items) in groupedByTime {
+                var weatherDict = [String: String]()
+                
+                // 각 카테고리별 최신 값을 딕셔너리에 저장합니다.
+                items.forEach { item in
+                    let value: String
+                    switch item.category {
+                    case Category.PTY.rawValue:
+                        value = rainTypeDescription(from: item.fcstValue) // PTY에 대한 설명 추가
+                    case Category.SKY.rawValue:
+                        value = skyStatusDescription(from: item.fcstValue) // SKY에 대한 설명 추가
+                    case Category.TMP.rawValue, Category.TMN.rawValue, Category.TMX.rawValue:
+                        if let doubleValue = Double(item.fcstValue) {
+                            value = String(format: "%.0f", doubleValue) // 온도 형식 변환
+                        } else {
+                            value = item.fcstValue
+                        }
+                    default:
+                        value = item.fcstValue
+                    }
+                    weatherDict[item.category] = value
+                }
+                
+                // Weather 객체를 생성하여 리스트에 추가합니다.
+                let weather = Weather(
+                    time: time,
+                    POP: weatherDict["POP"] ?? "0", // 강수확률
+                    PTY: weatherDict["PTY"] ?? "0", // 강수형태
+                    PCP: weatherDict["PCP"] ?? "0", // 1시간 강수량
+                    REH: weatherDict["REH"] ?? "0", // 습도
+                    SNO: weatherDict["SNO"] ?? "0", // 1시간 신적설
+                    SKY: weatherDict["SKY"] ?? "0", // 하늘상태
+                    TMP: weatherDict["TMP"] ?? "0", // 1시간 기온
+                    TMN: weatherDict["TMN"] ?? "0", // 일 최저기온
+                    TMX: weatherDict["TMX"] ?? "0", // 일 최고기온
+                    UUU: weatherDict["UUU"] ?? "0", // 풍속(동서성분)
+                    VVV: weatherDict["VVV"] ?? "0", // 풍속(남북성분)
+                    WAV: weatherDict["WAV"] ?? "0", // 파고
+                    VEC: weatherDict["VEC"] ?? "0", // 풍향
+                    WSD: weatherDict["WSD"] ?? "0"  // 풍속
+                )
+                DataProcessingManager.myWeatherDatas[index].append(weather)
+            }
+            DataProcessingManager.myWeatherDatas[index].sort { $0.time < $1.time }
+        }
+        print("MyweatherData 처리 완료")
+    }
+  
     // MARK: - 강수형태 설명 반환 함수
     func rainTypeDescription(from code: String) -> String {
         switch code {
@@ -212,10 +276,58 @@ class DataProcessingManager {
         }
     }
     
+    // MARK: - 오늘 날짜의 MyWeatherView 날씨를 반환해주는 함수
+    func getMyWeatherDataValue(dataKey: Category, indexPath: Int, currentTime: Bool = true, highTemp: Bool = false) -> String? {
+        var currentTimeString = ""
+        
+        if currentTime {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH00"
+            currentTimeString = formatter.string(from: Date())
+        } else {
+            currentTimeString = highTemp ? "1500" : "0600"
+        }
+        
+        guard let forecastAtTime = DataProcessingManager.myWeatherDatas[indexPath].first(where: { $0.time == currentTimeString }) else {
+            return nil
+        }
+        
+        switch dataKey {
+        case .POP:
+            return forecastAtTime.POP
+        case .PTY:
+            return forecastAtTime.PTY
+        case .PCP:
+            return forecastAtTime.PCP
+        case .REH:
+            return forecastAtTime.REH
+        case .SNO:
+            return forecastAtTime.SNO
+        case .SKY:
+            return forecastAtTime.SKY
+        case .TMP:
+            return forecastAtTime.TMP
+        case .TMN:
+            return forecastAtTime.TMN
+        case .TMX:
+            return forecastAtTime.TMX
+        case .UUU:
+            return forecastAtTime.UUU
+        case .VVV:
+            return forecastAtTime.VVV
+        case .WAV:
+            return forecastAtTime.WAV
+        case .VEC:
+            return forecastAtTime.VEC
+        case .WSD:
+            return forecastAtTime.WSD
+        }
+    }
+    
     // MARK: - 일주일 날씨 및 기온을 나타내는 [WeekForecast]배열을 반환하는 함수
     func weeksTemperatureStatus() {
         var weekForecast: [WeekForecast] = []
-
+        
         // 현재 시간 기준 오늘의 날씨 상태, 최고 기온 및 최저 기온을 기반으로 WeekForecast 객체 생성
         for _ in 0..<3 {
             let week = WeekForecast(
@@ -226,7 +338,7 @@ class DataProcessingManager {
             )
             weekForecast.append(week)
         }
-
+        
         // NetworkManager를 통해 받아온 주간 날씨 데이터를 기반으로 WeekForecast 객체 생성
         if let weatherStatusData = NetworkManager.weatherStatusData?.first,
            let weatherTemperatureData = NetworkManager.weatherTemperatureData?.first {
@@ -235,7 +347,7 @@ class DataProcessingManager {
                         (weatherStatusData.wf5Pm, weatherTemperatureData.taMax5, weatherTemperatureData.taMin5, weatherStatusData.rnSt5Pm),
                         (weatherStatusData.wf6Pm, weatherTemperatureData.taMax6, weatherTemperatureData.taMin6, weatherStatusData.rnSt6Pm),
                         (weatherStatusData.wf7Pm, weatherTemperatureData.taMax7, weatherTemperatureData.taMin7, weatherStatusData.rnSt7Pm)]
-
+            
             for day in days {
                 let week = WeekForecast(
                     status: day.0,

@@ -15,8 +15,6 @@ class MyWeatherPageTableViewController: UITableViewController {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     
-//    var city: String = "Seoul"
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -57,9 +55,9 @@ class MyWeatherPageTableViewController: UITableViewController {
             firstCell.locationLabel.text = "My Location"
             firstCell.cityLabel.text = "Seoul"
             
-            let tempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
-            let highTempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0") ?? 0.0
-            let lowTempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "0") ?? 0.0
+            let tempCelsius = Double(DataProcessingManager.shared.getMyWeatherDataValue(dataKey: .TMP, indexPath: indexPath.row) ?? "0") ?? 0.0
+            let highTempCelsius = Double(DataProcessingManager.shared.getMyWeatherDataValue(dataKey: .TMX, indexPath: indexPath.row, currentTime: false, highTemp: true) ?? "0") ?? 0.0
+            let lowTempCelsius = Double(DataProcessingManager.shared.getMyWeatherDataValue(dataKey: .TMN, indexPath: indexPath.row, currentTime: false) ?? "0") ?? 0.0
             
             if SearchViewController.isCelsius {
                 let tCelsius = (tempCelsius).rounded()
@@ -69,7 +67,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.tempLabel.text = "\(Int(tCelsius))°"
                 firstCell.highLabel.text = "H: \(Int(hCelsius))°"
                 firstCell.lowLabel.text = "L: \(Int(lCelsius))°"
-                firstCell.weatherLabel.text = (DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
+                firstCell.weatherLabel.text = (DataProcessingManager.shared.getMyWeatherDataValue(dataKey: .SKY, indexPath: indexPath.row) ?? "-")
             } else {
                 let tempFahrenheit = (tempCelsius * 1.8 + 32).rounded()
                 let highTempFahrenheit = (highTempCelsius * 1.8 + 32).rounded()
@@ -79,7 +77,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
                 firstCell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
             }
-           // 배경색 설정
+            // 배경색 설정
             switch firstCell.weatherLabel.text {
             case "sunny":
                 firstCell.contentView.backgroundColor = UIColor(named: "Background")
@@ -137,11 +135,11 @@ class MyWeatherPageTableViewController: UITableViewController {
             cell.selectionStyle = .none
             cell.cityLabel.text = CoreDataManager.addLocationData[indexPath.row].city
             cell.cityDetailLabel.text = "\(CoreDataManager.addLocationData[indexPath.row].town ?? "") \(CoreDataManager.addLocationData[indexPath.row].village ?? "")"
-            cell.weatherLabel.text = (DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
+            cell.weatherLabel.text = (DataProcessingManager.shared.getMyWeatherDataValue(dataKey: .SKY, indexPath: indexPath.row) ?? "-")
             
-            let tempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
-            let highTempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "0") ?? 0.0
-            let lowTempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "0") ?? 0.0
+            let tempCelsius = Double(DataProcessingManager.shared.getMyWeatherDataValue(dataKey: .TMP, indexPath: indexPath.row) ?? "0") ?? 0.0
+            let highTempCelsius = Double(DataProcessingManager.shared.getMyWeatherDataValue(dataKey: .TMX, indexPath: indexPath.row, currentTime: false, highTemp: true) ?? "0") ?? 0.0
+            let lowTempCelsius = Double(DataProcessingManager.shared.getMyWeatherDataValue(dataKey: .TMN, indexPath: indexPath.row, currentTime: false) ?? "0") ?? 0.0
             
             if SearchViewController.isCelsius {
                 let tCelsius = (tempCelsius).rounded()
@@ -153,15 +151,15 @@ class MyWeatherPageTableViewController: UITableViewController {
                 cell.lowLabel.text = "L: \(Int(lCelsius))°"
                 
             } else {
-                    let tempFahrenheit = (tempCelsius * 1.8 + 32).rounded()
-                    let highTempFahrenheit = (highTempCelsius * 1.8 + 32).rounded()
-                    let lowTempFahrenheit = (lowTempCelsius * 1.8 + 32).rounded()
-                    
-                    cell.tempLabel.text = "\(Int(tempFahrenheit))°"
-                    cell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
-                    cell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
-            }
+                let tempFahrenheit = (tempCelsius * 1.8 + 32).rounded()
+                let highTempFahrenheit = (highTempCelsius * 1.8 + 32).rounded()
+                let lowTempFahrenheit = (lowTempCelsius * 1.8 + 32).rounded()
                 
+                cell.tempLabel.text = "\(Int(tempFahrenheit))°"
+                cell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
+                cell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
+            }
+            
             // 이미지 설정
             if let weatherImage = UIImage(named: "sun2") {
                 cell.cellImageView.image = weatherImage
@@ -274,7 +272,10 @@ extension MyWeatherPageTableViewController {
                 navigationController.popToRootViewController(animated: true)
             }
         } else {
-            print("Selected: \(CoreDataManager.addLocationData[indexPath.row])")
+            MainViewController.isModal2 = true
+            let modalVC = MainViewController()
+            modalVC.modalPresentationStyle = .fullScreen
+            present(modalVC, animated: true)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -299,18 +300,16 @@ extension MyWeatherPageTableViewController {
         // 첫 번째 셀 외의 셀은 이동 허용
         return proposedDestinationIndexPath
     }
-
+    
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
 
         CoreDataManager.shared.moveLocationData(from: sourceIndexPath.row, to: destinationIndexPath.row)
-        
+
         CoreDataManager.shared.updateCoreDataOrder()
         
     }
     
-
-
+    
+    
     
 }
-
-
