@@ -116,7 +116,7 @@ class CoreDataManager {
             // 일치하는 데이터가 있다면, 첫 번째 데이터를 삭제
             if let dataToDelete = matchingDatas.first {
                 viewContext.delete(dataToDelete)
-                // 변경 사항 저장
+//                self.readData()
                 try viewContext.save()
                 print("Data deleted successfully")
             } else {

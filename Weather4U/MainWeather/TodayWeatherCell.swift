@@ -14,6 +14,8 @@ class TodayWeatherCell: UICollectionViewCell {
     let time = UILabel()
     let icon = UIImageView()
     let temperature = UILabel()
+    var weatherStatus = ""
+    var weatherType = ""
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,14 +34,14 @@ class TodayWeatherCell: UICollectionViewCell {
         }
         time.text = "시간"
         time.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 17)
-        time.textColor = UIColor(named: "font")
+        time.textColor = setFontColor()
         
-        icon.tintColor = UIColor(named: "font")
+        icon.tintColor = setFontColor()
         icon.contentMode = .scaleAspectFit
         
         temperature.text = "-°"
         temperature.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
-        temperature.textColor = UIColor(named: "font")
+        temperature.textColor = setFontColor()
     }
     
     func constraintLayout() {
@@ -69,6 +71,42 @@ class TodayWeatherCell: UICollectionViewCell {
             self.icon.image = UIImage(systemName: "cloud")
         default:
             self.icon.image = UIImage(systemName: "sun.min")
+        }
+    }
+    
+    func setFontColor() -> UIColor {
+        switch self.weatherStatus {
+        case "Sunny":
+            return UIColor(named: "font")!
+        case "Mostly Cloudy":
+            switch self.weatherType {
+            case "비", "소나기":
+                return UIColor(named: "fontR")!
+            case "눈", "비/눈":
+                return UIColor(named: "fontS")!
+            default:
+                return UIColor(named: "fontR")!
+            }
+        default:
+            return UIColor(named: "font")!
+        }
+    }
+    
+    func setCellColor() -> UIColor {
+        switch self.weatherStatus {
+        case "Sunny":
+            return UIColor(named: "cell")!
+        case "Mostly Cloudy":
+            switch self.weatherType {
+            case "비", "소나기":
+                return UIColor(named: "cellR")!
+            case "눈", "비/눈":
+                return UIColor(named: "cellS")!
+            default:
+                return UIColor(named: "cellR")!
+            }
+        default:
+            return UIColor(named: "cell")!
         }
     }
 }
