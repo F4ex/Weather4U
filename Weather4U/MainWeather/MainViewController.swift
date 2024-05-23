@@ -15,6 +15,7 @@ class MainViewController: BaseViewController {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     static var isModal = false
+    static var isModal2 = false
     static var selectRegion : CombinedData? // 배열이 아닌 값 하나
     
     let scrollView = UIScrollView()
@@ -109,19 +110,29 @@ class MainViewController: BaseViewController {
         gradientDown.locations = [0, 0.4, 0.9, 1]
         maskedDownView.layer.mask = gradientDown
         view.addSubview(maskedDownView)
-
+        
         self.networkDataManager()
         
         if MainViewController.isModal == true {
             moveToSearch.isHidden = true
             moveToDress.isHidden = true
-
+            
             gradientDown.colors = [UIColor.clear.cgColor]
-
+            
             setModalPage()
         }
+        
+        if MainViewController.isModal2 == true {
+            moveToSearch.isHidden = true
+            moveToDress.isHidden = true
+            
+            gradientDown.colors = [UIColor.clear.cgColor]
+            
+            setModalPage2()
+            
+        }
+        
         setupHeaderView()
-//        readData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -250,7 +261,7 @@ class MainViewController: BaseViewController {
         locationDetail.text = ""
         locationDetail.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
         locationDetail.textAlignment = .center
-
+        
         
         moveToDress.setImage(UIImage(systemName: "hanger"), for: .normal)
         moveToDress.addTarget(self, action: #selector(clickToStyle), for: .touchUpInside)
@@ -454,7 +465,7 @@ class MainViewController: BaseViewController {
         todayPrecipitation.backgroundColor = todayPrecipitationC
         weekWeather.backgroundColor = weekWeatherC
     }
-
+    
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -483,7 +494,7 @@ class MainViewController: BaseViewController {
             print(MainViewController.selectRegion?.Region ?? "-")
             
         }
-       
+        
         let cancelButton = UIButton()
         let addButton = UIButton()
         
@@ -524,54 +535,84 @@ class MainViewController: BaseViewController {
     }
     
     @objc func tappedAddButton() {
-          print("Add")
-          
-          guard let unwrapArray = MainViewController.selectRegion else {
-              return
-          }
+        print("Add")
         
-          CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
-
-          
+        guard let unwrapArray = MainViewController.selectRegion else {
+            return
+        }
+        
+        CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
+        
+        
         // Add 버튼 클릭 시 검색결과 화면이 아닌 바로 MyWeatherPage 로 이동
-          if let navigationController = self.presentingViewController as? UINavigationController {
-              for controller in navigationController.viewControllers {
-                  if let searchViewController = controller as? SearchViewController {
-                      searchViewController.searchController.isActive = false
-                      break
-                  }
-              }
-          }
-          
-          // 현재 모달을 닫습니다.
-          dismiss(animated: true) {
-              DispatchQueue.main.async {
-                  MyWeatherPageTableViewController().tableView.reloadData()
-              }
-              MainViewController.isModal = false
-          }
-      }
-  }
+        if let navigationController = self.presentingViewController as? UINavigationController {
+            for controller in navigationController.viewControllers {
+                if let searchViewController = controller as? SearchViewController {
+                    searchViewController.searchController.isActive = false
+                    break
+                }
+            }
+        }
+        
+        // 현재 모달을 닫습니다.
+        dismiss(animated: true) {
+            DispatchQueue.main.async {
+                MyWeatherPageTableViewController().tableView.reloadData()
+            }
+            MainViewController.isModal = false
+        }
+    }
+    func setModalPage2() {
+        if MainViewController.isModal2 == true {
+            location.text = MainViewController.selectRegion?.City
+            locationDetail.text = "\(String(describing: MainViewController.selectRegion?.Town ?? "")) \(String(describing: MainViewController.selectRegion?.Village ?? ""))"
+            print(MainViewController.selectRegion?.Region ?? "-")
+        }
+        
+        let backButton = UIButton()
+        
+        view.addSubview(backButton)
+        
+        backButton.setTitle("Back", for: .normal)
+        backButton.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Heavy", size: 17)
+        backButton.setTitleColor(UIColor(named: "font"), for: .normal)
+        backButton.addTarget(self, action: #selector(tappedBackButton), for: .touchUpInside)
+        
+        backButton.snp.makeConstraints {
+            $0.top.left.equalTo(view.safeAreaLayoutGuide).inset(15)
+        }
+    }
+    
+    @objc func tappedBackButton() {
+        
+        print("Back")
+        
+        MyWeatherPageTableViewController().tableView.reloadData()
+        MainViewController.isModal2 = false
+        dismiss(animated: true)
+    }
+}
+
 
 //MARK: - 컬렉션뷰 설정
 
 class CustomFlowLayout: UICollectionViewFlowLayout {
     //layoutAttributesForElements 매서드 = 설정한 영역과 셀 서브뷰의 속성 가져오기
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-            guard let attributes = super.layoutAttributesForElements(in: rect) else {
-                return nil //UICollectionViewLayout이 없으면 nil
-            }
-            
-            for attribute in attributes {
-                // 위에서 컬렉션뷰 설정할때 영역과 서브뷰간 속성이 존재하지 않는다면. 즉, collectionViewLayout: UICollectionViewFlowLayout() 으로 설정한게 아니라면
-                // 컬렉션 뷰의 높이의 원하는 지점에 셀을 배치합니다. 셀 서브뷰 높이의 가운데를 컬렉션뷰 높이의 57% 지점에 맞추기
-                if attribute.representedElementKind == nil {
-                    attribute.center.y = collectionView!.frame.height * 0.57
-                }
-            }
-            return attributes
+        guard let attributes = super.layoutAttributesForElements(in: rect) else {
+            return nil //UICollectionViewLayout이 없으면 nil
         }
+        
+        for attribute in attributes {
+            // 위에서 컬렉션뷰 설정할때 영역과 서브뷰간 속성이 존재하지 않는다면. 즉, collectionViewLayout: UICollectionViewFlowLayout() 으로 설정한게 아니라면
+            // 컬렉션 뷰의 높이의 원하는 지점에 셀을 배치합니다. 셀 서브뷰 높이의 가운데를 컬렉션뷰 높이의 57% 지점에 맞추기
+            if attribute.representedElementKind == nil {
+                attribute.center.y = collectionView!.frame.height * 0.57
+            }
+        }
+        return attributes
     }
+}
 
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {

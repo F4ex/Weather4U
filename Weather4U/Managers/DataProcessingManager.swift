@@ -78,7 +78,7 @@ class DataProcessingManager {
         let todayDate = calendar.startOfDay(for: fcstDate)
         let tomorrowDate = calendar.date(byAdding: .day, value: 1, to: todayDate)!
         let dayAfterTomorrowDate = calendar.date(byAdding: .day, value: 2, to: todayDate)!
-
+        
         // 오늘, 내일, 모레 날짜에 해당하는 데이터를 추출합니다.
         let dates = [todayDate, tomorrowDate, dayAfterTomorrowDate]
         
@@ -204,7 +204,7 @@ class DataProcessingManager {
         }
         print("MyweatherData 처리 완료")
     }
-        
+  
     // MARK: - 강수형태 설명 반환 함수
     func rainTypeDescription(from code: String) -> String {
         switch code {
@@ -327,7 +327,7 @@ class DataProcessingManager {
     // MARK: - 일주일 날씨 및 기온을 나타내는 [WeekForecast]배열을 반환하는 함수
     func weeksTemperatureStatus() {
         var weekForecast: [WeekForecast] = []
-
+        
         // 현재 시간 기준 오늘의 날씨 상태, 최고 기온 및 최저 기온을 기반으로 WeekForecast 객체 생성
         for _ in 0..<3 {
             let week = WeekForecast(
@@ -338,7 +338,7 @@ class DataProcessingManager {
             )
             weekForecast.append(week)
         }
-
+        
         // NetworkManager를 통해 받아온 주간 날씨 데이터를 기반으로 WeekForecast 객체 생성
         if let weatherStatusData = NetworkManager.weatherStatusData?.first,
            let weatherTemperatureData = NetworkManager.weatherTemperatureData?.first {
@@ -347,7 +347,7 @@ class DataProcessingManager {
                         (weatherStatusData.wf5Pm, weatherTemperatureData.taMax5, weatherTemperatureData.taMin5, weatherStatusData.rnSt5Pm),
                         (weatherStatusData.wf6Pm, weatherTemperatureData.taMax6, weatherTemperatureData.taMin6, weatherStatusData.rnSt6Pm),
                         (weatherStatusData.wf7Pm, weatherTemperatureData.taMax7, weatherTemperatureData.taMin7, weatherStatusData.rnSt7Pm)]
-
+            
             for day in days {
                 let week = WeekForecast(
                     status: day.0,
