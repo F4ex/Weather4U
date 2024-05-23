@@ -269,6 +269,7 @@ class NetworkManager {
     // MARK: - 모든 날씨 데이터 받아오기
     func fetchAllWeatherData(x: Int16 = nx, y: Int16 = ny, sentence: Int16 = ncode, status: String = ID, temperature: String = regID, areaNo: Int64 = areaNo) {
         let dispatchGroup = DispatchGroup()
+        var hasFailure = false // 실패 여부를 추적하는 변수
         
         // MARK: - 3일치 날씨 데이터 가공해서 배열에 담기
         dispatchGroup.enter()
@@ -279,6 +280,7 @@ class NetworkManager {
                 DataProcessingManager.shared.forecastForDates(items: data, fcstDate: Date())
             case .failure(let error):
                 self.alertDelegate?.showAlert(message: error.localizedDescription)
+                hasFailure = true
             }
         })
         
@@ -291,6 +293,7 @@ class NetworkManager {
                 NetworkManager.weatherStatusData = data
             case .failure(let error):
                 self.alertDelegate?.showAlert(message: error.localizedDescription)
+                hasFailure = true
             }
         })
         
@@ -303,6 +306,7 @@ class NetworkManager {
                 NetworkManager.weatherTemperatureData = data
             case .failure(let error):
                 self.alertDelegate?.showAlert(message: error.localizedDescription)
+                hasFailure = true
             }
         })
         
@@ -315,6 +319,7 @@ class NetworkManager {
                 NetworkManager.uvData = data
             case .failure(let error):
                 self.alertDelegate?.showAlert(message: error.localizedDescription)
+                hasFailure = true
             }
         })
         
@@ -327,13 +332,18 @@ class NetworkManager {
                 NetworkManager.perceivedTemperatureData = data
             case .failure(let error):
                 self.alertDelegate?.showAlert(message: error.localizedDescription)
+                hasFailure = true
             }
         })
         
         dispatchGroup.notify(queue: .main) {
-            DataProcessingManager.shared.weeksTemperatureStatus()
-            DataProcessingManager.shared.dayForecast()
-            print("모든 날씨 데이터가 성공적으로 받아졌습니다.")
+            if !hasFailure {
+                DataProcessingManager.shared.weeksTemperatureStatus()
+                DataProcessingManager.shared.dayForecast()
+                print("모든 날씨 데이터가 성공적으로 받아졌습니다.")
+            } else {
+                print("날씨 데이터를 받아오는데 실패했습니다.")
+            }
         }
     }
 }

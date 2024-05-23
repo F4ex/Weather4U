@@ -36,10 +36,6 @@ class MyWeatherPageTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        CoreDataManager.shared.updateCoreDataOrder()
-        
-        //        tableView.reloadData()
     }
     
     
@@ -97,7 +93,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.lowLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 firstCell.weatherLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 firstCell.weatherImageView.image = UIImage(named:"cloudy2")
-            case "cloudy":
+            case "Cloudy":
                 firstCell.contentView.backgroundColor = UIColor(red: 122/255, green: 131/255, blue: 135/255, alpha: 1)
                 firstCell.locationLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 firstCell.cityLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
@@ -207,7 +203,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 cell.lowLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 cell.weatherLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 cell.cellImageView.image = UIImage(named:"cloudy2")
-            case "cloudy":
+            case "Cloudy":
                 cell.contentView.backgroundColor = UIColor(red: 122/255, green: 131/255, blue: 135/255, alpha: 1)
                 cell.cityLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 cell.cityDetailLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
@@ -297,9 +293,14 @@ extension MyWeatherPageTableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             CoreDataManager.addLocationData.remove(at: indexPath.row)
+            if !DataProcessingManager.myWeatherDatas.isEmpty {
+                DataProcessingManager.myWeatherDatas.remove(at: indexPath.row)
+            }
             CoreDataManager.shared.deleteData(withOrder: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            CoreDataManager.shared.updateCoreDataOrder()
         }
+        tableView.reloadData()
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -350,9 +351,7 @@ extension MyWeatherPageTableViewController {
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         CoreDataManager.shared.moveLocationData(from: sourceIndexPath.row, to: destinationIndexPath.row)
-        
         CoreDataManager.shared.updateCoreDataOrder()
-        
     }
     
     @objc func reloadTableData() {

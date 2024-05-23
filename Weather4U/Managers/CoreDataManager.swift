@@ -12,10 +12,9 @@ class CoreDataManager {
     static let shared = CoreDataManager()
     static var addLocationData: [LocationAllData] = [] { // 코어데이터가 저장되는 배열
         didSet {
-            NetworkManager.shared.receiveMyWeatherData(addLocationData: CoreDataManager.addLocationData)
+            NotificationCenter.default.post(name: NSNotification.Name("ReloadTableViewNotification"), object: nil)
         }
     }
-    
     private init() { }
     
     var persistentContainer: NSPersistentContainer? {
@@ -64,6 +63,7 @@ class CoreDataManager {
         do {
             let locationAllDatas = try context.fetch(request)
             CoreDataManager.addLocationData = locationAllDatas
+            print(locationAllDatas)
         } catch {
             print("Error fetching data from CoreData: \(error.localizedDescription)")
         }
@@ -150,6 +150,7 @@ class CoreDataManager {
             
             try viewContext.save()
             self.readData() // 변경 값을 업데이트해주어야.
+            
             print("코어데이터 위치 이동 성공")
         } catch {
             print("Failed to move CoreData location data: \(error.localizedDescription)")
