@@ -37,8 +37,8 @@ class NetworkManager {
             
         // 00시, 01시일 경우 전날 23시 데이터를 요청하기
         let currentHour = Calendar.current.component(.hour, from: Date())
-        let baseTime = (currentHour == 0 || currentHour == 1) ? "2300" : "0200"
-        let baseDate = (currentHour == 0 || currentHour == 1) ? self.previousDateToString() : currentDateString
+        let baseTime = (currentHour == 0 || currentHour == 1 || currentHour == 2) ? "2300" : "0200"
+        let baseDate = (currentHour == 0 || currentHour == 1 || currentHour == 2) ? self.previousDateToString() : currentDateString
         let url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let parameters: Parameters = ["dataType": "JSON",

@@ -15,9 +15,6 @@ class MyWeatherPageTableViewController: UITableViewController {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     
-    
-    static var array: [LocationAllData] = []
-    
 //    var city: String = "Seoul"
     
     override func viewDidLoad() {
@@ -44,9 +41,9 @@ class MyWeatherPageTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        CoreDataManager.shared.readData()
+//        CoreDataManager.shared.readData()
         
-        tableView.reloadData()
+//        tableView.reloadData()
     }
     
     
@@ -54,7 +51,7 @@ class MyWeatherPageTableViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return MyWeatherPageTableViewController.array.count
+        return CoreDataManager.addLocationData.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -142,8 +139,8 @@ class MyWeatherPageTableViewController: UITableViewController {
         } else {
             let cell: MyWeatherPageTableViewCell = tableView.dequeueReusableCell(withIdentifier: "NormalCellIdentifier", for: indexPath) as! MyWeatherPageTableViewCell
             cell.selectionStyle = .none
-            cell.cityLabel.text = MainViewController.selectRegion?.City
-            cell.cityDetailLabel.text = "\(MainViewController.selectRegion?.Town ?? "") \(MainViewController.selectRegion?.Village ?? "")"
+            cell.cityLabel.text = CoreDataManager.addLocationData[indexPath.row].city
+            cell.cityDetailLabel.text = "\(CoreDataManager.addLocationData[indexPath.row].town ?? "") \(CoreDataManager.addLocationData[indexPath.row].village ?? "")"
             cell.weatherLabel.text = (DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-")
             
             let tempCelsius = Double(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "0") ?? 0.0
@@ -269,7 +266,7 @@ extension MyWeatherPageTableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            MyWeatherPageTableViewController.array.remove(at: indexPath.row)
+            CoreDataManager.addLocationData.remove(at: indexPath.row)
             CoreDataManager.shared.deleteData(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
@@ -281,7 +278,7 @@ extension MyWeatherPageTableViewController {
                 navigationController.popToRootViewController(animated: true)
             }
         } else {
-            print("Selected: \(MyWeatherPageTableViewController.array[indexPath.row])")
+            print("Selected: \(CoreDataManager.addLocationData[indexPath.row])")
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -289,7 +286,7 @@ extension MyWeatherPageTableViewController {
     // 드래그 앤 드롭
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let dragItem = UIDragItem(itemProvider: NSItemProvider())
-        dragItem.localObject = MyWeatherPageTableViewController.array[indexPath.row]
+        dragItem.localObject = CoreDataManager.addLocationData[indexPath.row]
         
         return [ dragItem ]
     }
@@ -300,8 +297,8 @@ extension MyWeatherPageTableViewController {
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         // Update the model
-        let mover = MyWeatherPageTableViewController.array.remove(at: sourceIndexPath.row)
-        MyWeatherPageTableViewController.array.insert(mover, at: destinationIndexPath.row)
+        let mover = CoreDataManager.addLocationData.remove(at: sourceIndexPath.row)
+        CoreDataManager.addLocationData.insert(mover, at: destinationIndexPath.row)
         
         CoreDataManager.shared.updateCoreDataOrder()
     }

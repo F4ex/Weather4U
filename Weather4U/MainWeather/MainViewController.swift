@@ -133,7 +133,7 @@ class MainViewController: BaseViewController {
     
     func networkManager() {
         guard let unwrapArray = MainViewController.selectRegion else { return }
-        NetworkManager.shared.fetchAllWeatherData(x: Int16(unwrapArray.X), y: Int16(unwrapArray.Y), status: unwrapArray.Status, temperature: unwrapArray.Temperature)
+        NetworkManager.shared.fetchAllWeatherData(x: Int16(unwrapArray.X), y: Int16(unwrapArray.Y), status: unwrapArray.Status, temperature: unwrapArray.Temperature, areaNo: Int64(unwrapArray.AreaNo))
         JSONManager.shared.loadJSONToLocationData()
     }
     
