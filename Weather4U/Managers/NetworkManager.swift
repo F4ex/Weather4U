@@ -85,7 +85,7 @@ class NetworkManager {
                                       "nx": x,
                                       "ny": y,
                                       "serviceKey": serviceKey,
-                                      "numOfRows": 260]
+                                      "numOfRows": 254]
         AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: WeatherData.self) { response in
             switch response.result {
             case .success(let data):
@@ -98,15 +98,29 @@ class NetworkManager {
     }
     
     // MARK: - MyWeatherView 날씨 데이터 배열에 담기
-    func receiveMyWeatherData(x: Int16 = nx, y: Int16 = ny) {
-        NetworkManager.shared.fetchMyWeatherData(x: x, y: y, completion: { result in
-            switch result {
-            case .success(let data):
-                DataProcessingManager.myWeatherDatas.append(data)
-            case .failure(let error):
-                print(error)
+    func receiveMyWeatherData(addLocationData: [LocationAllData]) {
+        let dispatchGroup = DispatchGroup()
+        var weatherDataList: [(index: Int16, data: [Item])] = []
+
+        for location in addLocationData {
+            dispatchGroup.enter()
+            NetworkManager.shared.fetchMyWeatherData(x: location.x, y: location.y) { result in
+                switch result {
+                case .success(let data):
+                    weatherDataList.append((index: location.order, data: data))
+                case .failure(let error):
+                    print("Error fetching weather data for location \(location): \(error.localizedDescription)")
+                }
+                dispatchGroup.leave()
             }
-        })
+        }
+
+        dispatchGroup.notify(queue: .main) {
+            weatherDataList.sort(by: { $0.index < $1.index }) // weatherDataList를 index 기준으로 정렬
+            let sortedWeatherDataList = weatherDataList.map { $0.data }
+            print("MyWeatherView 날씨 Data 받아오기 완료")
+            DataProcessingManager.shared.processingMyWeatherData(items: sortedWeatherDataList, fcstDate: Date())
+        }
     }
     
     // MARK: - 오늘 날씨 문장 데이터 받아오기
