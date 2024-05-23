@@ -110,7 +110,7 @@ class MainViewController: BaseViewController {
         maskedDownView.layer.mask = gradientDown
         view.addSubview(maskedDownView)
 
-        networkManager()
+        self.networkDataManager()
         
         if MainViewController.isModal == true {
             moveToSearch.isHidden = true
@@ -126,34 +126,14 @@ class MainViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        
-        //뷰가 나타날 때마다 업데이트
-        readData()
     }
     
-    //MARK: - 네트워크 매니저
-    
-    func networkManager() {
+    //MARK: - 네트워크 & 데이터 매니저
+    func networkDataManager() {
         guard let unwrapArray = MainViewController.selectRegion else { return }
         NetworkManager.shared.fetchAllWeatherData(x: Int16(unwrapArray.X), y: Int16(unwrapArray.Y), status: unwrapArray.Status, temperature: unwrapArray.Temperature, areaNo: Int64(unwrapArray.AreaNo))
         JSONManager.shared.loadJSONToLocationData()
-    }
-    
-    //데이터 조회
-    func readData() {
-        guard let context = self.persistentContainer?.viewContext else {
-            print("Error: Can't access Core Data view context")
-            return
-        }
-        
-        let request = LocationAllData.fetchRequest()
-        
-        do {
-            let locationAllDatas = try context.fetch(request)
-            CoreDataManager.addLocationData = locationAllDatas
-        } catch {
-            print("Error fetching data from CoreData: \(error.localizedDescription)")
-        }
+        CoreDataManager.shared.readData()
     }
     
     //MARK: - 오토레이아웃

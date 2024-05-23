@@ -40,10 +40,6 @@ class MyWeatherPageTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-//        CoreDataManager.shared.readData()
-        
-//        tableView.reloadData()
     }
     
     

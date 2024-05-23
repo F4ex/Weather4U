@@ -71,6 +71,44 @@ class NetworkManager {
         })
     }
     
+    // MARK: - MyWeatherView 날씨 데이터 받아오기
+    func fetchMyWeatherData(x: Int16 = nx, y: Int16 = ny, completion: @escaping (Result<[Item], Error>) -> Void) {
+        let currentDateString = self.currentDateToString()
+        let currentHour = Calendar.current.component(.hour, from: Date())
+        let baseTime = (currentHour == 0 || currentHour == 1 || currentHour == 2) ? "2300" : "0200"
+        let baseDate = (currentHour == 0 || currentHour == 1 || currentHour == 2) ? self.previousDateToString() : currentDateString
+        let url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
+        let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
+        let parameters: Parameters = ["dataType": "JSON",
+                                      "base_date": baseDate,
+                                      "base_time": baseTime,
+                                      "nx": x,
+                                      "ny": y,
+                                      "serviceKey": serviceKey,
+                                      "numOfRows": 260]
+        AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: WeatherData.self) { response in
+            switch response.result {
+            case .success(let data):
+                completion(.success(data.response.body.items.item))
+            case .failure(let error):
+                print("Error: MyWeatherView 날씨 데이터 받아오기 실패, \(error.localizedDescription)")
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    // MARK: - MyWeatherView 날씨 데이터 배열에 담기
+    func receiveMyWeatherData(x: Int16 = nx, y: Int16 = ny) {
+        NetworkManager.shared.fetchMyWeatherData(x: x, y: y, completion: { result in
+            switch result {
+            case .success(let data):
+                DataProcessingManager.myWeatherDatas.append(data)
+            case .failure(let error):
+                print(error)
+            }
+        })
+    }
+    
     // MARK: - 오늘 날씨 문장 데이터 받아오기
     func fetchWeatherSentence(sentenceCode: Int16 = ncode, completion: @escaping (Result<[SentenceItem], Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidFcst"
