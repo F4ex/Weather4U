@@ -15,6 +15,7 @@ class MainViewController: BaseViewController {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     static var isModal = false
+    static var isModal2 = false
     static var selectRegion : CombinedData? // 배열이 아닌 값 하나
     
     let scrollView = UIScrollView()
@@ -108,20 +109,29 @@ class MainViewController: BaseViewController {
         gradientDown.locations = [0, 0.4, 0.9, 1]
         maskedDownView.layer.mask = gradientDown
         view.addSubview(maskedDownView)
-
+        
         networkManager()
         
         if MainViewController.isModal == true {
             moveToSearch.isHidden = true
             moveToDress.isHidden = true
-
+            
             gradientDown.colors = [UIColor.clear.cgColor]
-
+            
             setModalPage()
+            
         }
         
+        if MainViewController.isModal2 == true {
+            moveToSearch.isHidden = true
+            moveToDress.isHidden = true
+            
+            gradientDown.colors = [UIColor.clear.cgColor]
+            
+            setModalPage2()
+            
+        }
     }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
@@ -197,6 +207,27 @@ class MainViewController: BaseViewController {
             $0.height.equalTo(1680)
         }
         
+        location.snp.makeConstraints(){
+            $0.top.equalTo(contentView).offset(28)
+            $0.centerX.equalTo(contentView)
+        }
+        locationDetail.snp.makeConstraints(){
+            $0.top.equalTo(location.snp.bottom).offset(5)
+            $0.centerX.equalTo(contentView)
+        }
+        
+        moveToDress.snp.makeConstraints(){
+            $0.top.equalTo(contentView).offset(13)
+            $0.left.equalTo(contentView).inset(29)
+            $0.width.equalTo(30)
+            $0.height.equalTo(24)
+        }
+        moveToSearch.snp.makeConstraints(){
+            $0.top.equalTo(contentView).offset(13)
+            $0.right.equalTo(contentView).inset(29)
+            $0.width.equalTo(30)
+            $0.height.equalTo(24)
+        }
         imageView.snp.makeConstraints(){
             $0.top.equalTo(contentView)
             $0.height.equalTo(200)
@@ -268,7 +299,7 @@ class MainViewController: BaseViewController {
         locationDetail.text = ""
         locationDetail.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
         locationDetail.textAlignment = .center
-
+        
         
         moveToDress.setImage(UIImage(systemName: "hanger"), for: .normal)
         moveToDress.addTarget(self, action: #selector(clickToStyle), for: .touchUpInside)
@@ -437,7 +468,7 @@ class MainViewController: BaseViewController {
         todayPrecipitation.backgroundColor = todayPrecipitationC
         weekWeather.backgroundColor = weekWeatherC
     }
-
+    
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -466,7 +497,7 @@ class MainViewController: BaseViewController {
             print(MainViewController.selectRegion?.Region ?? "-")
             
         }
-       
+        
         let cancelButton = UIButton()
         let addButton = UIButton()
         
@@ -520,8 +551,38 @@ class MainViewController: BaseViewController {
         MainViewController.isModal = false
         dismiss(animated: true)
     }
-}
+    
+    
+    func setModalPage2() {
+        if MainViewController.isModal2 == true {
+            location.text = MainViewController.selectRegion?.City
+            locationDetail.text = "\(String(describing: MainViewController.selectRegion?.Town ?? "")) \(String(describing: MainViewController.selectRegion?.Village ?? ""))"
+            print(MainViewController.selectRegion?.Region ?? "-")
+        }
+        
+        let backButton = UIButton()
+        
+        view.addSubview(backButton)
+        
+        backButton.setTitle("Back", for: .normal)
+        backButton.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Heavy", size: 17)
+        backButton.setTitleColor(UIColor(named: "font"), for: .normal)
+        backButton.addTarget(self, action: #selector(tappedBackButton), for: .touchUpInside)
+        
+        backButton.snp.makeConstraints {
+            $0.top.left.equalTo(view.safeAreaLayoutGuide).inset(15)
+        }
+    }
 
+    @objc func tappedBackButton() {
+        
+        print("Back")
+        
+        MyWeatherPageTableViewController().tableView.reloadData()
+        MainViewController.isModal2 = false
+        dismiss(animated: true)
+    }
+}
 //MARK: - 컬렉션뷰 설정
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
