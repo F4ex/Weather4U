@@ -10,6 +10,7 @@ import UIKit
 
 class NetworkManager {
     
+    let mainViewController = MainViewController()
     static let shared = NetworkManager()
     static var weatherSentenceData: String?
     static var weatherStatusData: [StatusItem]?
@@ -66,7 +67,7 @@ class NetworkManager {
             case .success(let data):
                 DataProcessingManager.shared.forecastForDates(items: data, fcstDate: Date())
             case .failure(let error):
-                print(error) // 추후에 Alert창 호출로 변경
+                self.mainViewController.showAlert(message: error.localizedDescription)
             }
         })
     }
@@ -109,7 +110,7 @@ class NetworkManager {
                 case .success(let data):
                     weatherDataList.append((index: location.order, data: data))
                 case .failure(let error):
-                    print("Error fetching weather data for location \(location): \(error.localizedDescription)")
+                    self.mainViewController.showAlert(message: error.localizedDescription)
                 }
                 dispatchGroup.leave()
             }
@@ -150,7 +151,7 @@ class NetworkManager {
             case .success(let data):
                 NetworkManager.weatherSentenceData = data[0].wfSv
             case .failure(let error):
-                print(error)
+                self.mainViewController.showAlert(message: error.localizedDescription)
             }
         })
     }
@@ -182,7 +183,7 @@ class NetworkManager {
             case .success(let data):
                 NetworkManager.weatherStatusData = data
             case .failure(let error):
-                print(error)
+                self.mainViewController.showAlert(message: error.localizedDescription)
             }
         })
     }
@@ -214,7 +215,7 @@ class NetworkManager {
             case .success(let data):
                 NetworkManager.weatherTemperatureData = data
             case .failure(let error):
-                print(error)
+                self.mainViewController.showAlert(message: error.localizedDescription)
             }
         })
     }
@@ -276,7 +277,7 @@ class NetworkManager {
             case .success(let data):
                 DataProcessingManager.shared.forecastForDates(items: data, fcstDate: Date())
             case .failure(let error):
-                print(error) // 추후에 Alert창 호출로 변경
+                self.mainViewController.showAlert(message: error.localizedDescription)
             }
         })
         
@@ -288,7 +289,7 @@ class NetworkManager {
             case .success(let data):
                 NetworkManager.weatherStatusData = data
             case .failure(let error):
-                print(error)
+                self.mainViewController.showAlert(message: error.localizedDescription)
             }
         })
         
@@ -300,7 +301,7 @@ class NetworkManager {
             case .success(let data):
                 NetworkManager.weatherTemperatureData = data
             case .failure(let error):
-                print(error)
+                self.mainViewController.showAlert(message: error.localizedDescription)
             }
         })
         
@@ -312,7 +313,7 @@ class NetworkManager {
             case .success(let data):
                 NetworkManager.uvData = data
             case .failure(let error):
-                print(error)
+                self.mainViewController.showAlert(message: error.localizedDescription)
             }
         })
         
@@ -324,7 +325,7 @@ class NetworkManager {
             case .success(let data):
                 NetworkManager.perceivedTemperatureData = data
             case .failure(let error):
-                print(error)
+                self.mainViewController.showAlert(message: error.localizedDescription)
             }
         })
         
