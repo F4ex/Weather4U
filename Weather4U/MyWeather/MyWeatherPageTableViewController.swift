@@ -79,7 +79,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
                 firstCell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
             }
-            // 배경색 설정
+            // 폰트 설정
             switch firstCell.weatherLabel.text {
             case "sunny":
                 firstCell.contentView.backgroundColor = UIColor(named: "Background")
@@ -89,18 +89,6 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.weatherLabel.textColor = UIColor(named: "font")
                 firstCell.weatherImageView.image = UIImage(named: "sun2")
             case "Mostly Cloudy":
-                firstCell.contentView.backgroundColor = UIColor(named: "BackGroundR")
-                firstCell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "font" : "cell")
-                firstCell.highLabel.textColor = UIColor(named: "font")
-                firstCell.lowLabel.textColor = UIColor(named: "font")
-                firstCell.weatherLabel.textColor = UIColor(named: "font")
-                firstCell.weatherImageView.image = UIImage(named:"sun&cloud2")
-            case "cloudy":
-                firstCell.contentView.backgroundColor = UIColor(named: "BackGroundR")
-                firstCell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "fontR" : "cellR")
-                firstCell.highLabel.textColor = UIColor(named: "fontR")
-                firstCell.lowLabel.textColor = UIColor(named: "fontR")
-                firstCell.weatherLabel.textColor = UIColor(named: "fontR")
                 firstCell.contentView.backgroundColor = UIColor(red: 122/255, green: 131/255, blue: 135/255, alpha: 1)
                 firstCell.cityLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 firstCell.tempLabel.textColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
@@ -117,11 +105,6 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.weatherLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 firstCell.weatherImageView.image = UIImage(named:"cloud&sun2")
             case "비":
-                firstCell.contentView.backgroundColor = UIColor(named: "BackGroundR")
-                firstCell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "fontR" : "cellR")
-                firstCell.highLabel.textColor = UIColor(named: "fontR")
-                firstCell.lowLabel.textColor = UIColor(named: "fontR")
-                firstCell.weatherLabel.textColor = UIColor(named: "fontR")
                 firstCell.contentView.backgroundColor = UIColor(red: 122/255, green: 131/255, blue: 135/255, alpha: 1)
                 firstCell.cityLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 firstCell.tempLabel.textColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
@@ -138,18 +121,6 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.weatherLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 firstCell.weatherImageView.image = UIImage(named: "heavyRain2")
             case "비/눈":
-                firstCell.contentView.backgroundColor = UIColor(named: "BackGroundS")
-                firstCell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "fontS" : "cellS")
-                firstCell.highLabel.textColor = UIColor(named: "fontS")
-                firstCell.lowLabel.textColor = UIColor(named: "fontS")
-                firstCell.weatherLabel.textColor = UIColor(named: "fontS")
-                firstCell.weatherImageView.image = UIImage(named: "snow&rain2")
-            case "눈":
-                firstCell.contentView.backgroundColor = UIColor(named: "BackGroundS")
-                firstCell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "fontS" : "cellS")
-                firstCell.highLabel.textColor = UIColor(named: "fontS")
-                firstCell.lowLabel.textColor = UIColor(named: "fontS")
-                firstCell.weatherLabel.textColor = UIColor(named: "fontS")
                 firstCell.contentView.backgroundColor = UIColor(red: 171/255, green: 211/255, blue: 240/255, alpha: 1)
                 firstCell.cityLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
                 firstCell.tempLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
@@ -159,7 +130,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.weatherImageView.image = UIImage(named: "snow&rain2")
             case "눈":
                 firstCell.contentView.backgroundColor = UIColor(red: 171/255, green: 211/255, blue: 240/255, alpha: 1)
-                firstCell.cityLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+                firstCell.tempLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
                 firstCell.tempLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
                 firstCell.highLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
                 firstCell.lowLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
@@ -167,7 +138,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.weatherImageView.image = UIImage(named: "snow2")
             default:
                 firstCell.contentView.backgroundColor = UIColor(named: "Background")
-                firstCell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "fontS" : "cellS")
+                firstCell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "font" : "cell")
                 firstCell.highLabel.textColor = UIColor(named: "font")
                 firstCell.lowLabel.textColor = UIColor(named: "font")
                 firstCell.weatherLabel.textColor = UIColor(named: "font")
@@ -216,23 +187,10 @@ class MyWeatherPageTableViewController: UITableViewController {
             case "sunny":
                 cell.contentView.backgroundColor = UIColor(named: "Background")
                 cell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "font" : "cell")
-                cell.highLabel.textColor = UIColor(named: "font")
                 cell.lowLabel.textColor = UIColor(named: "font")
                 cell.weatherLabel.textColor = UIColor(named: "font")
                 cell.cellImageView.image = UIImage(named: "sun2")
             case "Mostly Cloudy":
-                cell.contentView.backgroundColor = UIColor(named: "BackGroundR")
-                cell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "font" : "cell")
-                cell.highLabel.textColor = UIColor(named: "font")
-                cell.lowLabel.textColor = UIColor(named: "font")
-                cell.weatherLabel.textColor = UIColor(named: "font")
-                cell.cellImageView.image = UIImage(named:"sun&cloud2")
-            case "cloudy":
-                cell.contentView.backgroundColor = UIColor(named: "BackGroundR")
-                cell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "fontR" : "cellR")
-                cell.highLabel.textColor = UIColor(named: "fontR")
-                cell.lowLabel.textColor = UIColor(named: "fontR")
-                cell.weatherLabel.textColor = UIColor(named: "fontR")
                 cell.contentView.backgroundColor = UIColor(red: 122/255, green: 131/255, blue: 135/255, alpha: 1)
                 cell.cityLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 cell.cityDetailLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
@@ -251,32 +209,6 @@ class MyWeatherPageTableViewController: UITableViewController {
                 cell.weatherLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 cell.cellImageView.image = UIImage(named:"cloud&sun2")
             case "비":
-                cell.contentView.backgroundColor = UIColor(named: "BackGroundR")
-                cell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "fontR" : "cellR")
-                cell.highLabel.textColor = UIColor(named: "fontR")
-                cell.lowLabel.textColor = UIColor(named: "fontR")
-                cell.weatherLabel.textColor = UIColor(named: "fontR")
-                cell.cellImageView.image = UIImage(named: "rain2")
-            case "소나기":
-                cell.contentView.backgroundColor = UIColor(named: "BackGroundR")
-                cell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "fontR" : "cellR")
-                cell.highLabel.textColor = UIColor(named: "fontR")
-                cell.lowLabel.textColor = UIColor(named: "fontR")
-                cell.weatherLabel.textColor = UIColor(named: "fontR")
-                cell.cellImageView.image = UIImage(named: "heavyRain2")
-            case "비/눈":
-                cell.contentView.backgroundColor = UIColor(named: "BackGroundS")
-                cell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "cellS" : "fontS")
-                cell.highLabel.textColor = UIColor(named: "fontS")
-                cell.lowLabel.textColor = UIColor(named: "fontS")
-                cell.weatherLabel.textColor = UIColor(named: "fontS")
-                cell.cellImageView.image = UIImage(named: "snow&rain2")
-            case "눈":
-                cell.contentView.backgroundColor = UIColor(named: "BackGroundS")
-                cell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "cellS" : "fontS")
-                cell.highLabel.textColor = UIColor(named: "fontS")
-                cell.lowLabel.textColor = UIColor(named: "fontS")
-                cell.weatherLabel.textColor = UIColor(named: "fontS")
                 cell.contentView.backgroundColor = UIColor(red: 122/255, green: 131/255, blue: 135/255, alpha: 1)
                 cell.cityLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
                 cell.cityDetailLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
