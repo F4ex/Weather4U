@@ -17,6 +17,7 @@ class WeekWeatherCell: UITableViewCell {
     let icon = UIImageView()
     var tempHigh = UILabel()
     var tempLow = UILabel()
+    var weatherStatus: String = ""
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -34,26 +35,20 @@ class WeekWeatherCell: UITableViewCell {
         }
         day.text = "Now"
         day.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
-        day.textColor = UIColor(named: "font")
         
         drop.image = UIImage(systemName: "drop")
-        drop.tintColor = UIColor(named: "font")
         icon.contentMode = .scaleAspectFill //가져온 물방울과 동일하게 사이즈를 맞추려면 영역에 아이콘을 맞추는 방법 사용
         
         pop.text = "00%"
         pop.font = UIFont(name: "Apple SD Gothic Neo", size: 12)
-        pop.textColor = UIColor(named: "font")
         
-        icon.tintColor = UIColor(named: "font")
         icon.contentMode = .scaleAspectFit //기본제공 아이콘 찌그러지지 않게 하려면 비율고정 필요
         
         tempHigh.text = "00°"
         tempHigh.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
-        tempHigh.textColor = UIColor(named: "font")
         
         tempLow.text = "00°"
         tempLow.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
-        tempLow.textColor = UIColor(named: "font")
         
     }
     
@@ -139,6 +134,50 @@ class WeekWeatherCell: UITableViewCell {
             self.drop.image = UIImage(systemName: "drop.fill")
         default:
             self.drop.image = UIImage(systemName: "drop")
+        }
+    }
+    
+    func updateAppearanceBasedOnWeather(for weatherStatus: String) {
+        switch weatherStatus {
+        case "Sunny", "Cloudy":
+            day.textColor = UIColor(named: "font")!
+            drop.tintColor = UIColor(named: "font")!
+            pop.textColor = UIColor(named: "font")!
+            icon.tintColor = UIColor(named: "font")!
+            tempHigh.textColor = UIColor(named: "font")!
+            tempLow.textColor = UIColor(named: "font")!
+        case "Mostly Cloudy", "비", "소나기":
+            day.textColor = UIColor(named: "fontR")!
+            drop.tintColor = UIColor(named: "fontR")!
+            pop.textColor = UIColor(named: "fontR")!
+            icon.tintColor = UIColor(named: "fontR")!
+            tempHigh.textColor = UIColor(named: "fontR")!
+            tempLow.textColor = UIColor(named: "fontR")!
+        case "비/눈", "눈":
+            day.textColor = UIColor(named: "fontS")!
+            drop.tintColor = UIColor(named: "fontS")!
+            pop.textColor = UIColor(named: "fontS")!
+            icon.tintColor = UIColor(named: "fontS")!
+            tempHigh.textColor = UIColor(named: "fontS")!
+            tempLow.textColor = UIColor(named: "fontS")!
+        default:
+            day.textColor = UIColor(named: "font")!
+            drop.tintColor = UIColor(named: "font")!
+            pop.textColor = UIColor(named: "font")!
+            icon.tintColor = UIColor(named: "font")!
+            tempHigh.textColor = UIColor(named: "font")!
+            tempLow.textColor = UIColor(named: "font")!
+        }
+        if traitCollection.userInterfaceStyle == .dark {
+            switch weatherStatus {
+            default:
+                day.textColor = UIColor(named: "font")!
+                drop.tintColor = UIColor(named: "font")!
+                pop.textColor = UIColor(named: "font")!
+                icon.tintColor = UIColor(named: "font")!
+                tempHigh.textColor = UIColor(named: "font")!
+                tempLow.textColor = UIColor(named: "font")!
+            }
         }
     }
 }
