@@ -194,19 +194,19 @@ class MainViewController: BaseViewController {
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView)
             $0.width.equalTo(scrollView)
-            $0.height.equalTo(1604)
+            $0.height.equalTo(1680)
         }
         
-        imageView.snp.makeConstraints(){ //<- 공간이 너무 뜸, 수정 필요 수정해야함!!!!!!!!
+        imageView.snp.makeConstraints(){
             $0.top.equalTo(contentView)
-            $0.bottom.equalTo(temperature.snp.top)
+            $0.height.equalTo(200)
         }
         weatherImage.snp.makeConstraints(){
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.top.equalTo(imageView)
+            $0.centerY.equalTo(imageView).offset(53)
         }
         temperature.snp.makeConstraints(){
-            $0.top.equalTo(373)
+            $0.top.equalTo(contentView).offset(300)
             $0.left.equalTo(contentView).offset(164)
         }
         tempHigh.snp.makeConstraints(){
