@@ -64,7 +64,7 @@ class MainViewController: BaseViewController {
     
     //그라데이션 레이어와 마스크 해줄 레이어 만들기
     let maskedUpView = UIView(frame: CGRect(x: 0, y: 782, width: 393, height: 70))
-    let maskedDownView = UIView(frame: CGRect(x: 0, y: 0, width: 393, height: 67))
+    let maskedDownView = UIView(frame: CGRect(x: 0, y: 123, width: 393, height: 67))
     let gradientUp = CAGradientLayer()
     let gradientDown = CAGradientLayer()
     
@@ -90,6 +90,7 @@ class MainViewController: BaseViewController {
         if MainViewController.selectRegion == nil {
             CoreDataManager.shared.readFirstData()
         }
+        
         
         weekWeather.sectionHeaderTopPadding = 0
         
@@ -156,54 +157,56 @@ class MainViewController: BaseViewController {
     
     //MARK: - 오토레이아웃
     override func constraintLayout() {
-        view.addSubview(scrollView)
+        [location, locationDetail, moveToDress, moveToSearch, scrollView].forEach() {
+            view.addSubview($0)
+        }
+        moveToDress.snp.makeConstraints(){
+            $0.top.equalTo(view).offset(67)
+            $0.left.equalTo(view).inset(29)
+            $0.width.equalTo(30)
+            $0.height.equalTo(24)
+        }
+        moveToSearch.snp.makeConstraints(){
+            $0.top.equalTo(view).offset(67)
+            $0.right.equalTo(view).inset(29)
+            $0.width.equalTo(30)
+            $0.height.equalTo(24)
+        }
+        location.snp.makeConstraints(){
+            $0.top.equalTo(view).offset(82)
+            $0.centerX.equalTo(view)
+        }
+        locationDetail.snp.makeConstraints(){
+            $0.top.equalTo(location.snp.bottom).offset(5)
+            $0.centerX.equalTo(view)
+        }
         scrollView.snp.makeConstraints(){
-            $0.top.equalTo(view)
+            $0.top.equalTo(view).offset(146)
             $0.left.right.bottom.equalTo(view)
         }
+        
         scrollView.addSubview(contentView)
         
-        [location, locationDetail, moveToDress, moveToSearch, imageView, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather,todayPrecipitation, feels, footerMessage, logo].forEach() {
+        [imageView, weatherImage, temperature, tempHigh, tempLow, weatherExplanation, status, todayWeather, weekWeather,todayPrecipitation, feels, footerMessage, logo].forEach() {
             contentView.addSubview($0)
         }
         
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView)
             $0.width.equalTo(scrollView)
-            $0.height.equalTo(1763)
+            $0.height.equalTo(1680)
         }
         
-        location.snp.makeConstraints(){
-            $0.top.equalTo(contentView).offset(28)
-            $0.centerX.equalTo(contentView)
-        }
-        locationDetail.snp.makeConstraints(){
-            $0.top.equalTo(location.snp.bottom).offset(5)
-            $0.centerX.equalTo(contentView)
-        }
-    
-        moveToDress.snp.makeConstraints(){
-            $0.top.equalTo(contentView).offset(13)
-            $0.left.equalTo(contentView).inset(29)
-            $0.width.equalTo(30)
-            $0.height.equalTo(24)
-        }
-        moveToSearch.snp.makeConstraints(){
-            $0.top.equalTo(contentView).offset(13)
-            $0.right.equalTo(contentView).inset(29)
-            $0.width.equalTo(30)
-            $0.height.equalTo(24)
-        }
         imageView.snp.makeConstraints(){
-            $0.top.equalTo(locationDetail.snp.bottom).offset(10)
-            $0.bottom.equalTo(temperature.snp.top)
+            $0.top.equalTo(contentView)
+            $0.height.equalTo(200)
         }
         weatherImage.snp.makeConstraints(){
             $0.centerX.equalTo(contentView.snp.centerX)
-            $0.centerY.equalTo(imageView)
+            $0.centerY.equalTo(imageView).offset(53)
         }
         temperature.snp.makeConstraints(){
-            $0.top.equalTo(contentView).offset(383)
+            $0.top.equalTo(contentView).offset(300)
             $0.left.equalTo(contentView).offset(164)
         }
         tempHigh.snp.makeConstraints(){
@@ -457,7 +460,6 @@ class MainViewController: BaseViewController {
     
     
     func setModalPage() {
-        
         if MainViewController.isModal == true {
             location.text = MainViewController.selectRegion?.City
             locationDetail.text = "\(String(describing: MainViewController.selectRegion?.Town ?? "")) \(String(describing: MainViewController.selectRegion?.Village ?? ""))"
@@ -577,6 +579,39 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return cell
         }
         return UICollectionViewCell()
+    }
+    
+    //컬렉션뷰 내부 남는 공간에 서브뷰를 추가해서 헤더처럼 만들어주려고 함 <- 이것도 안보인다 수정해야함!!!!!!!!
+    func setupHeaderView() {
+        let headerView = UIView()
+        headerView.backgroundColor = .clear
+        view.addSubview(headerView)
+        
+        headerView.snp.makeConstraints(){
+            $0.top.equalTo(todayWeather.snp.top)
+            $0.width.equalTo(todayWeather.snp.horizontalEdges)
+            $0.height.equalTo(todayWeather).offset(38)
+        }
+        
+        let label = UILabel()
+        label.text = "Hourly Forecast"
+        label.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
+        label.textColor = UIColor(named: "font")
+        headerView.addSubview(label)
+        
+        let icon = UIImageView(image: UIImage(systemName: "clock"))
+        icon.tintColor = UIColor(named: "font")
+        headerView.addSubview(icon)
+        
+        label.snp.makeConstraints(){
+            $0.top.equalTo(todayWeather.snp.top).offset(10)
+            $0.left.equalTo(todayWeather.snp.left).offset(22)
+        }
+        icon.snp.makeConstraints(){
+            $0.top.equalTo(todayWeather.snp.top).offset(8)
+            $0.left.equalTo(label.snp.right).offset(6)
+            $0.width.height.equalTo(todayWeather).offset(20)
+        }
     }
 }
 

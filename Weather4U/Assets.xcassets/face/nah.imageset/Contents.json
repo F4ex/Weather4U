@@ -3,6 +3,16 @@
     {
       "filename" : "nah.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "nahW.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

@@ -3,6 +3,16 @@
     {
       "filename" : "smile.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "laughW.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

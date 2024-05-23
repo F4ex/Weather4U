@@ -106,7 +106,7 @@ class FeelsCollectionViewCell: UICollectionViewCell {
         
         gradeLabel.snp.makeConstraints(){
             $0.top.equalTo(faceIcon.snp.bottom).offset(8)
-            $0.left.equalToSuperview().offset(59)
+            $0.centerX.equalToSuperview()
         }
     }
     

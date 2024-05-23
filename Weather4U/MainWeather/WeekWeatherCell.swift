@@ -38,12 +38,14 @@ class WeekWeatherCell: UITableViewCell {
         
         drop.image = UIImage(systemName: "drop")
         drop.tintColor = UIColor(named: "font")
+        icon.contentMode = .scaleAspectFill //가져온 물방울과 동일하게 사이즈를 맞추려면 영역에 아이콘을 맞추는 방법 사용
         
         pop.text = "00%"
         pop.font = UIFont(name: "Apple SD Gothic Neo", size: 12)
         pop.textColor = UIColor(named: "font")
         
         icon.tintColor = UIColor(named: "font")
+        icon.contentMode = .scaleAspectFit //기본제공 아이콘 찌그러지지 않게 하려면 비율고정 필요
         
         tempHigh.text = "00°"
         tempHigh.font = UIFont(name: "Apple SD Gothic Neo", size: 20)
@@ -66,12 +68,12 @@ class WeekWeatherCell: UITableViewCell {
             $0.centerY.equalToSuperview()
             $0.width.equalTo(12)
             $0.height.equalTo(17.25)
-            $0.right.equalTo(pop.snp.left).offset(-5)
+            $0.centerX.equalToSuperview().offset(-15)
         }
         
         pop.snp.makeConstraints(){
             $0.top.equalToSuperview().offset(20)
-            $0.right.equalTo(icon.snp.left).offset(-24)
+            $0.left.equalTo(drop.snp.right).offset(6)
         }
         
         icon.snp.makeConstraints(){
