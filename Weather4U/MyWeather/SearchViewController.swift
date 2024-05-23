@@ -52,7 +52,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         let barButton = UIBarButtonItem(customView: settingButton)
         self.navigationItem.rightBarButtonItem = barButton
         
-        myWeatherTable.tableView.reloadData()
+//        myWeatherTable.tableView.reloadData()
         
     }
     
@@ -60,7 +60,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         super.viewWillAppear(animated)
         
         CoreDataManager.shared.updateCoreDataOrder()
-        myWeatherTable.tableView.reloadData()
+//        myWeatherTable.tableView.reloadData()
     }
     
     

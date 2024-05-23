@@ -30,12 +30,15 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 테이블 뷰 삭제
         tableView.isEditing = false
         
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableData), name: NSNotification.Name("ReloadTableViewNotification"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         CoreDataManager.shared.updateCoreDataOrder()
-        tableView.reloadData()
+
+//        tableView.reloadData()
     }
     
     
@@ -272,6 +275,16 @@ extension MyWeatherPageTableViewController {
         } else {
             MainViewController.isModal2 = true
             let modalVC = MainViewController()
+            MainViewController.selectRegion = CombinedData(AreaNo: Int(CoreDataManager.addLocationData[indexPath.row].areaNo),
+                                                           Region: CoreDataManager.addLocationData[indexPath.row].region ?? "-",
+                                                           City: CoreDataManager.addLocationData[indexPath.row].city ?? "-",
+                                                           Town: CoreDataManager.addLocationData[indexPath.row].town ?? "-",
+                                                           Village: CoreDataManager.addLocationData[indexPath.row].village ?? "-",
+                                                           X: Int(CoreDataManager.addLocationData[indexPath.row].x),
+                                                           Y: Int(CoreDataManager.addLocationData[indexPath.row].y),
+                                                           Sentence: Int(CoreDataManager.addLocationData[indexPath.row].sentence),
+                                                           Status: CoreDataManager.addLocationData[indexPath.row].status ?? "-",
+                                                           Temperature: CoreDataManager.addLocationData[indexPath.row].temperature ?? "-")
             modalVC.modalPresentationStyle = .fullScreen
             present(modalVC, animated: true)
         }
@@ -300,14 +313,16 @@ extension MyWeatherPageTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
-        let mover = CoreDataManager.addLocationData.remove(at: sourceIndexPath.row)
-        CoreDataManager.addLocationData.insert(mover, at: destinationIndexPath.row)
-        
+
+        CoreDataManager.shared.moveLocationData(from: sourceIndexPath.row, to: destinationIndexPath.row)
+
         CoreDataManager.shared.updateCoreDataOrder()
+        
     }
     
-    
+    @objc func reloadTableData() {
+        tableView.reloadData()
+    }
     
     
 }

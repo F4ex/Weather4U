@@ -137,6 +137,7 @@ class MainViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         navigationController?.navigationBar.isHidden = true
     }
     
@@ -528,7 +529,7 @@ class MainViewController: BaseViewController {
     @objc func tappedCancelButton() {
         print("Cancel")
         
-        MyWeatherPageTableViewController().tableView.reloadData()
+//        MyWeatherPageTableViewController().tableView.reloadData()
         MainViewController.isModal = false
         dismiss(animated: true)
         
@@ -542,8 +543,8 @@ class MainViewController: BaseViewController {
         }
         
         CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
-        
-        
+        CoreDataManager.shared.readData()
+
         // Add 버튼 클릭 시 검색결과 화면이 아닌 바로 MyWeatherPage 로 이동
         if let navigationController = self.presentingViewController as? UINavigationController {
             for controller in navigationController.viewControllers {
@@ -556,9 +557,9 @@ class MainViewController: BaseViewController {
         
         // 현재 모달을 닫습니다.
         dismiss(animated: true) {
-            DispatchQueue.main.async {
-                MyWeatherPageTableViewController().tableView.reloadData()
-            }
+//            DispatchQueue.main.async {
+//                MyWeatherPageTableViewController().tableView.reloadData()
+//            }
             MainViewController.isModal = false
         }
     }
@@ -588,7 +589,7 @@ class MainViewController: BaseViewController {
         
         print("Back")
         
-        MyWeatherPageTableViewController().tableView.reloadData()
+//        MyWeatherPageTableViewController().tableView.reloadData()
         MainViewController.isModal2 = false
         dismiss(animated: true)
     }
