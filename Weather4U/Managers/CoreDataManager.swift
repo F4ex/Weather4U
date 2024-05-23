@@ -64,8 +64,6 @@ class CoreDataManager {
         do {
             let locationAllDatas = try context.fetch(request)
             CoreDataManager.addLocationData = locationAllDatas
-            print(CoreDataManager.addLocationData)
-            print(CoreDataManager.addLocationData.count)
         } catch {
             print("Error fetching data from CoreData: \(error.localizedDescription)")
         }
@@ -103,61 +101,60 @@ class CoreDataManager {
         }
     }
     
-    func deleteData(at index: Int) {
+    func deleteData(withOrder order: Int) {
         guard let viewContext = self.persistentContainer?.viewContext else {
             print("Error: Can't access Core Data view context")
             return
         }
         
         let request = LocationAllData.fetchRequest()
+        // LocationAllData.order 값이 주어진 order와 일치하는 데이터만 선택
+        request.predicate = NSPredicate(format: "order == %d", order)
         
         do {
-            let wishListDatas = try viewContext.fetch(request)
-            // 인덱스 유효성 검사
-            guard wishListDatas.indices.contains(index) else {
-                print("Error: Index out of range")
-                return
+            let matchingDatas = try viewContext.fetch(request)
+            // 일치하는 데이터가 있다면, 첫 번째 데이터를 삭제
+            if let dataToDelete = matchingDatas.first {
+                viewContext.delete(dataToDelete)
+//                self.readData()
+                try viewContext.save()
+                print("Data deleted successfully")
+            } else {
+                print("Error: No data found with order \(order)")
             }
-            // 인덱스에 해당하는 데이터 삭제
-            let dataToDelete = wishListDatas[index]
-            viewContext.delete(dataToDelete)
-            
-            // 변경 사항 저장
-            try viewContext.save()
-            print("Data deleted successfully")
         } catch {
             print("Failed to delete data: \(error.localizedDescription)")
         }
     }
     
 
-        func moveLocationData(from sourceIndex: Int, to destinationIndex: Int) {
-            guard let viewContext = self.persistentContainer?.viewContext else {
-                print("Error: Can't access CoreData view context")
-                return
-            }
-            
-            let fetchRequest: NSFetchRequest<LocationAllData> = LocationAllData.fetchRequest()
-            let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
-            fetchRequest.sortDescriptors = [sortDescriptor]
-            
-            do {
-                var locationDatas = try viewContext.fetch(fetchRequest)
-                let mover = locationDatas.remove(at: sourceIndex)
-                locationDatas.insert(mover, at: destinationIndex)
-                
-                // Update the order field in LocationAllData objects
-                for (index, data) in locationDatas.enumerated() {
-                    data.order = Int16(index)
-                }
-                
-                try viewContext.save()
-                self.readData() // 변경 값을 업데이트해주어야.
-                print("코어데이터 위치 이동 성공")
-            } catch {
-                print("Failed to move CoreData location data: \(error.localizedDescription)")
-            }
+    func moveLocationData(from sourceIndex: Int, to destinationIndex: Int) {
+        guard let viewContext = self.persistentContainer?.viewContext else {
+            print("Error: Can't access CoreData view context")
+            return
         }
+        
+        let fetchRequest: NSFetchRequest<LocationAllData> = LocationAllData.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            var locationDatas = try viewContext.fetch(fetchRequest)
+            let mover = locationDatas.remove(at: sourceIndex)
+            locationDatas.insert(mover, at: destinationIndex)
+            
+            // Update the order field in LocationAllData objects
+            for (index, data) in locationDatas.enumerated() {
+                data.order = Int16(index)
+            }
+            
+            try viewContext.save()
+            self.readData() // 변경 값을 업데이트해주어야.
+            print("코어데이터 위치 이동 성공")
+        } catch {
+            print("Failed to move CoreData location data: \(error.localizedDescription)")
+        }
+    }
 
     
     func updateCoreDataOrder() {

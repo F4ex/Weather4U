@@ -15,6 +15,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -78,13 +79,13 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.highLabel.text = "H: \(Int(highTempFahrenheit))°"
                 firstCell.lowLabel.text = "L: \(Int(lowTempFahrenheit))°"
             }
-            // 배경색 설정
+            // 폰트 설정
             switch firstCell.weatherLabel.text {
             case "sunny":
                 firstCell.contentView.backgroundColor = UIColor(named: "Background")
                 firstCell.locationLabel.textColor = UIColor(named: "font")
                 firstCell.cityLabel.textColor = UIColor(named: "font")
-                firstCell.tempLabel.textColor = UIColor(named: "cell")
+                firstCell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "font" : "cell")
                 firstCell.highLabel.textColor = UIColor(named: "font")
                 firstCell.lowLabel.textColor = UIColor(named: "font")
                 firstCell.weatherLabel.textColor = UIColor(named: "font")
@@ -147,7 +148,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 firstCell.contentView.backgroundColor = UIColor(named: "Background")
                 firstCell.locationLabel.textColor = UIColor(named: "font")
                 firstCell.cityLabel.textColor = UIColor(named: "font")
-                firstCell.tempLabel.textColor = UIColor(named: "cell")
+                firstCell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "font" : "cell")
                 firstCell.highLabel.textColor = UIColor(named: "font")
                 firstCell.lowLabel.textColor = UIColor(named: "font")
                 firstCell.weatherLabel.textColor = UIColor(named: "font")
@@ -197,8 +198,8 @@ class MyWeatherPageTableViewController: UITableViewController {
                 cell.contentView.backgroundColor = UIColor(named: "Background")
                 cell.cityLabel.textColor = UIColor(named: "font")
                 cell.cityDetailLabel.textColor = UIColor(named: "font")
-                cell.tempLabel.textColor = UIColor(named: "cell")
                 cell.highLabel.textColor = UIColor(named: "font")
+                cell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "font" : "cell")
                 cell.lowLabel.textColor = UIColor(named: "font")
                 cell.weatherLabel.textColor = UIColor(named: "font")
                 cell.cellImageView.image = UIImage(named: "sun2")
@@ -260,7 +261,9 @@ class MyWeatherPageTableViewController: UITableViewController {
                 cell.contentView.backgroundColor = UIColor(named: "Background")
                 cell.cityLabel.textColor = UIColor(named: "font")
                 cell.cityDetailLabel.textColor = UIColor(named: "font")
-                cell.tempLabel.textColor = UIColor(named: "cell")
+                cell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "font" : "cell")
+                cell.cityLabel.textColor = UIColor(named: "font")
+                cell.cityDetailLabel.textColor = UIColor(named: "font")
                 cell.highLabel.textColor = UIColor(named: "font")
                 cell.lowLabel.textColor = UIColor(named: "font")
                 cell.weatherLabel.textColor = UIColor(named: "font")
@@ -301,7 +304,7 @@ extension MyWeatherPageTableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             CoreDataManager.addLocationData.remove(at: indexPath.row)
-            CoreDataManager.shared.deleteData(at: indexPath.row)
+            CoreDataManager.shared.deleteData(withOrder: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
