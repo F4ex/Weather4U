@@ -348,12 +348,4 @@ class DataProcessingManager {
             return "Terrible"
         }
     }
-
-    func currentFormattedTime() -> String {
-                let now = Date()
-                let formatter = DateFormatter()
-                formatter.dateFormat = "HH00"
-                return formatter.string(from: now)
-            }
-
 }
