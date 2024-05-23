@@ -133,7 +133,6 @@ class MainViewController: BaseViewController {
         }
         
         setupHeaderView()
-        //readData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
