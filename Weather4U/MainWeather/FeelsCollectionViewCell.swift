@@ -18,11 +18,14 @@ class FeelsCollectionViewCell: UICollectionViewCell {
     let num = UILabel()
     let descriptionLabel = UILabel()
     let gradeLabel = UILabel()
+    var weatherStatus: String = ""
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
         constraintLayout()
+        updateAppearanceBasedOnWeather(for: weatherStatus)
+        
     }
     
     required init?(coder: NSCoder) {
@@ -33,28 +36,20 @@ class FeelsCollectionViewCell: UICollectionViewCell {
         [background, property, icon, faceIcon, num, descriptionLabel, gradeLabel].forEach(){
             addSubview($0)
         }
-        background.backgroundColor = UIColor(named: "cell")
         background.layer.cornerRadius = 15
         
         property.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
-        property.textColor = UIColor(named: "font")
-        
-        icon.tintColor = UIColor(named: "font")
-        
-        faceIcon.tintColor = UIColor(named: "font")
         
         num.text = "00"
         num.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 32)
-        num.textColor = UIColor(named: "font")
         num.textAlignment = .center
         
         descriptionLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
-        descriptionLabel.textColor = UIColor(named: "font")
         descriptionLabel.numberOfLines = 2
         
         gradeLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 13)
-        gradeLabel.textColor = UIColor(named: "font")
         gradeLabel.textAlignment = .center
+        
         
     }
     
@@ -133,6 +128,70 @@ class FeelsCollectionViewCell: UICollectionViewCell {
         } else {
             gradeLabel.isHidden = true // 텍스트가 없으면 gradeLabel을 숨깁니다.
         }
+    }
+    
+    func updateAppearanceBasedOnWeather(for weatherStatus: String) {
+        var backgroundColor = UIColor()
+        var propertyC = UIColor()
+        var iconC = UIColor()
+        var faceIconC = UIColor()
+        var numC = UIColor()
+        var descriptionLabelC = UIColor()
+        var gradeLabelC = UIColor()
+        
+        switch weatherStatus {
+        case "Sunny", "Cloudy":
+            backgroundColor = UIColor(named: "cell")!
+            propertyC = UIColor(named: "font")!
+            iconC = UIColor(named: "font")!
+            faceIconC = UIColor(named: "font")!
+            numC = UIColor(named: "font")!
+            descriptionLabelC = UIColor(named: "font")!
+            gradeLabelC = UIColor(named: "font")!
+        case "Mostly Cloudy", "비", "소나기":
+            backgroundColor = UIColor(named: "cellR")!
+            propertyC = UIColor(named: "fontR")!
+            iconC = UIColor(named: "fontR")!
+            faceIconC = UIColor(named: "fontR")!
+            numC = UIColor(named: "fontR")!
+            descriptionLabelC = UIColor(named: "fontR")!
+            gradeLabelC = UIColor(named: "fontR")!
+        case "비/눈", "눈":
+            backgroundColor = UIColor(named: "cellS")!
+            propertyC = UIColor(named: "fontS")!
+            iconC = UIColor(named: "fontS")!
+            faceIconC = UIColor(named: "fontS")!
+            numC = UIColor(named: "fontS")!
+            descriptionLabelC = UIColor(named: "fontS")!
+            gradeLabelC = UIColor(named: "fontS")!
+        default:
+            backgroundColor = UIColor(named: "cell")!
+            propertyC = UIColor(named: "font")!
+            iconC = UIColor(named: "font")!
+            faceIconC = UIColor(named: "font")!
+            numC = UIColor(named: "font")!
+            descriptionLabelC = UIColor(named: "font")!
+            gradeLabelC = UIColor(named: "font")!
+        }
+        if traitCollection.userInterfaceStyle == .dark {
+            switch weatherStatus {
+            default:
+                backgroundColor = UIColor(named: "cell")!
+                propertyC = UIColor(named: "font")!
+                iconC = UIColor(named: "font")!
+                faceIconC = UIColor(named: "font")!
+                numC = UIColor(named: "font")!
+                descriptionLabelC = UIColor(named: "font")!
+                gradeLabelC = UIColor(named: "font")!
+            }
+        }
+        background.backgroundColor = backgroundColor
+        property.textColor = propertyC
+        icon.tintColor = iconC
+        faceIcon.tintColor = faceIconC
+        num.textColor = numC
+        descriptionLabel.textColor = descriptionLabelC
+        gradeLabel.textColor = gradeLabelC
     }
 }
 
