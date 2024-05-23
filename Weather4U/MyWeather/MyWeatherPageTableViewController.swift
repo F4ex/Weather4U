@@ -32,14 +32,12 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 테이블 뷰 삭제
         tableView.isEditing = false
         
-        CoreDataManager.shared.readData()
-        
-        tableView.reloadData()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        CoreDataManager.shared.updateCoreDataOrder()
+        tableView.reloadData()
     }
     
     
@@ -291,13 +289,25 @@ extension MyWeatherPageTableViewController {
         return indexPath.row > 0 ? true : false
     }
     
+    override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        // 첫 번째 셀 자리에는 다른 셀이 이동되지 않도록 설정
+        if proposedDestinationIndexPath.row == 0 {
+            return sourceIndexPath // 0번째 셀은 자리 유지
+        }
+        // 첫 번째 셀 외의 셀은 이동 허용
+        return proposedDestinationIndexPath
+    }
+
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        // Update the model
+
         let mover = CoreDataManager.addLocationData.remove(at: sourceIndexPath.row)
         CoreDataManager.addLocationData.insert(mover, at: destinationIndexPath.row)
         
         CoreDataManager.shared.updateCoreDataOrder()
     }
+    
+
+
     
 }
 
