@@ -272,6 +272,16 @@ extension MyWeatherPageTableViewController {
         } else {
             MainViewController.isModal2 = true
             let modalVC = MainViewController()
+            MainViewController.selectRegion = CombinedData(AreaNo: Int(CoreDataManager.addLocationData[indexPath.row].areaNo),
+                                                           Region: CoreDataManager.addLocationData[indexPath.row].region ?? "-",
+                                                           City: CoreDataManager.addLocationData[indexPath.row].city ?? "-",
+                                                           Town: CoreDataManager.addLocationData[indexPath.row].town ?? "-",
+                                                           Village: CoreDataManager.addLocationData[indexPath.row].village ?? "-",
+                                                           X: Int(CoreDataManager.addLocationData[indexPath.row].x),
+                                                           Y: Int(CoreDataManager.addLocationData[indexPath.row].y),
+                                                           Sentence: Int(CoreDataManager.addLocationData[indexPath.row].sentence),
+                                                           Status: CoreDataManager.addLocationData[indexPath.row].status ?? "-",
+                                                           Temperature: CoreDataManager.addLocationData[indexPath.row].temperature ?? "-")
             modalVC.modalPresentationStyle = .fullScreen
             present(modalVC, animated: true)
         }
