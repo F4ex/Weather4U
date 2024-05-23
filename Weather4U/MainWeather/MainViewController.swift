@@ -121,7 +121,7 @@ class MainViewController: BaseViewController {
             setModalPage()
         }
         setupHeaderView()
-        readData()
+//        readData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
