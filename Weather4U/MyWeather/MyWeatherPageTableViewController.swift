@@ -355,7 +355,7 @@ extension MyWeatherPageTableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             CoreDataManager.addLocationData.remove(at: indexPath.row)
-            CoreDataManager.shared.deleteData(at: indexPath.row)
+            CoreDataManager.shared.deleteData(withOrder: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
