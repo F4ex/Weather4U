@@ -61,6 +61,7 @@ class DataProcessingManager {
     
     static let shared = DataProcessingManager()
     static var threeDaysWeatherData: [[Weather]] = []
+    static var myWeatherDatas: [[Weather]] = []
     static var weekForecast: [WeekForecast] = []
     static var dayForecast: [DayForecast] = []
     weak var delegate: DataReloadDelegate?

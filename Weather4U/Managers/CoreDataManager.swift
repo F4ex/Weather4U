@@ -26,6 +26,7 @@ class CoreDataManager {
 
         let newLocation = LocationAllData(context: context)
 
+        newLocation.areaNo = Int64(combinedData.AreaNo)
         newLocation.region = combinedData.Region
         newLocation.city = combinedData.City
         newLocation.town = combinedData.Town
@@ -54,8 +55,9 @@ class CoreDataManager {
         
         do {
             let locationAllDatas = try context.fetch(request)
+            print(locationAllDatas)
+            print(locationAllDatas.count)
             CoreDataManager.addLocationData = locationAllDatas
-            MyWeatherPageTableViewController.array = locationAllDatas
         } catch {
             print("Error fetching data from CoreData: \(error.localizedDescription)")
         }
@@ -73,6 +75,7 @@ class CoreDataManager {
             let locationAllDatas = try context.fetch(request)
             if let locationData = locationAllDatas.first {
                 let firstValue = CombinedData(
+                    AreaNo: Int(locationData.areaNo),
                     Region: locationData.region ?? "-",
                     City: locationData.city ?? "-",
                     Town: locationData.town ?? "-",
@@ -123,7 +126,7 @@ class CoreDataManager {
             return
         }
         
-        for (index, data) in MyWeatherPageTableViewController.array.enumerated() {
+        for (index, data) in CoreDataManager.addLocationData.enumerated() {
             data.order = Int16(index)
         }
         do {

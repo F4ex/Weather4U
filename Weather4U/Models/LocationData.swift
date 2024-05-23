@@ -13,6 +13,7 @@ typealias TemperatureCode = [String: String]
 
 // MARK: - DetailedLocation
 struct DetailedLocation: Decodable {
+    let AreaNo: Int
     let City: String
     let Town: String
     let Village: String
@@ -22,6 +23,7 @@ struct DetailedLocation: Decodable {
 
 // MARK: - CombinedData
 struct CombinedData: Encodable {
+    let AreaNo: Int
     let Region: String
     let City: String
     let Town: String

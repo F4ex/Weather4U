@@ -21,6 +21,7 @@
 		95DF8FA92BF79E1C000022CA /* FeelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DF8FA82BF79E1C000022CA /* FeelsCollectionViewCell.swift */; };
 		95FE07DF2BF336F0004D2139 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FE07DE2BF336F0004D2139 /* WeatherData.swift */; };
 		95FE07E22BF35203004D2139 /* WeekWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FE07E12BF35203004D2139 /* WeekWeatherCell.swift */; };
+		FF9E8EA52BFEC54C003CBC28 /* weatherLocationData.json in Resources */ = {isa = PBXBuildFile; fileRef = FF9E8EA42BFEC54C003CBC28 /* weatherLocationData.json */; };
 		FFE5DCB72BF1B463004EE3F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCB62BF1B463004EE3F7 /* AppDelegate.swift */; };
 		FFE5DCB92BF1B463004EE3F7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCB82BF1B463004EE3F7 /* SceneDelegate.swift */; };
 		FFE5DCBB2BF1B463004EE3F7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCBA2BF1B463004EE3F7 /* ViewController.swift */; };
@@ -35,7 +36,6 @@
 		FFE5DCF32BF3057C004EE3F7 /* MyWeatherPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCF02BF3057C004EE3F7 /* MyWeatherPageViewController.swift */; };
 		FFE5DCF52BF309E0004EE3F7 /* LocationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCF42BF309E0004EE3F7 /* LocationData.swift */; };
 		FFE5DCF92BF30CF0004EE3F7 /* JSONManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCF82BF30CF0004EE3F7 /* JSONManager.swift */; };
-		FFE5DCFD2BF32AF3004EE3F7 /* weatherLocationData.json in Resources */ = {isa = PBXBuildFile; fileRef = FFE5DCFC2BF32AF3004EE3F7 /* weatherLocationData.json */; };
 		FFE5DCFF2BF32C73004EE3F7 /* WeatherSentenceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCFE2BF32C73004EE3F7 /* WeatherSentenceData.swift */; };
 		FFE5DD012BF3630A004EE3F7 /* WeatherStatusData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DD002BF3630A004EE3F7 /* WeatherStatusData.swift */; };
 		FFE5DD032BF36AD6004EE3F7 /* WeatherTemperatureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DD022BF36AD6004EE3F7 /* WeatherTemperatureData.swift */; };
@@ -83,6 +83,7 @@
 		95DF8FA82BF79E1C000022CA /* FeelsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeelsCollectionViewCell.swift; sourceTree = "<group>"; };
 		95FE07DE2BF336F0004D2139 /* WeatherData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		95FE07E12BF35203004D2139 /* WeekWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekWeatherCell.swift; sourceTree = "<group>"; };
+		FF9E8EA42BFEC54C003CBC28 /* weatherLocationData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = weatherLocationData.json; path = ../../../../../Downloads/weatherLocationData.json; sourceTree = "<group>"; };
 		FFE5DCB32BF1B463004EE3F7 /* Weather4U.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather4U.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFE5DCB62BF1B463004EE3F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FFE5DCB82BF1B463004EE3F7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,7 +101,6 @@
 		FFE5DCF02BF3057C004EE3F7 /* MyWeatherPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWeatherPageViewController.swift; sourceTree = "<group>"; };
 		FFE5DCF42BF309E0004EE3F7 /* LocationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationData.swift; sourceTree = "<group>"; };
 		FFE5DCF82BF30CF0004EE3F7 /* JSONManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONManager.swift; sourceTree = "<group>"; };
-		FFE5DCFC2BF32AF3004EE3F7 /* weatherLocationData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = weatherLocationData.json; sourceTree = "<group>"; };
 		FFE5DCFE2BF32C73004EE3F7 /* WeatherSentenceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSentenceData.swift; sourceTree = "<group>"; };
 		FFE5DD002BF3630A004EE3F7 /* WeatherStatusData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherStatusData.swift; sourceTree = "<group>"; };
 		FFE5DD022BF36AD6004EE3F7 /* WeatherTemperatureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTemperatureData.swift; sourceTree = "<group>"; };
@@ -221,7 +221,7 @@
 				FFE5DD062BF38B18004EE3F7 /* weatherSentenceLocationData.json */,
 				FFE5DD052BF38B18004EE3F7 /* weatherStatusLocationData.json */,
 				FFE5DD042BF38B18004EE3F7 /* weatherTemperatureLocationData.json */,
-				FFE5DCFC2BF32AF3004EE3F7 /* weatherLocationData.json */,
+				FF9E8EA42BFEC54C003CBC28 /* weatherLocationData.json */,
 				FFE5DCFE2BF32C73004EE3F7 /* WeatherSentenceData.swift */,
 				FFE5DD022BF36AD6004EE3F7 /* WeatherTemperatureData.swift */,
 				95FE07DE2BF336F0004D2139 /* WeatherData.swift */,
@@ -319,10 +319,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFE5DCFD2BF32AF3004EE3F7 /* weatherLocationData.json in Resources */,
 				FFE5DD092BF38B18004EE3F7 /* weatherSentenceLocationData.json in Resources */,
 				FFE5DCC32BF1B465004EE3F7 /* Assets.xcassets in Resources */,
 				FFE5DD082BF38B18004EE3F7 /* weatherStatusLocationData.json in Resources */,
+				FF9E8EA52BFEC54C003CBC28 /* weatherLocationData.json in Resources */,
 				95AB0DEA2BFC99FD007975D9 /* BarlowSemiCondensed-Regular.ttf in Resources */,
 				FFE5DCC62BF1B465004EE3F7 /* Base in Resources */,
 				95B07D9F2BF3C6BB00F80AC5 /* Alata-Regular in Resources */,

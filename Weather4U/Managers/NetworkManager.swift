@@ -27,7 +27,7 @@ class NetworkManager {
     static var ncode : Int16 = 108
     static var ID : String = "11B00000"
     static var regID: String = "11B10101"
-    static var areaNo: String = "1100000000"
+    static var areaNo: Int64 = 1100000000
     
     
     
@@ -37,8 +37,8 @@ class NetworkManager {
             
         // 00시, 01시일 경우 전날 23시 데이터를 요청하기
         let currentHour = Calendar.current.component(.hour, from: Date())
-        let baseTime = (currentHour == 0 || currentHour == 1) ? "2300" : "0200"
-        let baseDate = (currentHour == 0 || currentHour == 1) ? self.previousDateToString() : currentDateString
+        let baseTime = (currentHour == 0 || currentHour == 1 || currentHour == 2) ? "2300" : "0200"
+        let baseDate = (currentHour == 0 || currentHour == 1 || currentHour == 2) ? self.previousDateToString() : currentDateString
         let url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let parameters: Parameters = ["dataType": "JSON",
@@ -168,7 +168,7 @@ class NetworkManager {
     }
     
     // MARK: - 자외선지수 데이터 받아오기
-    func fetchUVValue(areaNo: String = areaNo, completion: @escaping (Result<UVItems, Error>) -> Void) {
+    func fetchUVValue(areaNo: Int64 = areaNo, completion: @escaping (Result<UVItems, Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let formatter = DateFormatter()
@@ -190,7 +190,7 @@ class NetworkManager {
     }
     
     // MARK: - 체감온도(여름철) 데이터 받아오기
-    func fetchPerceivedTemperature(areaNo: String = areaNo, completion: @escaping (Result<PerceivedTemperatureItems, Error>) -> Void) {
+    func fetchPerceivedTemperature(areaNo: Int64 = areaNo, completion: @escaping (Result<PerceivedTemperatureItems, Error>) -> Void) {
         let url = "http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getSenTaIdxV4"
         let serviceKey = "PMlSyH+ObW0hWwzno2IL0dV7ieP6NaJ9kdG1wVCTBmY+8SisLa9CuYGJjmIcpb5SMuJ3RgfEtTUIyE7QevwZnw=="
         let formatter = DateFormatter()
@@ -213,7 +213,7 @@ class NetworkManager {
     }
     
     // MARK: - 모든 날씨 데이터 받아오기
-    func fetchAllWeatherData(x: Int16 = nx, y: Int16 = ny, sentence: Int16 = ncode, status: String = ID, temperature: String = regID, areaNo: String = areaNo) {
+    func fetchAllWeatherData(x: Int16 = nx, y: Int16 = ny, sentence: Int16 = ncode, status: String = ID, temperature: String = regID, areaNo: Int64 = areaNo) {
         let dispatchGroup = DispatchGroup()
         
         // MARK: - 3일치 날씨 데이터 가공해서 배열에 담기
