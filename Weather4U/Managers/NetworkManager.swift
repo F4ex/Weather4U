@@ -35,7 +35,7 @@ class NetworkManager {
     func fetchWeatherData(x: Int16 = nx, y: Int16 = ny, completion: @escaping (Result<[Item], Error>) -> Void) {
         let currentDateString = self.currentDateToString()
             
-        // 00시, 01시일 경우 전날 23시 데이터를 요청하기
+        // 00시, 01시, 02시일 경우 전날 23시 데이터를 요청하기
         let currentHour = Calendar.current.component(.hour, from: Date())
         let baseTime = (currentHour == 0 || currentHour == 1 || currentHour == 2) ? "2300" : "0200"
         let baseDate = (currentHour == 0 || currentHour == 1 || currentHour == 2) ? self.previousDateToString() : currentDateString
@@ -225,18 +225,6 @@ class NetworkManager {
                 DataProcessingManager.shared.forecastForDates(items: data, fcstDate: Date())
             case .failure(let error):
                 print(error) // 추후에 Alert창 호출로 변경
-            }
-        })
-        
-        // MARK: - 오늘 날씨 문장 데이터 변수에 담기
-        dispatchGroup.enter()
-        NetworkManager.shared.fetchWeatherSentence(sentenceCode: sentence, completion: { result in
-            defer { dispatchGroup.leave() }
-            switch result {
-            case .success(let data):
-                NetworkManager.weatherSentenceData = data[0].wfSv
-            case .failure(let error):
-                print(error)
             }
         })
         

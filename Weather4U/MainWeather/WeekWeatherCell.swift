@@ -134,7 +134,7 @@ class WeekWeatherCell: UITableViewCell {
         case 25..<50:
             self.drop.image = UIImage(named: "drop_Little")
         case 50..<75:
-            self.drop.image = UIImage(systemName: "drop_Half")
+            self.drop.image = UIImage(named: "drop_Half")
         case 75...100:
             self.drop.image = UIImage(systemName: "drop.fill")
         default:
