@@ -50,7 +50,7 @@ class JSONManager {
                     Y: location.Y,
                     Sentence: sentenceCode.filter { location.City.contains($0.key) }.first?.value ?? 108,
                     Status: statusCode.filter { location.City.contains($0.key) }.first?.value ?? "11B00000",
-                    Temperature: temperatureCode.filter { location.City.contains($0.key) }.first?.value ?? "11B10101"
+                    Temperature: temperatureCode.filter { location.Town.contains($0.key) }.first?.value ?? "11B10101"
                 )
                 JSONManager.combinedDataArray.append(combinedData)
             }

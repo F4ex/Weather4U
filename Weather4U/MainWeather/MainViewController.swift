@@ -61,6 +61,7 @@ class MainViewController: BaseViewController {
     var city: City = .서울특별시 //City의 디폴트 값인 서울로 현재의 위치를 표시하겠다
     var weatherData: [WeatherData] = []
     var weatherStatus: String = "Sunny"
+    var weatherType: String = "없음"
     
     //그라데이션 레이어와 마스크 해줄 레이어 만들기
     let maskedUpView = UIView(frame: CGRect(x: 0, y: 782, width: 393, height: 70))
@@ -109,7 +110,7 @@ class MainViewController: BaseViewController {
         maskedDownView.layer.mask = gradientDown
         view.addSubview(maskedDownView)
 
-        networkManager()
+        self.networkDataManager()
         
         if MainViewController.isModal == true {
             moveToSearch.isHidden = true
@@ -126,32 +127,14 @@ class MainViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-   
     }
     
-    //MARK: - 네트워크 매니저
-    
-    func networkManager() {
+    //MARK: - 네트워크 & 데이터 매니저
+    func networkDataManager() {
         guard let unwrapArray = MainViewController.selectRegion else { return }
         NetworkManager.shared.fetchAllWeatherData(x: Int16(unwrapArray.X), y: Int16(unwrapArray.Y), status: unwrapArray.Status, temperature: unwrapArray.Temperature, areaNo: Int64(unwrapArray.AreaNo))
         JSONManager.shared.loadJSONToLocationData()
-    }
-    
-    //데이터 조회
-    func readData() {
-        guard let context = self.persistentContainer?.viewContext else {
-            print("Error: Can't access Core Data view context")
-            return
-        }
-        
-        let request = LocationAllData.fetchRequest()
-        
-        do {
-            let locationAllDatas = try context.fetch(request)
-            CoreDataManager.addLocationData = locationAllDatas
-        } catch {
-            print("Error fetching data from CoreData: \(error.localizedDescription)")
-        }
+        CoreDataManager.shared.readData()
     }
     
     //MARK: - 오토레이아웃
@@ -330,9 +313,8 @@ class MainViewController: BaseViewController {
         
         
         switch weatherStatus {
-        case "Sunny", "Mostly Cloudy":
+        case "Sunny", "Cloudy":
             Icon = (weatherStatus == "Sunny" ? UIImage(named: "sun") : UIImage(named: "sun&cloud"))!
-            Icon = UIImage(named: "sun")!
             backgroundColor = UIColor(named: "Background")!
             temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
             locationC = UIColor(named: "font")!
@@ -346,36 +328,54 @@ class MainViewController: BaseViewController {
             todayWeatherC = UIColor(named: "cell")!
             todayPrecipitationC = UIColor(named: "cell")!
             weekWeatherC = UIColor(named: "cell")!
-        case "Cloudy", "비", "소나기":
-            Icon = (weatherStatus == "Cloudy" ? UIImage(named: "cloudy") : weatherStatus == "비" ? UIImage(named: "rain") : UIImage(named: "heavyRain"))!
-            backgroundColor = UIColor(named: "BackGroundR")!
-            temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
-            locationC = UIColor(named: "fontR")!
-            locationDetailC = UIColor(named: "fontR")!
-            moveToDressC = UIColor(named: "fontR")!
-            moveToSearchC = UIColor(named: "fontR")!
-            tempHighC = UIColor(named: "fontR")!
-            tempLowC = UIColor(named: "fontR")!
-            weatherExplanationC = UIColor(named: "fontR")!
-            weatherExplanationText = (weatherStatus == "Cloudy" ? "It's a gloomy day outside, a perfect time for a warm cup of tea and some cozy indoor activities." : weatherStatus == "비" ? "Rain is pouring down today. Remember to take your umbrella." : "Watch out for sudden showers. Keeping an umbrella handy is a smart choice!")
-            todayWeatherC = UIColor(named: "cellR")!
-            todayPrecipitationC = UIColor(named: "cellR")!
-            weekWeatherC = UIColor(named: "cellR")!
-        case "비/눈", "눈":
-            Icon = (weatherStatus == "비/눈" ? UIImage(named: "snow&rain") : UIImage(named: "snow"))!
-            backgroundColor = UIColor(named: "BackGroundS")!
-            temperatureColor = weatherStatus == "눈" ? UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1) : UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
-            locationC = UIColor(named: "fontS")!
-            locationDetailC = UIColor(named: "fontR")!
-            moveToDressC = UIColor(named: "fontS")!
-            moveToSearchC = UIColor(named: "fontS")!
-            tempHighC = UIColor(named: "fontS")!
-            tempLowC = UIColor(named: "fontS")!
-            weatherExplanationC = UIColor(named: "fontS")!
-            weatherExplanationText = (weatherStatus == "비/눈" ? "Today's weather is a mix of rain and snow. Take extra caution on slippery roads" : "A snowy blanket covers the ground today. Bundle up warmly and revel in the winter magic.")
-            todayWeatherC = UIColor(named: "cellS")!
-            todayPrecipitationC = UIColor(named: "cellS")!
-            weekWeatherC = UIColor(named: "cellS")!
+        case "Mostly Cloudy":
+            switch weatherType {
+            case "비", "소나기":
+                Icon = (weatherStatus == "비" ? UIImage(named: "rain") : UIImage(named: "heavyRain"))!
+                backgroundColor = UIColor(named: "BackGroundR")!
+                temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+                locationC = UIColor(named: "fontR")!
+                locationDetailC = UIColor(named: "fontR")!
+                moveToDressC = UIColor(named: "fontR")!
+                moveToSearchC = UIColor(named: "fontR")!
+                tempHighC = UIColor(named: "fontR")!
+                tempLowC = UIColor(named: "fontR")!
+                weatherExplanationC = UIColor(named: "fontR")!
+                weatherExplanationText = (weatherStatus == "비" ? "Rain is pouring down today. Remember to take your umbrella." : "Watch out for sudden showers. Keeping an umbrella handy is a smart choice!")
+                todayWeatherC = UIColor(named: "cellR")!
+                todayPrecipitationC = UIColor(named: "cellR")!
+                weekWeatherC = UIColor(named: "cellR")!
+            case "비/눈", "눈":
+                Icon = (weatherStatus == "비/눈" ? UIImage(named: "snow&rain") : UIImage(named: "snow"))!
+                backgroundColor = UIColor(named: "BackGroundS")!
+                temperatureColor = weatherStatus == "눈" ? UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1) : UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+                locationC = UIColor(named: "fontS")!
+                locationDetailC = UIColor(named: "fontR")!
+                moveToDressC = UIColor(named: "fontS")!
+                moveToSearchC = UIColor(named: "fontS")!
+                tempHighC = UIColor(named: "fontS")!
+                tempLowC = UIColor(named: "fontS")!
+                weatherExplanationC = UIColor(named: "fontS")!
+                weatherExplanationText = (weatherStatus == "비/눈" ? "Today's weather is a mix of rain and snow. Take extra caution on slippery roads" : "A snowy blanket covers the ground today. Bundle up warmly and revel in the winter magic.")
+                todayWeatherC = UIColor(named: "cellS")!
+                todayPrecipitationC = UIColor(named: "cellS")!
+                weekWeatherC = UIColor(named: "cellS")!
+            default:
+                Icon = UIImage(named: "cloudy")!
+                backgroundColor = UIColor(named: "BackGroundR")!
+                temperatureColor = UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
+                locationC = UIColor(named: "fontR")!
+                locationDetailC = UIColor(named: "fontR")!
+                moveToDressC = UIColor(named: "fontR")!
+                moveToSearchC = UIColor(named: "fontR")!
+                tempHighC = UIColor(named: "fontR")!
+                tempLowC = UIColor(named: "fontR")!
+                weatherExplanationC = UIColor(named: "fontR")!
+                weatherExplanationText = "It's a gloomy day outside, a perfect time for a warm cup of tea and some cozy indoor activities."
+                todayWeatherC = UIColor(named: "cellR")!
+                todayPrecipitationC = UIColor(named: "cellR")!
+                weekWeatherC = UIColor(named: "cellR")!
+            }
         default:
             Icon = UIImage(named: "sun")!
             backgroundColor = UIColor(named: "Background")!
@@ -384,36 +384,54 @@ class MainViewController: BaseViewController {
         
         if traitCollection.userInterfaceStyle == .dark {
             switch weatherStatus {
-            case "Cloudy", "비", "소나기":
-                Icon = (weatherStatus == "Cloudy" ? UIImage(named: "moon&cloud") : weatherStatus == "비" ? UIImage(named: "rain") : UIImage(named: "heavyRain"))!
-                backgroundColor = UIColor(named: "Background")!
-                temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
-                locationC = UIColor(named: "font")!
-                locationDetailC = UIColor(named: "font")!
-                moveToDressC = UIColor(named: "font")!
-                moveToSearchC = UIColor(named: "font")!
-                tempHighC = UIColor(named: "font")!
-                tempLowC = UIColor(named: "font")!
-                weatherExplanationC = UIColor(named: "font")!
-                weatherExplanationText = (weatherStatus == "Cloudy" ? "Despite the cloudy night, let the light within your heart guide you through darkness." : weatherStatus == "비" ? "Rain is pouring down today. Remember to take your umbrella." : "Watch out for sudden showers. Keeping an umbrella handy is a smart choice!")
-                todayWeatherC = UIColor(named: "cell")!
-                todayPrecipitationC = UIColor(named: "cell")!
-                weekWeatherC = UIColor(named: "cell")!
-            case "비/눈", "눈":
-                Icon = (weatherStatus == "비/눈" ? UIImage(named: "snow&rain") : UIImage(named: "snow"))!
-                backgroundColor = UIColor(named: "Background")!
-                temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
-                locationC = UIColor(named: "font")!
-                locationDetailC = UIColor(named: "font")!
-                moveToDressC = UIColor(named: "font")!
-                moveToSearchC = UIColor(named: "font")!
-                tempHighC = UIColor(named: "font")!
-                tempLowC = UIColor(named: "font")!
-                weatherExplanationC = UIColor(named: "font")!
-                weatherExplanationText = (weatherStatus == "비/눈" ? "Today's weather is a mix of rain and snow. Take extra caution on slippery roads" : "A snowy blanket covers the ground today. Bundle up warmly and revel in the winter magic.")
-                todayWeatherC = UIColor(named: "cell")!
-                todayPrecipitationC = UIColor(named: "cell")!
-                weekWeatherC = UIColor(named: "cell")!
+            case "Cloudy", "Mostly Cloudy":
+                switch weatherType {
+                case "비", "소나기":
+                    Icon = (weatherStatus == "비" ? UIImage(named: "rain") : UIImage(named: "heavyRain"))!
+                    backgroundColor = UIColor(named: "Background")!
+                    temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
+                    locationC = UIColor(named: "font")!
+                    locationDetailC = UIColor(named: "font")!
+                    moveToDressC = UIColor(named: "font")!
+                    moveToSearchC = UIColor(named: "font")!
+                    tempHighC = UIColor(named: "font")!
+                    tempLowC = UIColor(named: "font")!
+                    weatherExplanationC = UIColor(named: "font")!
+                    weatherExplanationText = (weatherStatus == "비" ? "Rain is pouring down today. Remember to take your umbrella." : "Watch out for sudden showers. Keeping an umbrella handy is a smart choice!")
+                    todayWeatherC = UIColor(named: "cell")!
+                    todayPrecipitationC = UIColor(named: "cell")!
+                    weekWeatherC = UIColor(named: "cell")!
+                case "비/눈", "눈":
+                    Icon = (weatherStatus == "비/눈" ? UIImage(named: "snow&rain") : UIImage(named: "snow"))!
+                    backgroundColor = UIColor(named: "Background")!
+                    temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
+                    locationC = UIColor(named: "font")!
+                    locationDetailC = UIColor(named: "font")!
+                    moveToDressC = UIColor(named: "font")!
+                    moveToSearchC = UIColor(named: "font")!
+                    tempHighC = UIColor(named: "font")!
+                    tempLowC = UIColor(named: "font")!
+                    weatherExplanationC = UIColor(named: "font")!
+                    weatherExplanationText = (weatherStatus == "비/눈" ? "Today's weather is a mix of rain and snow. Take extra caution on slippery roads" : "A snowy blanket covers the ground today. Bundle up warmly and revel in the winter magic.")
+                    todayWeatherC = UIColor(named: "cell")!
+                    todayPrecipitationC = UIColor(named: "cell")!
+                    weekWeatherC = UIColor(named: "cell")!
+                default:
+                    Icon = UIImage(named: "moon&cloud")!
+                    backgroundColor = UIColor(named: "Background")!
+                    temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
+                    locationC = UIColor(named: "font")!
+                    locationDetailC = UIColor(named: "font")!
+                    moveToDressC = UIColor(named: "font")!
+                    moveToSearchC = UIColor(named: "font")!
+                    tempHighC = UIColor(named: "font")!
+                    tempLowC = UIColor(named: "font")!
+                    weatherExplanationC = UIColor(named: "font")!
+                    weatherExplanationText = "Despite the cloudy night, let the light within your heart guide you through darkness."
+                    todayWeatherC = UIColor(named: "cell")!
+                    todayPrecipitationC = UIColor(named: "cell")!
+                    weekWeatherC = UIColor(named: "cell")!
+                }
             default:
                 Icon = UIImage(named: "moon")!
                 backgroundColor = UIColor(named: "Background")!
@@ -720,6 +738,7 @@ extension MainViewController: DataReloadDelegate {
             self.location.text = MainViewController.selectRegion?.City
             self.locationDetail.text = "\(MainViewController.selectRegion?.Town ?? "") \(MainViewController.selectRegion?.Village ?? "")"
             self.weatherStatus = DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .SKY) ?? "-"
+            self.weatherType = DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .PTY) ?? "-"
             self.temperature.text = "\(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMP) ?? "-")°"
             self.tempHigh.text = "H: \(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMX, currentTime: false, highTemp: true) ?? "-")°"
             self.tempLow.text = "L: \(DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .TMN, currentTime: false) ?? "-")°"
