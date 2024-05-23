@@ -120,14 +120,13 @@ class MainViewController: BaseViewController {
             setModalPage()
         }
         setupHeaderView()
+        readData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        
-        //뷰가 나타날 때마다 업데이트
-        readData()
+   
     }
     
     //MARK: - 네트워크 매니저
@@ -507,20 +506,34 @@ class MainViewController: BaseViewController {
     }
     
     @objc func tappedAddButton() {
-        print("Add")
+          print("Add")
+          
+          guard let unwrapArray = MainViewController.selectRegion else {
+              return
+          }
         
-        guard let unwrapArray = MainViewController.selectRegion else {
-            return
-        }
-        print(unwrapArray)
-        CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
-        CoreDataManager.shared.readData()
-        print(CoreDataManager.addLocationData)
-        MyWeatherPageTableViewController().tableView.reloadData()
-        MainViewController.isModal = false
-        dismiss(animated: true)
-    }
-}
+          CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
+
+          
+        // Add 버튼 클릭 시 검색결과 화면이 아닌 바로 MyWeatherPage 로 이동
+          if let navigationController = self.presentingViewController as? UINavigationController {
+              for controller in navigationController.viewControllers {
+                  if let searchViewController = controller as? SearchViewController {
+                      searchViewController.searchController.isActive = false
+                      break
+                  }
+              }
+          }
+          
+          // 현재 모달을 닫습니다.
+          dismiss(animated: true) {
+              DispatchQueue.main.async {
+                  MyWeatherPageTableViewController().tableView.reloadData()
+              }
+              MainViewController.isModal = false
+          }
+      }
+  }
 
 //MARK: - 컬렉션뷰 설정
 

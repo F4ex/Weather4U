@@ -56,6 +56,14 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        CoreDataManager.shared.updateCoreDataOrder()
+        myWeatherTable.tableView.reloadData()
+    }
+    
+    
     
     //MARK: - searchController
     
@@ -221,8 +229,6 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         
         myWeatherTable.tableView.visibleCells.forEach { cell in
             guard let cell = cell as? MyWeatherPageTableViewCell else {return}
-            //            cell.cityLabel.isHidden = false
-            //            cell.tempLabel.isHidden = false
             cell.highLabel.isHidden = false
             cell.lowLabel.isHidden = false
             cell.weatherLabel.isHidden = false

@@ -18,6 +18,13 @@ class MyWeatherPageViewController: BaseViewController {
         configureUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    
+        
+        myWeatherTable.tableView.reloadData()
+    }
+    
     override func configureUI() {
         view.addSubview(myWeatherTable.tableView)
         
