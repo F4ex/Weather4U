@@ -36,9 +36,9 @@ class MainViewController: BaseViewController {
         layout.minimumInteritemSpacing = 15
         layout.itemSize = CGSize(width: 110, height: 110)
     }
-    
-    let todayWeather = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then() {
-        let layout = $0.collectionViewLayout as! UICollectionViewFlowLayout
+    //UICollectionViewFlowLayout은 기본적으로 컬렉션뷰와 셀 간 센터x,센터y에 맞추도록 설정되어 있어서 여기를 커스텀 플로우레이아웃으로 설정 = 527번째 줄
+    let todayWeather = UICollectionView(frame: .zero, collectionViewLayout: CustomFlowLayout()).then() {
+        let layout = $0.collectionViewLayout as! CustomFlowLayout
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 2
         layout.itemSize = CGSize(width: 56, height: 110)
@@ -119,7 +119,7 @@ class MainViewController: BaseViewController {
 
             setModalPage()
         }
-        
+        setupHeaderView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -523,6 +523,26 @@ class MainViewController: BaseViewController {
 }
 
 //MARK: - 컬렉션뷰 설정
+
+class CustomFlowLayout: UICollectionViewFlowLayout {
+    //layoutAttributesForElements 매서드 = 설정한 영역과 셀 서브뷰의 속성 가져오기
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+            guard let attributes = super.layoutAttributesForElements(in: rect) else {
+                return nil //UICollectionViewLayout이 없으면 nil
+            }
+            
+            for attribute in attributes {
+                // 위에서 컬렉션뷰 설정할때 영역과 서브뷰간 속성이 존재하지 않는다면. 즉, collectionViewLayout: UICollectionViewFlowLayout() 으로 설정한게 아니라면
+                // 컬렉션 뷰의 높이의 원하는 지점에 셀을 배치합니다. 셀 서브뷰 높이의 가운데를 컬렉션뷰 높이의 57% 지점에 맞추기
+                if attribute.representedElementKind == nil {
+                    attribute.center.y = collectionView!.frame.height * 0.57
+                }
+            }
+            return attributes
+        }
+    }
+
+
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
@@ -581,18 +601,19 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return UICollectionViewCell()
     }
     
-    //컬렉션뷰 내부 남는 공간에 서브뷰를 추가해서 헤더처럼 만들어주려고 함 <- 이것도 안보인다 수정해야함!!!!!!!!
+    //오토레이아웃 제대로 잡기
+    //viewDidLoad에서 함수 호출해주지 않아서 보이지 않았다!
     func setupHeaderView() {
         let headerView = UIView()
-        headerView.backgroundColor = .clear
-        view.addSubview(headerView)
-        
+        contentView.addSubview(headerView)
+        //뷰에다 서브뷰를 추가하면 제일 상단 서브뷰로 올라오면서 배경색도 함께 반영이 된다
+        //view.addSubview(headerView)
+        //headerView.backgroundColor = .red
         headerView.snp.makeConstraints(){
             $0.top.equalTo(todayWeather.snp.top)
-            $0.width.equalTo(todayWeather.snp.horizontalEdges)
-            $0.height.equalTo(todayWeather).offset(38)
+            $0.left.right.equalTo(todayWeather)
+            $0.height.equalTo(38)
         }
-        
         let label = UILabel()
         label.text = "Hourly Forecast"
         label.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
@@ -603,14 +624,15 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         icon.tintColor = UIColor(named: "font")
         headerView.addSubview(icon)
         
-        label.snp.makeConstraints(){
-            $0.top.equalTo(todayWeather.snp.top).offset(10)
-            $0.left.equalTo(todayWeather.snp.left).offset(22)
-        }
         icon.snp.makeConstraints(){
-            $0.top.equalTo(todayWeather.snp.top).offset(8)
-            $0.left.equalTo(label.snp.right).offset(6)
-            $0.width.height.equalTo(todayWeather).offset(20)
+            $0.top.equalTo(headerView.snp.top).offset(8)
+            $0.left.equalTo(headerView.snp.left).offset(22)
+            $0.width.height.equalTo(20)
+        }
+        label.snp.makeConstraints(){
+            $0.top.equalTo(headerView.snp.top).offset(10)
+            $0.left.equalTo(icon.snp.right).offset(6)
+            
         }
     }
 }
@@ -665,13 +687,13 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
         weekWeatherH.addSubview(icon)
         
         icon.snp.makeConstraints(){
-            $0.centerY.equalTo(weekWeatherH)
+            $0.top.equalTo(weekWeatherH.snp.top).offset(8)
             $0.left.equalTo(weekWeatherH).offset(22)
-            $0.width.height.equalTo(20)
+            $0.width.height.equalTo(21)
         }
         
         label.snp.makeConstraints(){
-            $0.centerY.equalTo(weekWeatherH)
+            $0.top.equalTo(weekWeatherH.snp.top).offset(10)
             $0.left.equalTo(icon.snp.right).offset(6)
         }
         return weekWeatherH
