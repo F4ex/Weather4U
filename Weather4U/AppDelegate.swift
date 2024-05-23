@@ -85,6 +85,7 @@ extension AppDelegate {
         // 예시로 Person 엔티티에 이름을 저장하는 코드
         let entity = NSEntityDescription.entity(forEntityName: "LocationAllData", in: context)!
         let newLocation = NSManagedObject(entity: entity, insertInto: context)
+        newLocation.setValue(1100000000, forKey: "areaNo")
         newLocation.setValue("서울특별시", forKey: "region")
         newLocation.setValue("서울특별시", forKey: "city")
         newLocation.setValue("", forKey: "town")
