@@ -213,7 +213,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
             cell.weatherLabel.isHidden = true
         }
         myWeatherTable.tableView.endUpdates()
-        
+        myWeatherTable.tableView.reloadData()
     }
     
     
@@ -234,7 +234,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
             cell.weatherLabel.isHidden = false
         }
         myWeatherTable.tableView.endUpdates()
-        
+        myWeatherTable.tableView.reloadData()
         print("Done")
     }
     
