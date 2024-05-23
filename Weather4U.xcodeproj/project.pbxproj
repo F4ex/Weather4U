@@ -11,6 +11,8 @@
 		7B09E6EF2BF1D91800248D0B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B09E6ED2BF1D91800248D0B /* SearchViewController.swift */; };
 		7B9BBB1F2BF750E100B72970 /* SearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9BBB1E2BF750E100B72970 /* SearchResultTableViewController.swift */; };
 		7B9BBB212BF7518100B72970 /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9BBB202BF7518100B72970 /* SearchResultTableViewCell.swift */; };
+		7B9BBB272BFF9C3D00B72970 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 7B9BBB262BFF9C3D00B72970 /* SnapKit-Dynamic */; };
+		7B9BBB292BFF9C4C00B72970 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 7B9BBB282BFF9C4C00B72970 /* SnapKit-Dynamic */; };
 		950EB3412BFF7C5000B9874C /* StyleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950EB3402BFF7C5000B9874C /* StyleViewController.swift */; };
 		9545B8072BF3085300EE36B8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545B8062BF3085300EE36B8 /* MainViewController.swift */; };
 		9545B8092BF3252800EE36B8 /* StatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9545B8082BF3252800EE36B8 /* StatusCell.swift */; };
@@ -24,7 +26,7 @@
 		95FE07E22BF35203004D2139 /* WeekWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FE07E12BF35203004D2139 /* WeekWeatherCell.swift */; };
 
 		FFBFF0742BFF99BA00A7DF59 /* StyleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBFF0732BFF99B900A7DF59 /* StyleViewController.swift */; };
-
+		FFBFF0762BFFA71900A7DF59 /* AlertViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBFF0752BFFA71900A7DF59 /* AlertViewDelegate.swift */; };
 		FFE5DCB72BF1B463004EE3F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCB62BF1B463004EE3F7 /* AppDelegate.swift */; };
 		FFE5DCB92BF1B463004EE3F7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCB82BF1B463004EE3F7 /* SceneDelegate.swift */; };
 		FFE5DCBB2BF1B463004EE3F7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE5DCBA2BF1B463004EE3F7 /* ViewController.swift */; };
@@ -89,7 +91,7 @@
 		95FE07E12BF35203004D2139 /* WeekWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekWeatherCell.swift; sourceTree = "<group>"; };
 
 		FFBFF0732BFF99B900A7DF59 /* StyleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyleViewController.swift; sourceTree = "<group>"; };
-
+		FFBFF0752BFFA71900A7DF59 /* AlertViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewDelegate.swift; sourceTree = "<group>"; };
 		FFE5DCB32BF1B463004EE3F7 /* Weather4U.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather4U.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFE5DCB62BF1B463004EE3F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FFE5DCB82BF1B463004EE3F7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -128,8 +130,10 @@
 				FFE5DD1E2BF6ED73004EE3F7 /* Kingfisher in Frameworks */,
 				FFE5DD242BF6EDB2004EE3F7 /* SnapKit in Frameworks */,
 				FFE5DD272BF6EDD2004EE3F7 /* DGCharts in Frameworks */,
+				7B9BBB292BFF9C4C00B72970 /* SnapKit-Dynamic in Frameworks */,
 				FFE5DD2A2BF78406004EE3F7 /* Alamofire in Frameworks */,
 				FFE5DD212BF6EDA2004EE3F7 /* Then in Frameworks */,
+				7B9BBB272BFF9C3D00B72970 /* SnapKit-Dynamic in Frameworks */,
 				FFE5DD1B2BF6ED5C004EE3F7 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -217,6 +221,7 @@
 				FFE5DCC42BF1B465004EE3F7 /* LaunchScreen.storyboard */,
 				FFE5DCC72BF1B465004EE3F7 /* Info.plist */,
 				FFE5DD2F2BFAEE2B004EE3F7 /* DataReloadDelegate.swift */,
+				FFBFF0752BFFA71900A7DF59 /* AlertViewDelegate.swift */,
 			);
 			path = Weather4U;
 			sourceTree = "<group>";
@@ -274,6 +279,8 @@
 				FFE5DD232BF6EDB2004EE3F7 /* SnapKit */,
 				FFE5DD262BF6EDD2004EE3F7 /* DGCharts */,
 				FFE5DD292BF78406004EE3F7 /* Alamofire */,
+				7B9BBB262BFF9C3D00B72970 /* SnapKit-Dynamic */,
+				7B9BBB282BFF9C4C00B72970 /* SnapKit-Dynamic */,
 			);
 			productName = Weather4U;
 			productReference = FFE5DCB32BF1B463004EE3F7 /* Weather4U.app */;
@@ -358,6 +365,7 @@
 				FFE5DCF22BF3057C004EE3F7 /* MyWeatherPageTableViewController.swift in Sources */,
 				FFE5DD342BFE2A2C004EE3F7 /* PerceivedTemperatureData.swift in Sources */,
 				FFE5DD322BFE1787004EE3F7 /* UVData.swift in Sources */,
+				FFBFF0762BFFA71900A7DF59 /* AlertViewDelegate.swift in Sources */,
 				FFBFF0742BFF99BA00A7DF59 /* StyleViewController.swift in Sources */,
 				FFE5DCB72BF1B463004EE3F7 /* AppDelegate.swift in Sources */,
 				FFE5DCED2BF30302004EE3F7 /* BaseViewController.swift in Sources */,
@@ -652,6 +660,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7B9BBB262BFF9C3D00B72970 /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "SnapKit-Dynamic";
+		};
+		7B9BBB282BFF9C4C00B72970 /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "SnapKit-Dynamic";
+		};
 		FFE5DD1A2BF6ED5C004EE3F7 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FFE5DD192BF6ED5C004EE3F7 /* XCRemoteSwiftPackageReference "Then" */;

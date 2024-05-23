@@ -87,6 +87,7 @@ class MainViewController: BaseViewController {
         feels.delegate = self
         feels.dataSource = self
         NetworkManager.shared.delegate = self
+        NetworkManager.shared.alertDelegate = self
         DataProcessingManager.shared.delegate = self
         
         if MainViewController.selectRegion == nil {
@@ -518,8 +519,6 @@ class MainViewController: BaseViewController {
         self.present(vc, animated: true, completion: nil)
     }
     
-    
-    
     func setModalPage() {
         if MainViewController.isModal == true {
             location.text = MainViewController.selectRegion?.City
@@ -827,5 +826,14 @@ extension MainViewController: DataReloadDelegate {
             self.feels.reloadData()
             self.updateAppearanceBasedOnWeather(for: self.weatherStatus)
         }
+    }
+}
+
+extension MainViewController: AlertViewDelegate {
+    func showAlert(message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
     }
 }
