@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "weather4U.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

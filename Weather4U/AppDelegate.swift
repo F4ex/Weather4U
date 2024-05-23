@@ -11,10 +11,26 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+    var window: UIWindow?
+    
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        // UserDefaults를 사용하여 앱이 처음 실행되는지 확인
+        let userDefaults = UserDefaults.standard
+        if userDefaults.bool(forKey: "isAppAlreadyLaunchedOnce") == false {
+            // 앱이 처음 실행되는 경우
+            print("App launched first time")
+            userDefaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
+            userDefaults.synchronize()
+            
+            // Core Data에 초기 데이터 저장
+            saveInitialData()
+        } else {
+            // 앱이 이미 실행된 경우
+            print("App already launched")
+        }
+        
         return true
     }
 
@@ -35,26 +51,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-        */
         let container = NSPersistentContainer(name: "Weather4U")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                 
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
@@ -79,3 +78,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+extension AppDelegate {
+    func saveInitialData() {
+        let context = persistentContainer.viewContext
+        
+        // 예시로 Person 엔티티에 이름을 저장하는 코드
+        let entity = NSEntityDescription.entity(forEntityName: "LocationAllData", in: context)!
+        let newLocation = NSManagedObject(entity: entity, insertInto: context)
+        newLocation.setValue(0, forKey: "order")
+        newLocation.setValue(1100000000, forKey: "areaNo")
+        newLocation.setValue("서울특별시", forKey: "region")
+        newLocation.setValue("서울특별시", forKey: "city")
+        newLocation.setValue("", forKey: "town")
+        newLocation.setValue("", forKey: "village")
+        newLocation.setValue(60, forKey: "x")
+        newLocation.setValue(127, forKey: "y")
+        newLocation.setValue(109, forKey: "sentence")
+        newLocation.setValue("11B00000", forKey: "status")
+        newLocation.setValue("11B10101", forKey: "temperature")
+        
+        do {
+            try context.save()
+            print("saveInitial Success")
+        } catch {
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+    }
+}
