@@ -23,9 +23,11 @@ class CoreDataManager {
             print("Error: Can't access Core Data view context")
             return
         }
-
+        
+        let currentCount = self.getCurrentLocationDataCount()
         let newLocation = LocationAllData(context: context)
-
+        
+        newLocation.order = Int16(currentCount)
         newLocation.areaNo = Int64(combinedData.AreaNo)
         newLocation.region = combinedData.Region
         newLocation.city = combinedData.City
@@ -36,7 +38,7 @@ class CoreDataManager {
         newLocation.sentence = Int16(combinedData.Sentence)
         newLocation.status = combinedData.Status
         newLocation.temperature = combinedData.Temperature
-
+        
         do {
             try context.save()
             print("Data saved successfully")
@@ -52,6 +54,8 @@ class CoreDataManager {
         }
         
         let request = LocationAllData.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
+        request.sortDescriptors = [sortDescriptor] // 정렬 조건 설정
         
         do {
             let locationAllDatas = try context.fetch(request)
@@ -62,6 +66,8 @@ class CoreDataManager {
             print("Error fetching data from CoreData: \(error.localizedDescription)")
         }
     }
+    
+
     
     func readFirstData() {
         guard let context = self.persistentContainer?.viewContext else {
@@ -120,6 +126,35 @@ class CoreDataManager {
         }
     }
     
+
+        func moveLocationData(from sourceIndex: Int, to destinationIndex: Int) {
+            guard let viewContext = self.persistentContainer?.viewContext else {
+                print("Error: Can't access CoreData view context")
+                return
+            }
+            
+            let fetchRequest: NSFetchRequest<LocationAllData> = LocationAllData.fetchRequest()
+            let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
+            fetchRequest.sortDescriptors = [sortDescriptor]
+            
+            do {
+                var locationDatas = try viewContext.fetch(fetchRequest)
+                let mover = locationDatas.remove(at: sourceIndex)
+                locationDatas.insert(mover, at: destinationIndex)
+                
+                // Update the order field in LocationAllData objects
+                for (index, data) in locationDatas.enumerated() {
+                    data.order = Int16(index)
+                }
+                
+                try viewContext.save()
+                self.readData() // 변경 값을 업데이트해주어야.
+                print("코어데이터 위치 이동 성공")
+            } catch {
+                print("Failed to move CoreData location data: \(error.localizedDescription)")
+            }
+        }
+
     
     func updateCoreDataOrder() {
         guard let viewContext = self.persistentContainer?.viewContext else {
@@ -137,4 +172,21 @@ class CoreDataManager {
             print("Failed to update CoreData order: \(error.localizedDescription)")
         }
     }
+    
+    func getCurrentLocationDataCount() -> Int {
+            guard let context = self.persistentContainer?.viewContext else {
+                print("Error: Can't access Core Data view context")
+                return 0
+            }
+
+            let fetchRequest: NSFetchRequest<LocationAllData> = LocationAllData.fetchRequest()
+            
+            do {
+                let count = try context.count(for: fetchRequest)
+                return count
+            } catch {
+                print("Failed to fetch count: \(error.localizedDescription)")
+                return 0
+            }
+        }
 }

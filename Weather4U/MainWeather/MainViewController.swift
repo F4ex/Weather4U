@@ -121,11 +121,12 @@ class MainViewController: BaseViewController {
             setModalPage()
         }
         setupHeaderView()
-//        readData()
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         navigationController?.navigationBar.isHidden = true
     }
     
@@ -531,6 +532,7 @@ class MainViewController: BaseViewController {
           }
         
           CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
+          CoreDataManager.shared.readData()
 
           
         // Add 버튼 클릭 시 검색결과 화면이 아닌 바로 MyWeatherPage 로 이동
