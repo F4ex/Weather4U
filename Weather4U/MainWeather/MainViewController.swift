@@ -124,7 +124,7 @@ class MainViewController: BaseViewController {
         
         if MainViewController.isModal2 == true {
             moveToSearch.isHidden = true
-            moveToDress.isHidden = true
+            moveToDress.isHidden = false
             
             gradientDown.colors = [UIColor.clear.cgColor]
             
@@ -580,7 +580,8 @@ class MainViewController: BaseViewController {
         backButton.addTarget(self, action: #selector(tappedBackButton), for: .touchUpInside)
         
         backButton.snp.makeConstraints {
-            $0.top.left.equalTo(view.safeAreaLayoutGuide).inset(15)
+            $0.top.equalTo(view).offset(67)
+            $0.right.equalTo(view.safeAreaLayoutGuide).inset(29)
         }
     }
     
