@@ -64,8 +64,6 @@ class CoreDataManager {
         do {
             let locationAllDatas = try context.fetch(request)
             CoreDataManager.addLocationData = locationAllDatas
-            print(CoreDataManager.addLocationData)
-            print(CoreDataManager.addLocationData.count)
         } catch {
             print("Error fetching data from CoreData: \(error.localizedDescription)")
         }
