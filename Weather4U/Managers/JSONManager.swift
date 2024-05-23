@@ -41,7 +41,6 @@ class JSONManager {
                 // 예시로 '서울, 인천, 경기도'에 대한 정보를 매핑
                 // 실제로는 location 정보에 따라 다른 값을 할당해야 함
                 let combinedData = CombinedData(
-                    AreaNo: location.AreaNo,
                     Region: "\(location.City) \(location.Town) \(location.Village)",
                     City: location.City,
                     Town: location.Town,

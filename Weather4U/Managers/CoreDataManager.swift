@@ -26,7 +26,6 @@ class CoreDataManager {
 
         let newLocation = LocationAllData(context: context)
 
-        newLocation.areaNo = Int64(combinedData.AreaNo)
         newLocation.region = combinedData.Region
         newLocation.city = combinedData.City
         newLocation.town = combinedData.Town
@@ -74,7 +73,6 @@ class CoreDataManager {
             let locationAllDatas = try context.fetch(request)
             if let locationData = locationAllDatas.first {
                 let firstValue = CombinedData(
-                    AreaNo: Int(locationData.areaNo),
                     Region: locationData.region ?? "-",
                     City: locationData.city ?? "-",
                     Town: locationData.town ?? "-",
