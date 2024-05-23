@@ -137,6 +137,7 @@ class MainViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         navigationController?.navigationBar.isHidden = true
     }
     
@@ -543,7 +544,7 @@ class MainViewController: BaseViewController {
         
         CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
         
-        
+
         // Add 버튼 클릭 시 검색결과 화면이 아닌 바로 MyWeatherPage 로 이동
         if let navigationController = self.presentingViewController as? UINavigationController {
             for controller in navigationController.viewControllers {

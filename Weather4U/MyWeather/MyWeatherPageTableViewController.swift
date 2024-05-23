@@ -34,7 +34,9 @@ class MyWeatherPageTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         CoreDataManager.shared.updateCoreDataOrder()
+
         tableView.reloadData()
     }
     
@@ -310,11 +312,11 @@ extension MyWeatherPageTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
-        let mover = CoreDataManager.addLocationData.remove(at: sourceIndexPath.row)
-        CoreDataManager.addLocationData.insert(mover, at: destinationIndexPath.row)
-        
+
+        CoreDataManager.shared.moveLocationData(from: sourceIndexPath.row, to: destinationIndexPath.row)
+
         CoreDataManager.shared.updateCoreDataOrder()
+        
     }
     
     

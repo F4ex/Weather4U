@@ -54,7 +54,7 @@ class SearchResultTableViewController: UITableViewController {
         MainViewController.isModal = true
         
         let modalVC = MainViewController()
-        
+        modalVC.modalPresentationStyle = .fullScreen
         MainViewController.selectRegion = SearchViewController.result[indexPath.row] // 클릭한 지역의 값이 array 안으로
         
         present(modalVC, animated: true, completion: nil)
