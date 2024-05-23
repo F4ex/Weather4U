@@ -120,6 +120,7 @@ class CoreDataManager {
         }
     }
     
+    
     func updateCoreDataOrder() {
         guard let viewContext = self.persistentContainer?.viewContext else {
             print("Error: Can't access CoreData view context")
@@ -131,7 +132,7 @@ class CoreDataManager {
         }
         do {
             try viewContext.save()
-            print("CoreData order updated successfully")
+            print("코어데이터 업데이트 성공")
         } catch {
             print("Failed to update CoreData order: \(error.localizedDescription)")
         }
