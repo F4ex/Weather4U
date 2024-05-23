@@ -146,10 +146,7 @@ class DataProcessingManager {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         
-        // DataProcessingManager.myWeatherDatas 배열의 크기를 items 배열의 크기와 동일하게 설정합니다.
-        if DataProcessingManager.myWeatherDatas.count != items.count {
-            DataProcessingManager.myWeatherDatas = Array(repeating: [], count: items.count)
-        }
+        var dataArray: [[Weather]] = Array(repeating: [], count: items.count)
         
         for (index, item) in items.enumerated() {
             let currentDate = formatter.string(from: fcstDate)
@@ -198,11 +195,13 @@ class DataProcessingManager {
                     VEC: weatherDict["VEC"] ?? "0", // 풍향
                     WSD: weatherDict["WSD"] ?? "0"  // 풍속
                 )
-                DataProcessingManager.myWeatherDatas[index].append(weather)
+                dataArray[index].append(weather)
             }
-            DataProcessingManager.myWeatherDatas[index].sort { $0.time < $1.time }
+            dataArray[index].sort { $0.time < $1.time }
         }
+        DataProcessingManager.myWeatherDatas = dataArray
         print("MyweatherData 처리 완료")
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadTableViewNotification"), object: nil)
     }
   
     // MARK: - 강수형태 설명 반환 함수

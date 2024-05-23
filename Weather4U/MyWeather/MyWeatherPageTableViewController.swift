@@ -30,6 +30,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         // 테이블 뷰 삭제
         tableView.isEditing = false
         
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableData), name: NSNotification.Name("ReloadTableViewNotification"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,7 +38,7 @@ class MyWeatherPageTableViewController: UITableViewController {
         
         CoreDataManager.shared.updateCoreDataOrder()
 
-        tableView.reloadData()
+//        tableView.reloadData()
     }
     
     
@@ -319,7 +320,9 @@ extension MyWeatherPageTableViewController {
         
     }
     
-    
+    @objc func reloadTableData() {
+        tableView.reloadData()
+    }
     
     
 }
