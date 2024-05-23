@@ -87,6 +87,7 @@ class MainViewController: BaseViewController {
         feels.delegate = self
         feels.dataSource = self
         NetworkManager.shared.delegate = self
+        NetworkManager.shared.alertDelegate = self
         DataProcessingManager.shared.delegate = self
         
         if MainViewController.selectRegion == nil {
@@ -793,7 +794,7 @@ extension MainViewController: DataReloadDelegate {
     }
 }
 
-extension MainViewController {
+extension MainViewController: AlertViewDelegate {
     func showAlert(message: String) {
         let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
