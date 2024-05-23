@@ -61,7 +61,7 @@ class MainViewController: BaseViewController {
     let logo = UIImageView()
     var city: City = .서울특별시 //City의 디폴트 값인 서울로 현재의 위치를 표시하겠다
     var weatherData: [WeatherData] = []
-    var weatherStatus: String = "Sunny"
+    var weatherStatus: String = "Mostly Cloudy"
     var weatherType: String = "없음"
     
     //그라데이션 레이어와 마스크 해줄 레이어 만들기
@@ -318,6 +318,7 @@ class MainViewController: BaseViewController {
         var moveToSearchC = UIColor()
         var tempHighC = UIColor()
         var tempLowC = UIColor()
+        var statusC = UIColor()
         var weatherExplanationC = UIColor()
         var weatherExplanationText = String()
         var todayWeatherC = UIColor()
@@ -336,6 +337,7 @@ class MainViewController: BaseViewController {
             moveToSearchC = UIColor(named: "font")!
             tempHighC = UIColor(named: "font")!
             tempLowC = UIColor(named: "font")!
+            statusC = UIColor(named: "cell")!
             weatherExplanationC = UIColor(named: "font")!
             weatherExplanationText = (weatherStatus == "Sunny" ? "It's a beautiful sunny day, perfect for a walk." : "The sky is moderately cloudy, providing a nice shade.")
             todayWeatherC = UIColor(named: "cell")!
@@ -353,6 +355,7 @@ class MainViewController: BaseViewController {
                 moveToSearchC = UIColor(named: "fontR")!
                 tempHighC = UIColor(named: "fontR")!
                 tempLowC = UIColor(named: "fontR")!
+                statusC = UIColor(named: "cellR")!
                 weatherExplanationC = UIColor(named: "fontR")!
                 weatherExplanationText = (weatherStatus == "비" ? "Rain is pouring down today. Remember to take your umbrella." : "Watch out for sudden showers. Keeping an umbrella handy is a smart choice!")
                 todayWeatherC = UIColor(named: "cellR")!
@@ -363,11 +366,12 @@ class MainViewController: BaseViewController {
                 backgroundColor = UIColor(named: "BackGroundS")!
                 temperatureColor = weatherStatus == "눈" ? UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1) : UIColor(red: 201/255, green: 201/255, blue: 201/255, alpha: 1)
                 locationC = UIColor(named: "fontS")!
-                locationDetailC = UIColor(named: "fontR")!
+                locationDetailC = UIColor(named: "fontS")!
                 moveToDressC = UIColor(named: "fontS")!
                 moveToSearchC = UIColor(named: "fontS")!
                 tempHighC = UIColor(named: "fontS")!
                 tempLowC = UIColor(named: "fontS")!
+                statusC = UIColor(named: "cellS")!
                 weatherExplanationC = UIColor(named: "fontS")!
                 weatherExplanationText = (weatherStatus == "비/눈" ? "Today's weather is a mix of rain and snow. Take extra caution on slippery roads" : "A snowy blanket covers the ground today. Bundle up warmly and revel in the winter magic.")
                 todayWeatherC = UIColor(named: "cellS")!
@@ -383,6 +387,7 @@ class MainViewController: BaseViewController {
                 moveToSearchC = UIColor(named: "fontR")!
                 tempHighC = UIColor(named: "fontR")!
                 tempLowC = UIColor(named: "fontR")!
+                statusC = UIColor(named: "cellR")!
                 weatherExplanationC = UIColor(named: "fontR")!
                 weatherExplanationText = "It's a gloomy day outside, a perfect time for a warm cup of tea and some cozy indoor activities."
                 todayWeatherC = UIColor(named: "cellR")!
@@ -393,6 +398,18 @@ class MainViewController: BaseViewController {
             Icon = UIImage(named: "sun")!
             backgroundColor = UIColor(named: "Background")!
             temperatureColor = UIColor(red: 255/255, green: 168/255, blue: 0/255, alpha: 1)
+            locationC = UIColor(named: "font")!
+            locationDetailC = UIColor(named: "font")!
+            moveToDressC = UIColor(named: "font")!
+            moveToSearchC = UIColor(named: "font")!
+            tempHighC = UIColor(named: "font")!
+            tempLowC = UIColor(named: "font")!
+            statusC = UIColor(named: "cell")!
+            weatherExplanationC = UIColor(named: "font")!
+            weatherExplanationText = "It's a beautiful sunny day, perfect for a walk."
+            todayWeatherC = UIColor(named: "cell")!
+            todayPrecipitationC = UIColor(named: "cell")!
+            weekWeatherC = UIColor(named: "cell")!
         }
         
         if traitCollection.userInterfaceStyle == .dark {
@@ -409,6 +426,7 @@ class MainViewController: BaseViewController {
                     moveToSearchC = UIColor(named: "font")!
                     tempHighC = UIColor(named: "font")!
                     tempLowC = UIColor(named: "font")!
+                    statusC = UIColor(named: "cell")!
                     weatherExplanationC = UIColor(named: "font")!
                     weatherExplanationText = (weatherStatus == "비" ? "Rain is pouring down today. Remember to take your umbrella." : "Watch out for sudden showers. Keeping an umbrella handy is a smart choice!")
                     todayWeatherC = UIColor(named: "cell")!
@@ -424,6 +442,7 @@ class MainViewController: BaseViewController {
                     moveToSearchC = UIColor(named: "font")!
                     tempHighC = UIColor(named: "font")!
                     tempLowC = UIColor(named: "font")!
+                    statusC = UIColor(named: "cell")!
                     weatherExplanationC = UIColor(named: "font")!
                     weatherExplanationText = (weatherStatus == "비/눈" ? "Today's weather is a mix of rain and snow. Take extra caution on slippery roads" : "A snowy blanket covers the ground today. Bundle up warmly and revel in the winter magic.")
                     todayWeatherC = UIColor(named: "cell")!
@@ -439,6 +458,7 @@ class MainViewController: BaseViewController {
                     moveToSearchC = UIColor(named: "font")!
                     tempHighC = UIColor(named: "font")!
                     tempLowC = UIColor(named: "font")!
+                    statusC = UIColor(named: "cell")!
                     weatherExplanationC = UIColor(named: "font")!
                     weatherExplanationText = "Despite the cloudy night, let the light within your heart guide you through darkness."
                     todayWeatherC = UIColor(named: "cell")!
@@ -449,7 +469,18 @@ class MainViewController: BaseViewController {
                 Icon = UIImage(named: "moon")!
                 backgroundColor = UIColor(named: "Background")!
                 temperatureColor = UIColor(red: 148/255, green: 139/255, blue: 183/255, alpha: 1)
+                locationC = UIColor(named: "font")!
+                locationDetailC = UIColor(named: "font")!
+                moveToDressC = UIColor(named: "font")!
+                moveToSearchC = UIColor(named: "font")!
+                tempHighC = UIColor(named: "font")!
+                tempLowC = UIColor(named: "font")!
+                statusC = UIColor(named: "cell")!
+                weatherExplanationC = UIColor(named: "font")!
                 weatherExplanationText = "The night sky is clear and stars are twinkling brightly. It's a perfect moment for stargazing and wishes."
+                todayWeatherC = UIColor(named: "cell")!
+                todayPrecipitationC = UIColor(named: "cell")!
+                weekWeatherC = UIColor(named: "cell")!
             }
         }
         weatherImage.image = Icon
@@ -461,6 +492,7 @@ class MainViewController: BaseViewController {
         moveToSearch.tintColor = moveToSearchC
         tempHigh.textColor = tempHighC
         tempLow.textColor = tempLowC
+        status.tintColor = statusC
         weatherExplanation.textColor = weatherExplanationC
         weatherExplanation.text = weatherExplanationText
         todayWeather.backgroundColor = todayWeatherC
@@ -638,7 +670,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             setViewModels()
             let viewModel = cellViewModels[indexPath.item]
             cell.configure(with: viewModel)
-            
+            cell.updateAppearanceBasedOnWeather(for: weatherStatus)
             return cell
         } else if collectionView == todayWeather {
             guard let cell = todayWeather.dequeueReusableCell(withReuseIdentifier: "TodayWeatherCell", for: indexPath) as? TodayWeatherCell else {
@@ -669,6 +701,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             setViewModels2()
             let viewModel = cellViewModel2[indexPath.item]
             cell.configure(with: viewModel)
+            cell.updateAppearanceBasedOnWeather(for: weatherStatus)
+            
             return cell
         }
         return UICollectionViewCell()
@@ -728,6 +762,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
             cell.setIcon(status: DataProcessingManager.weekForecast[indexPath.row].status)
             cell.tempHigh.text = "\(DataProcessingManager.weekForecast[indexPath.row].highTemp)°"
             cell.tempLow.text = "\(DataProcessingManager.weekForecast[indexPath.row].lowTemp)°"
+            cell.updateAppearanceBasedOnWeather(for: weatherStatus)
         }
         return cell
     }

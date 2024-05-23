@@ -15,6 +15,7 @@ class StatusCell: UICollectionViewCell {
     let property = UILabel()
     let icon = UIImageView()
     let num = UILabel()
+    var weatherStatus: String = ""
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,14 +32,9 @@ class StatusCell: UICollectionViewCell {
             addSubview($0)
         }
         property.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
-        property.textColor = UIColor(named: "font")
-        
-        icon.tintColor = UIColor(named: "font")
         
         num.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
-        num.textColor = UIColor(named: "font")
         
-        background.backgroundColor = UIColor(named: "cell")
         background.layer.cornerRadius = 15
     }
     
@@ -82,6 +78,53 @@ class StatusCell: UICollectionViewCell {
         property.text = viewModel.propertyName
         icon.image = viewModel.iconImage
         num.text = viewModel.num
+    }
+    
+    func updateAppearanceBasedOnWeather(for weatherStatus: String) {
+        var backgroundColor = UIColor()
+        var propertyC = UIColor()
+        var iconC = UIColor()
+        var numC = UIColor()
+ 
+        
+        switch weatherStatus {
+        case "Sunny", "Cloudy":
+            backgroundColor = UIColor(named: "cell")!
+            propertyC = UIColor(named: "font")!
+            iconC = UIColor(named: "font")!
+            numC = UIColor(named: "font")!
+
+        case "Mostly Cloudy", "비", "소나기":
+            backgroundColor = UIColor(named: "cellR")!
+            propertyC = UIColor(named: "fontR")!
+            iconC = UIColor(named: "fontR")!
+            numC = UIColor(named: "fontR")!
+
+        case "비/눈", "눈":
+            backgroundColor = UIColor(named: "cellS")!
+            propertyC = UIColor(named: "fontS")!
+            iconC = UIColor(named: "fontS")!
+            numC = UIColor(named: "fontS")!
+
+        default:
+            backgroundColor = UIColor(named: "cell")!
+            propertyC = UIColor(named: "font")!
+            iconC = UIColor(named: "font")!
+            numC = UIColor(named: "font")!
+        }
+        if traitCollection.userInterfaceStyle == .dark {
+            switch weatherStatus {
+            default:
+                backgroundColor = UIColor(named: "cell")!
+                propertyC = UIColor(named: "font")!
+                iconC = UIColor(named: "font")!
+                numC = UIColor(named: "font")!
+            }
+        }
+        background.backgroundColor = backgroundColor
+        property.textColor = propertyC
+        icon.tintColor = iconC
+        num.textColor = numC
     }
 }
 
