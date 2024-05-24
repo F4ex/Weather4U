@@ -425,17 +425,42 @@ class DataProcessingManager {
         let constant = 46.3
         let discomfortIndex: Double = temperatureFactor + humidityFactor + constant
         
-        switch discomfortIndex {
-        case 0..<65:
-            return UIImage(named: "smile")
-        case 65..<75:
-            return UIImage(named: "straightFace")
-        case 75..<80:
-            return UIImage(named: "nah")
-        default:
-            return UIImage(named: "frown")
+        func setImageColor() -> UIColor {
+            switch self.getTodayWeatherDataValue(dataKey: .SKY, currentTime: true) {
+            case "Sunny":
+                return UIColor(named: "font")!
+            case "Mostly Cloudy":
+                let rainType = DataProcessingManager.shared.getTodayWeatherDataValue(dataKey: .PTY) ?? "0" //165번째 줄
+                switch rainTypeDescription(from: rainType) {
+                case "비", "소나기":
+                    return UIColor(named: "fontR")!
+                case "눈", "비/눈":
+                    return UIColor(named: "fontS")!
+                default:
+                    return UIColor(named: "fontR")!
+                }
+            default:
+                return UIColor(named: "font")!
+            }
         }
+        
+        func getImage() -> UIImage? {
+            let tintColor = setImageColor()
+            switch discomfortIndex {
+            case 0..<65:
+                return UIImage(named: "laugh")?.withTintColor(tintColor)
+            case 65..<75:
+                return UIImage(named: "smile")?.withTintColor(tintColor)
+            case 75..<80:
+                return UIImage(named: "nah")?.withTintColor(tintColor)
+            default:
+                return UIImage(named: "frown")?.withTintColor(tintColor)
+                //이미지 색상 바꾸는거 의외로 간단했다. 그냥 withTintColor 했으면 되는거였음
+            }
+        }
+        return getImage()
     }
+    
     
     // [불쾌지수 = 0.81 \times 기온 + 0.01 \times 습도 \times (0.99 \times 기온 - 14.3) + 46.3]를 계산하는 함수
     func discomfortIndexString() -> String {
