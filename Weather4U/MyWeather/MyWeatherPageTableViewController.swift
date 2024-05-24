@@ -198,7 +198,7 @@ class MyWeatherPageTableViewController: UITableViewController {
                 cell.tempLabel.textColor = UIColor(named: traitCollection.userInterfaceStyle == .dark ? "font" : "cell")
                 cell.lowLabel.textColor = UIColor(named: "font")
                 cell.weatherLabel.textColor = UIColor(named: "font")
-                cell.cellImageView.image = UIImage(named: "sun2")
+                cell.cellImageView.image = UIImage(named: traitCollection.userInterfaceStyle == .dark ? "sun2" : "moon2")
             case "Mostly Cloudy":
                 cell.contentView.backgroundColor = UIColor(red: 122/255, green: 131/255, blue: 135/255, alpha: 1)
                 cell.cityLabel.textColor = UIColor(red: 235/255, green: 252/255, blue: 255/255, alpha: 1)
@@ -268,6 +268,16 @@ class MyWeatherPageTableViewController: UITableViewController {
             return cell
         }
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        // 인터페이스 스타일이 변경될 때마다 UI 업데이트
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            tableView.reloadData()
+            //왜 안될까...
+        }
+    }
+    
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30 // 각 섹션 사이의 공간을 조절하는 높이
