@@ -497,6 +497,8 @@ class MainViewController: BaseViewController {
         }
         weatherImage.image = Icon
         view.backgroundColor = backgroundColor
+        maskedUpView.backgroundColor = backgroundColor
+        maskedDownView.backgroundColor = backgroundColor
         temperature.textColor = temperatureColor
         location.textColor = locationC
         locationDetail.textColor = locationDetailC

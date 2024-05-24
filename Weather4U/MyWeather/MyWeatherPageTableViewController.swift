@@ -292,15 +292,17 @@ extension MyWeatherPageTableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            CoreDataManager.addLocationData.remove(at: indexPath.row)
             if !DataProcessingManager.myWeatherDatas.isEmpty {
                 DataProcessingManager.myWeatherDatas.remove(at: indexPath.row)
             }
             CoreDataManager.shared.deleteData(withOrder: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            CoreDataManager.addLocationData.remove(at: indexPath.row)
             CoreDataManager.shared.updateCoreDataOrder()
+//            tableView.beginUpdates()
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+//            tableView.endUpdates()
         }
-        tableView.reloadData()
+//        tableView.reloadData()
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -351,6 +353,7 @@ extension MyWeatherPageTableViewController {
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         CoreDataManager.shared.moveLocationData(from: sourceIndexPath.row, to: destinationIndexPath.row)
+        DataProcessingManager.moveWeatherData(from: sourceIndexPath.row, to: destinationIndexPath.row)
         CoreDataManager.shared.updateCoreDataOrder()
     }
     
