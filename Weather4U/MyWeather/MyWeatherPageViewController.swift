@@ -20,9 +20,6 @@ class MyWeatherPageViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-    
-        
-//        myWeatherTable.tableView.reloadData()
     }
     
     override func configureUI() {

@@ -15,6 +15,8 @@ class ChartCollectionViewCell: UICollectionViewCell {
     let descriptionLabel = UILabel()
     var lineChartView = LineChartView()
     var entries: [ChartDataEntry] = []
+    var weatherStatus = ""
+    var weatherType = ""
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,12 +36,12 @@ class ChartCollectionViewCell: UICollectionViewCell {
             addSubview($0)
         }
         titleLabel.text = "Rain Forecasted"
+        titleLabel.textColor = self.setFontColor()
         titleLabel.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
-        titleLabel.textColor = UIColor(named: "font")
         
         descriptionLabel.text = "Rain for the next hour"
+        descriptionLabel.textColor = self.setFontColor()
         descriptionLabel.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
-        titleLabel.textColor = UIColor(named: "font")
     }
     
     func configureLineChartView() {
@@ -47,10 +49,9 @@ class ChartCollectionViewCell: UICollectionViewCell {
         dataSet.drawValuesEnabled = false
         dataSet.drawCircleHoleEnabled = false
         dataSet.circleRadius = CGFloat(3.0)
-        if let customColor = UIColor(named: "font") {
-            dataSet.setColor(customColor)
-            dataSet.setCircleColor(customColor)
-        }
+        dataSet.setColor(setFontColor())
+        dataSet.setCircleColor(setFontColor())
+
         let data = LineChartData(dataSet: dataSet)
         
         lineChartView.data = data
@@ -65,6 +66,9 @@ class ChartCollectionViewCell: UICollectionViewCell {
         // xAxis valueFormatter 설정
         lineChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: hours)
         lineChartView.xAxis.granularity = 1
+        lineChartView.xAxis.labelTextColor = setFontColor()
+        lineChartView.xAxis.axisLineColor = setFontColor()
+        
         
         // xAxis 레이블 아래로 위치시키기
         lineChartView.xAxis.labelPosition = .bottom
@@ -115,6 +119,43 @@ class ChartCollectionViewCell: UICollectionViewCell {
             }
         }
         self.configureLineChartView()
+        titleLabel.textColor = self.setFontColor()
+        descriptionLabel.textColor = self.setFontColor()
     }
     
+    func setFontColor() -> UIColor {
+        switch self.weatherStatus {
+        case "Sunny":
+            return UIColor(named: "font")!
+        case "Mostly Cloudy":
+            switch self.weatherType {
+            case "비", "소나기":
+                return UIColor(named: "fontR")!
+            case "눈", "비/눈":
+                return UIColor(named: "fontS")!
+            default:
+                return UIColor(named: "fontR")!
+            }
+        default:
+            return UIColor(named: "font")!
+        }
+    }
+    
+    func setCellColor() -> UIColor {
+        switch self.weatherStatus {
+        case "Sunny":
+            return UIColor(named: "cell")!
+        case "Mostly Cloudy":
+            switch self.weatherType {
+            case "비", "소나기":
+                return UIColor(named: "cellR")!
+            case "눈", "비/눈":
+                return UIColor(named: "cellS")!
+            default:
+                return UIColor(named: "cellR")!
+            }
+        default:
+            return UIColor(named: "cell")!
+        }
+    }
 }

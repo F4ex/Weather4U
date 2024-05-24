@@ -31,7 +31,7 @@ class WeekWeatherCell: UITableViewCell {
     
     func configureUI() {
         [day, drop, pop, icon, tempHigh, tempLow].forEach(){
-            addSubview($0)
+            contentView.addSubview($0)
         }
         day.text = "Now"
         day.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
@@ -124,13 +124,11 @@ class WeekWeatherCell: UITableViewCell {
     func setDrop(rainPercent: Int) {
         // 강수 확률에 따른 이미지 변경
         switch rainPercent {
-        case 0..<25:
+        case 0..<30:
             self.drop.image = UIImage(systemName: "drop")
-        case 25..<50:
-            self.drop.image = UIImage(named: "drop_Little")
-        case 50..<75:
-            self.drop.image = UIImage(named: "drop_Half")
-        case 75...100:
+        case 30..<70:
+            self.drop.image = UIImage(systemName: "drop.halffull")
+        case 70..<100:
             self.drop.image = UIImage(systemName: "drop.fill")
         default:
             self.drop.image = UIImage(systemName: "drop")
@@ -140,6 +138,7 @@ class WeekWeatherCell: UITableViewCell {
     func updateAppearanceBasedOnWeather(for weatherStatus: String) {
         switch weatherStatus {
         case "Sunny", "Cloudy":
+            contentView.backgroundColor = UIColor(named: "cell")
             day.textColor = UIColor(named: "font")!
             drop.tintColor = UIColor(named: "font")!
             pop.textColor = UIColor(named: "font")!
@@ -147,6 +146,7 @@ class WeekWeatherCell: UITableViewCell {
             tempHigh.textColor = UIColor(named: "font")!
             tempLow.textColor = UIColor(named: "font")!
         case "Mostly Cloudy", "비", "소나기":
+            contentView.backgroundColor = UIColor(named: "cellR")
             day.textColor = UIColor(named: "fontR")!
             drop.tintColor = UIColor(named: "fontR")!
             pop.textColor = UIColor(named: "fontR")!
@@ -154,6 +154,7 @@ class WeekWeatherCell: UITableViewCell {
             tempHigh.textColor = UIColor(named: "fontR")!
             tempLow.textColor = UIColor(named: "fontR")!
         case "비/눈", "눈":
+            contentView.backgroundColor = UIColor(named: "cellS")
             day.textColor = UIColor(named: "fontS")!
             drop.tintColor = UIColor(named: "fontS")!
             pop.textColor = UIColor(named: "fontS")!
@@ -161,6 +162,7 @@ class WeekWeatherCell: UITableViewCell {
             tempHigh.textColor = UIColor(named: "fontS")!
             tempLow.textColor = UIColor(named: "fontS")!
         default:
+            contentView.backgroundColor = UIColor(named: "cell")
             day.textColor = UIColor(named: "font")!
             drop.tintColor = UIColor(named: "font")!
             pop.textColor = UIColor(named: "font")!
@@ -171,6 +173,7 @@ class WeekWeatherCell: UITableViewCell {
         if traitCollection.userInterfaceStyle == .dark {
             switch weatherStatus {
             default:
+                contentView.backgroundColor = UIColor(named: "cell")
                 day.textColor = UIColor(named: "font")!
                 drop.tintColor = UIColor(named: "font")!
                 pop.textColor = UIColor(named: "font")!

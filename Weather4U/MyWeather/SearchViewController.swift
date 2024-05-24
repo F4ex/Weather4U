@@ -52,15 +52,11 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
         let barButton = UIBarButtonItem(customView: settingButton)
         self.navigationItem.rightBarButtonItem = barButton
         
-//        myWeatherTable.tableView.reloadData()
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        CoreDataManager.shared.updateCoreDataOrder()
-//        myWeatherTable.tableView.reloadData()
     }
     
     
@@ -161,7 +157,6 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
                 self.setFahrenheit()
             }
             
-            //            self.searchCollectionView.reloadData()
             print(action.title)}
         
         let editList = UIAction(title: "Edit List", image: UIImage(systemName: "pencil"), handler: seletedPriority)
@@ -213,7 +208,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
             cell.weatherLabel.isHidden = true
         }
         myWeatherTable.tableView.endUpdates()
-        
+        myWeatherTable.tableView.reloadData()
     }
     
     
@@ -234,7 +229,7 @@ class SearchViewController: MyWeatherPageViewController, UISearchResultsUpdating
             cell.weatherLabel.isHidden = false
         }
         myWeatherTable.tableView.endUpdates()
-        
+        myWeatherTable.tableView.reloadData()
         print("Done")
     }
     

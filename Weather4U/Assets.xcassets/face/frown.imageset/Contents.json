@@ -3,16 +3,6 @@
     {
       "filename" : "frown.svg",
       "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "frownW.svg",
-      "idiom" : "universal"
     }
   ],
   "info" : {

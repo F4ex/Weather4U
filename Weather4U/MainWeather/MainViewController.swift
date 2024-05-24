@@ -52,6 +52,7 @@ class MainViewController: BaseViewController {
     }
     
     let weekWeather = UITableView()
+    let weekWeatherH = UIView() //헤더로 사용할 뷰 만들기
     let feels = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then() {
         let layout = $0.collectionViewLayout as! UICollectionViewFlowLayout
         layout.minimumInteritemSpacing = 15
@@ -61,7 +62,7 @@ class MainViewController: BaseViewController {
     let logo = UIImageView()
     var city: City = .서울특별시 //City의 디폴트 값인 서울로 현재의 위치를 표시하겠다
     var weatherData: [WeatherData] = []
-    var weatherStatus: String = "Mostly Cloudy"
+    var weatherStatus: String = "Sunny"
     var weatherType: String = "없음"
     
     //그라데이션 레이어와 마스크 해줄 레이어 만들기
@@ -148,6 +149,7 @@ class MainViewController: BaseViewController {
         NetworkManager.shared.fetchAllWeatherData(x: Int16(unwrapArray.X), y: Int16(unwrapArray.Y), status: unwrapArray.Status, temperature: unwrapArray.Temperature, areaNo: Int64(unwrapArray.AreaNo))
         JSONManager.shared.loadJSONToLocationData()
         CoreDataManager.shared.readData()
+        CoreDataManager.shared.updateCoreDataOrder()
     }
     
     //MARK: - 오토레이아웃
@@ -324,6 +326,7 @@ class MainViewController: BaseViewController {
         var todayWeatherC = UIColor()
         var todayPrecipitationC = UIColor()
         var weekWeatherC = UIColor()
+        var weekHeaderC = UIColor()
         
         
         switch weatherStatus {
@@ -343,6 +346,7 @@ class MainViewController: BaseViewController {
             todayWeatherC = UIColor(named: "cell")!
             todayPrecipitationC = UIColor(named: "cell")!
             weekWeatherC = UIColor(named: "cell")!
+            weekHeaderC = UIColor(named: "cell")!
         case "Mostly Cloudy":
             switch weatherType {
             case "비", "소나기":
@@ -361,6 +365,7 @@ class MainViewController: BaseViewController {
                 todayWeatherC = UIColor(named: "cellR")!
                 todayPrecipitationC = UIColor(named: "cellR")!
                 weekWeatherC = UIColor(named: "cellR")!
+                weekHeaderC = UIColor(named: "cellR")!
             case "비/눈", "눈":
                 Icon = (weatherStatus == "비/눈" ? UIImage(named: "snow&rain") : UIImage(named: "snow"))!
                 backgroundColor = UIColor(named: "BackGroundS")!
@@ -377,6 +382,7 @@ class MainViewController: BaseViewController {
                 todayWeatherC = UIColor(named: "cellS")!
                 todayPrecipitationC = UIColor(named: "cellS")!
                 weekWeatherC = UIColor(named: "cellS")!
+                weekHeaderC = UIColor(named: "cellS")!
             default:
                 Icon = UIImage(named: "cloudy")!
                 backgroundColor = UIColor(named: "BackGroundR")!
@@ -393,6 +399,7 @@ class MainViewController: BaseViewController {
                 todayWeatherC = UIColor(named: "cellR")!
                 todayPrecipitationC = UIColor(named: "cellR")!
                 weekWeatherC = UIColor(named: "cellR")!
+                weekHeaderC = UIColor(named: "cellR")!
             }
         default:
             Icon = UIImage(named: "sun")!
@@ -410,6 +417,7 @@ class MainViewController: BaseViewController {
             todayWeatherC = UIColor(named: "cell")!
             todayPrecipitationC = UIColor(named: "cell")!
             weekWeatherC = UIColor(named: "cell")!
+            weekHeaderC = UIColor(named: "cell")!
         }
         
         if traitCollection.userInterfaceStyle == .dark {
@@ -432,6 +440,7 @@ class MainViewController: BaseViewController {
                     todayWeatherC = UIColor(named: "cell")!
                     todayPrecipitationC = UIColor(named: "cell")!
                     weekWeatherC = UIColor(named: "cell")!
+                    weekHeaderC = UIColor(named: "cell")!
                 case "비/눈", "눈":
                     Icon = (weatherStatus == "비/눈" ? UIImage(named: "snow&rain") : UIImage(named: "snow"))!
                     backgroundColor = UIColor(named: "Background")!
@@ -448,6 +457,7 @@ class MainViewController: BaseViewController {
                     todayWeatherC = UIColor(named: "cell")!
                     todayPrecipitationC = UIColor(named: "cell")!
                     weekWeatherC = UIColor(named: "cell")!
+                    weekHeaderC = UIColor(named: "cell")!
                 default:
                     Icon = UIImage(named: "moon&cloud")!
                     backgroundColor = UIColor(named: "Background")!
@@ -464,6 +474,7 @@ class MainViewController: BaseViewController {
                     todayWeatherC = UIColor(named: "cell")!
                     todayPrecipitationC = UIColor(named: "cell")!
                     weekWeatherC = UIColor(named: "cell")!
+                    weekHeaderC = UIColor(named: "cell")!
                 }
             default:
                 Icon = UIImage(named: "moon")!
@@ -481,10 +492,13 @@ class MainViewController: BaseViewController {
                 todayWeatherC = UIColor(named: "cell")!
                 todayPrecipitationC = UIColor(named: "cell")!
                 weekWeatherC = UIColor(named: "cell")!
+                weekHeaderC = UIColor(named: "cell")!
             }
         }
         weatherImage.image = Icon
         view.backgroundColor = backgroundColor
+        maskedUpView.backgroundColor = backgroundColor
+        maskedDownView.backgroundColor = backgroundColor
         temperature.textColor = temperatureColor
         location.textColor = locationC
         locationDetail.textColor = locationDetailC
@@ -498,6 +512,7 @@ class MainViewController: BaseViewController {
         todayWeather.backgroundColor = todayWeatherC
         todayPrecipitation.backgroundColor = todayPrecipitationC
         weekWeather.backgroundColor = weekWeatherC
+        weekWeatherH.backgroundColor = weekHeaderC
     }
     
     
@@ -505,7 +520,7 @@ class MainViewController: BaseViewController {
         super.traitCollectionDidChange(previousTraitCollection)
         // 인터페이스 스타일이 변경될 때마다 UI 업데이트
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            updateAppearanceBasedOnWeather(for: weatherStatus)
+            updateAppearanceBasedOnWeather(for: self.weatherStatus)
         }
     }
     
@@ -513,6 +528,7 @@ class MainViewController: BaseViewController {
     @objc func clickToSearch() {
         let vc = SearchViewController()
         self.navigationController?.pushViewController(vc, animated: true)
+        NetworkManager.shared.receiveMyWeatherData(addLocationData: CoreDataManager.addLocationData)
     }
     @objc func clickToStyle() {
         let vc = StyleViewController()
@@ -560,7 +576,6 @@ class MainViewController: BaseViewController {
     @objc func tappedCancelButton() {
         print("Cancel")
         
-//        MyWeatherPageTableViewController().tableView.reloadData()
         MainViewController.isModal = false
         dismiss(animated: true)
         
@@ -575,7 +590,8 @@ class MainViewController: BaseViewController {
         
         CoreDataManager.shared.createCoreData(combinedData: unwrapArray)
         CoreDataManager.shared.readData()
-
+        NetworkManager.shared.receiveMyWeatherData(addLocationData: CoreDataManager.addLocationData)
+        
         // Add 버튼 클릭 시 검색결과 화면이 아닌 바로 MyWeatherPage 로 이동
         if let navigationController = self.presentingViewController as? UINavigationController {
             for controller in navigationController.viewControllers {
@@ -588,9 +604,6 @@ class MainViewController: BaseViewController {
         
         // 현재 모달을 닫습니다.
         dismiss(animated: true) {
-//            DispatchQueue.main.async {
-//                MyWeatherPageTableViewController().tableView.reloadData()
-//            }
             MainViewController.isModal = false
         }
     }
@@ -620,7 +633,6 @@ class MainViewController: BaseViewController {
         
         print("Back")
         
-//        MyWeatherPageTableViewController().tableView.reloadData()
         MainViewController.isModal2 = false
         dismiss(animated: true)
     }
@@ -670,15 +682,18 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             setViewModels()
             let viewModel = cellViewModels[indexPath.item]
             cell.configure(with: viewModel)
-            cell.updateAppearanceBasedOnWeather(for: weatherStatus)
+            cell.updateAppearanceBasedOnWeather(for: self.weatherStatus)
             return cell
         } else if collectionView == todayWeather {
             guard let cell = todayWeather.dequeueReusableCell(withReuseIdentifier: "TodayWeatherCell", for: indexPath) as? TodayWeatherCell else {
                 return UICollectionViewCell()
             }
+            cell.weatherType = self.weatherType
+            cell.weatherStatus = self.weatherStatus
             if !DataProcessingManager.dayForecast.isEmpty {
                 let timeString = DataProcessingManager.dayForecast[indexPath.row].time
                 let hourString = String(timeString.prefix(2))
+                cell.configureUI()
                 cell.time.text = hourString + "시"
                 cell.setIcon(status: DataProcessingManager.dayForecast[indexPath.row].status)
                 cell.temperature.text = DataProcessingManager.dayForecast[indexPath.row].temp + "°"
@@ -688,7 +703,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             guard let cell = todayPrecipitation.dequeueReusableCell(withReuseIdentifier: ChartCollectionViewCell.identifier, for: indexPath) as? ChartCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            
+            cell.weatherStatus = self.weatherStatus
+            cell.weatherType = self.weatherType
             if !DataProcessingManager.threeDaysWeatherData.isEmpty {
                 cell.setEntries()
             }
@@ -701,7 +717,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             setViewModels2()
             let viewModel = cellViewModel2[indexPath.item]
             cell.configure(with: viewModel)
-            cell.updateAppearanceBasedOnWeather(for: weatherStatus)
+            cell.updateAppearanceBasedOnWeather(for: self.weatherStatus)
             
             return cell
         }
@@ -724,11 +740,11 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let label = UILabel()
         label.text = "Hourly Forecast"
         label.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
-        label.textColor = UIColor(named: "font")
+        label.textColor = setFontColor(status: self.weatherStatus)
         headerView.addSubview(label)
         
         let icon = UIImageView(image: UIImage(systemName: "clock"))
-        icon.tintColor = UIColor(named: "font")
+        icon.tintColor = setFontColor(status: self.weatherStatus)
         headerView.addSubview(icon)
         
         icon.snp.makeConstraints(){
@@ -762,7 +778,7 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
             cell.setIcon(status: DataProcessingManager.weekForecast[indexPath.row].status)
             cell.tempHigh.text = "\(DataProcessingManager.weekForecast[indexPath.row].highTemp)°"
             cell.tempLow.text = "\(DataProcessingManager.weekForecast[indexPath.row].lowTemp)°"
-            cell.updateAppearanceBasedOnWeather(for: weatherStatus)
+            cell.updateAppearanceBasedOnWeather(for: self.weatherStatus)
         }
         return cell
     }
@@ -780,16 +796,14 @@ extension MainViewController: UITableViewDelegate,UITableViewDataSource {
     }
     //뷰델리게이트 안에 헤더뷰
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let weekWeatherH = UIView() //헤더로 사용할 뷰 만들기
-        weekWeatherH.backgroundColor = UIColor(named: "cell")
-        
+
         let label = UILabel()
         label.text = "Week Forecast"
         label.font = UIFont(name: "Apple SD Gothic Neo", size: 15)
-        label.textColor = UIColor(named: "font")
+        label.textColor = setFontColor(status: self.weatherStatus)
         
         let icon = UIImageView(image: UIImage(systemName: "calendar"))
-        icon.tintColor = UIColor(named: "font")
+        icon.tintColor = setFontColor(status: self.weatherStatus)
         
         weekWeatherH.addSubview(label)
         weekWeatherH.addSubview(icon)
@@ -835,5 +849,36 @@ extension MainViewController: AlertViewDelegate {
         let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
+    }
+}
+
+extension MainViewController {
+    func setFontColor(status: String) -> UIColor {
+        switch status {
+        case "Sunny":
+            return UIColor(named: "font")!
+        case "Mostly Cloudy":
+            return UIColor(named: "fontR")!
+        default:
+            return UIColor(named: "font")!
+        }
+    }
+    
+    func setCellColor(status: String) -> UIColor {
+        switch status {
+        case "Sunny":
+            return UIColor(named: "cell")!
+        case "Mostly Cloudy":
+            switch self.weatherType {
+            case "비", "소나기":
+                return UIColor(named: "cellR")!
+            case "눈", "비/눈":
+                return UIColor(named: "cellS")!
+            default:
+                return UIColor(named: "cellR")!
+            }
+        default:
+            return UIColor(named: "cell")!
+        }
     }
 }
