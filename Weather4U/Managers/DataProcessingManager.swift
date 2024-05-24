@@ -287,6 +287,9 @@ class DataProcessingManager {
             currentTimeString = highTemp ? "1500" : "0600"
         }
         
+        if DataProcessingManager.myWeatherDatas.isEmpty || DataProcessingManager.myWeatherDatas.count <= indexPath {
+            return nil
+        }
         guard let forecastAtTime = DataProcessingManager.myWeatherDatas[indexPath].first(where: { $0.time == currentTimeString }) else {
             return nil
         }
@@ -483,5 +486,17 @@ class DataProcessingManager {
         default:
             return "Terrible"
         }
+    }
+    
+    static func moveWeatherData(from index: Int, to destinationIndex: Int) {
+        guard index < myWeatherDatas.count else {
+            print("Error: index out of range")
+            return
+        }
+        
+        let mover = myWeatherDatas.remove(at: index)
+        myWeatherDatas.insert(mover, at: destinationIndex)
+        
+        print("날씨 데이터 위치 이동 성공")
     }
 }
